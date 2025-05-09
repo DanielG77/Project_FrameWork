@@ -1,0 +1,707 @@
+/*HOME*/
+/*Carousel Types*/
+/* Carrusel principal */
+.carouselType-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.main-carousel-item {
+    position: relative;
+    width: 100%;
+}
+
+.image-container {
+    height: 70vh;
+    min-height: 500px;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 8s ease-out;
+}
+
+/* Efecto de zoom suave durante la transición */
+.owl-item.active .image-container img {
+    transform: scale(1.05);
+}
+
+.type-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80%;
+    max-width: 1200px;
+}
+
+.type-title {
+    color: white;
+    font-size: 4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin: 0;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    line-height: 1.2;
+}
+
+.type-border {
+    width: 80px;
+    height: 3px;
+    background: white;
+    margin: 20px auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Navegación */
+.owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.owl-prev, .owl-next {
+    background: rgba(0,0,0,0.3) !important;
+    border-radius: 50% !important;
+    width: 60px !important;
+    height: 60px !important;
+    margin: 0 20px !important;
+    transition: all 0.3s ease !important;
+    pointer-events: all;
+}
+
+.owl-prev:hover, .owl-next:hover {
+    background: rgba(0,0,0,0.7) !important;
+}
+
+/* Puntos indicadores */
+.owl-dots {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.owl-dot span {
+    width: 15px !important;
+    height: 15px !important;
+    background: rgba(255,255,255,0.5) !important;
+    transition: all 0.3s ease !important;
+}
+
+.owl-dot.active span {
+    background: white !important;
+    transform: scale(1.3);
+}
+
+@media (max-width: 768px) {
+    .type-title {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+    }
+    
+    .image-container {
+        height: 60vh;
+        min-height: 400px;
+    }
+}
+
+/**/
+/*Carrousel Cities*/
+/**/
+.carouselCities .city-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.city-container {
+    width: 150px; /* Tamaño de las tarjetas */
+    height: 180px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.city-container:hover {
+    transform: scale(1.05);
+}
+
+.city-container img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.city-container p {
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+/* Contenedor del carrusel: centrado y responsive */
+.carousel-container {
+    max-width: 90%;
+    margin: 0 auto; 
+    padding: 20px 0;
+}
+
+.city-container {
+    position: relative;
+    width: 180px; 
+    height: 200px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.city-container:hover {
+    transform: scale(1.05);
+}
+
+/* Imagen de la ciudad */
+.city-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Contenedor principal */
+.carousel-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto; /* Centrar */
+    padding: 20px 0; /* Espacio arriba y abajo */
+}
+
+/* Tarjeta de cada ciudad */
+.city-container {
+    position: relative;
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    text-align: center;
+}
+
+/* Imagen de la ciudad */
+.city-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Nombre de la ciudad con fondo degradado y centrado */
+.city-container p {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    padding: 10px 0;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+}
+
+
+
+/**/
+/*Carrousel Categories*/
+/**/
+/* Estilos para categorías */
+.category-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-image-container {
+    position: relative;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.category-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover img {
+    transform: scale(1.05);
+}
+
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    text-align: center;
+}
+
+.category-title {
+    color: white;
+    font-size: 1.4rem;
+    margin: 0;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    opacity: 0.95;
+    letter-spacing: 0.5px;
+}
+
+/* Navegación del carrusel */
+.carouseCategories .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.carouseCategories .owl-prev,
+.carouseCategories .owl-next {
+    background: rgba(255,255,255,0.9) !important;
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.carouseCategories .owl-prev:hover,
+.carouseCategories .owl-next:hover {
+    background: #2d3436 !important;
+}
+
+.carouseCategories .owl-prev {
+    left: -50px !important;
+}
+
+.carouseCategories .owl-next {
+    right: -50px !important;
+}
+
+.carouseCategories .owl-nav svg {
+    fill: #2d3436;
+}
+
+.carouseCategories .owl-nav button:hover svg {
+    fill: white !important;
+}
+
+/**/
+/*Carrousel Brands*/
+/**/
+#port-sec-brand {
+    background: #cfcfd0;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.brand-img-container {
+    height: 220px; /* Aumentado el tamaño */
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.brand-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.brand-text-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 20px 15px 10px;
+    text-align: left;
+}
+
+.brand-name {
+    color: white !important;
+    font-size: 1.2rem !important;
+    margin: 0;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+.brand-card-inner {
+    overflow: hidden;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.brand-card:hover .brand-image {
+    transform: scale(1.05);
+}
+
+/* Tamaño de tarjetas */
+.brand-card {
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+.brand-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Navejacion estandar */
+/* .owl-nav {
+    top: 45%;
+}
+
+.owl-nav button {
+    background: rgba(255,255,255,0.9) !important;
+    border: 1px solid #ddd !important;
+} */
+
+/* Navejacion Lateral */
+.owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.owl-nav button {
+    background: white !important;
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+    pointer-events: all;
+}
+
+.owl-nav button:hover {
+    background: #2d3436 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+.owl-nav button svg {
+    fill: #2d3436;
+}
+
+.owl-nav button:hover svg {
+    fill: white !important;
+}
+
+.owl-prev {
+    margin-left: -20px !important;
+}
+
+.owl-next {
+    margin-right: -20px !important;
+}
+
+/**/
+/*Most Valored Prods*/
+/**/
+.more_related_container {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Ajusta según necesidades */
+}
+
+.nested-carousel {
+    height: 200px;
+    margin: 10px 0;
+}
+
+.nested-carousel img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* Botones de navegación para carruseles anidados */
+.nested-carousel .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+}
+
+.nested-carousel .owl-prev,
+.nested-carousel .owl-next {
+    position: absolute;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5) !important;
+    color: white !important;
+    padding: 5px 10px !important;
+}
+
+.nested-carousel .owl-prev { left: 5px; }
+.nested-carousel .owl-next { right: 5px; }
+
+/* Estilos para la tarjeta de producto */
+.product-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    margin: 10px;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff4757;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-title {
+    color: #2d3436;
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    height: 40px;
+    overflow: hidden;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-price {
+    color: #2ecc71;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.original-price {
+    color: #95a5a6;
+    font-size: 14px;
+    text-decoration: line-through;
+}
+
+/* Navegación del carrusel interno */
+.nested-carousel .owl-nav button {
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #2d3436 !important;
+    width: 30px;
+    height: 30px;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.nested-carousel .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.nested-carousel .owl-prev {
+    left: 10px;
+}
+
+.nested-carousel .owl-next {
+    right: 10px;
+}
+
+/**/
+/*Most Populars*/
+/**/
+.more_popu_container {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Ajusta según necesidades */
+}
+
+.nested-carousel {
+    height: 200px;
+    margin: 10px 0;
+}
+
+.nested-carousel img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* Botones de navegación para carruseles anidados */
+.nested-carousel .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+}
+
+.nested-carousel .owl-prev,
+.nested-carousel .owl-next {
+    position: absolute;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5) !important;
+    color: white !important;
+    padding: 5px 10px !important;
+}
+
+.nested-carousel .owl-prev { left: 5px; }
+.nested-carousel .owl-next { right: 5px; }
+
+/* Estilos para la tarjeta de producto */
+.product-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    margin: 10px;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff4757;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-title {
+    color: #2d3436;
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    height: 40px;
+    overflow: hidden;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-price {
+    color: #2ecc71;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.original-price {
+    color: #95a5a6;
+    font-size: 14px;
+    text-decoration: line-through;
+}
+
+/* Navegación del carrusel interno */
+.nested-carousel .owl-nav button {
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #2d3436 !important;
+    width: 30px;
+    height: 30px;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.nested-carousel .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.nested-carousel .owl-prev {
+    left: 10px;
+}
+
+.nested-carousel .owl-next {
+    right: 10px;
+}
