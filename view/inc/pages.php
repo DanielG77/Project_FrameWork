@@ -1,34 +1,26 @@
 <?php
-if(isset($_GET['module'])){
-	switch($_GET['module']){
-		case "home";
-			include("module/".$_GET['module']."/controller/controller_".$_GET['module'].".php");
+if(isset($_GET["page"])){
+	switch($_GET['page']){
+		case "ctrl_home";
+			include("module/home/controller/".$_GET['page'].".php");
 			break;
-		case "cars";
-			include("module/".$_GET['module']."/controller/controller_".$_GET['module'].".php");
+		case "ctrl_shop";
+			include("module/shop/controller/".$_GET['page'].".php");
 			break;
-		case "shop";
-			include("module/".$_GET['module']."/controller/controller_".$_GET['module'].".php");
+		case "ctrl_auth";
+			include("module/auth/controller/".$_GET['page'].".php");
+		break;
+		case "404";
+			include("view/inc/error".$_GET['page'].".php");
 			break;
-		case "login";
-			include("module/".$_GET['module']."/controller/controller_".$_GET['module'].".php");
-			break;
-		case "errors";
-			include("module/".$_GET['module']."/controller/controller_".$_GET['module'].".php");
-			break;
-		case "aboutus";
-			include("module/".$_GET['module']."/".$_GET['module'].".php");
-			break;
-		case "contact";
-			include("module/".$_GET['module']."/".$_GET['module']."_us".".php");
+		case "503";
+			include("view/inc/error".$_GET['page'].".php");
 			break;
 		default;
-		include("module/".$_GET['module']."/controller/controller_".$_GET['module'].".php");
+			include("module/home/view/home.html");
 			break;
 	}
-
-} else {
+}else{
 	include("module/home/view/home.html");
 }
-
 ?>

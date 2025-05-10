@@ -1,52 +1,52 @@
-<!-- Header -->
-
-<div id="header">
-	<div id="header-wrapper">
-		<header id="header" class="container">
-
-			<!-- Logo -->
-			<div id="icono">
-				<a href="?module=home&op=view"></a>
-			</div>
-
-			<!-- Nav -->
-
-			<nav id="nav">
-				<ul class="nav_list">
-					<!-- <li><a href="index.php?module=home&op=home" data-tr="Homepage"></a></li> -->
-					<!-- <li><a href="index.php?module=shop&op=view" data-tr="Shop"></a></li> -->
-					<!-- <li><a href="index.php?module=cars&op=list" data-tr="Cars"></a></li> -->
-					<!-- <li><a href="index.php?module=login&op=login_view" data-tr="Login"></a></li> -->
-					<!-- <li><a href="index.php?module=contact" data-tr="Contact us"></a></li> -->
-					<!-- <li><a href="index.php?module=aboutus" data-tr="About us"></a></li> -->
-					<!-- <li><a href="index.php?module=errors&op=errors_log" data-tr="Errors log"></a></li> -->
-				</ul>
-				<ul class="nav_list_profile">
-				</ul>
-			</nav>
-		
-			<div id="search">
-				<form class="search_form">
-					<select id="type_select">
-						<option value="0">Car type...</option>
-					</select>
-
-					<select id="brand_select">
-						<option value="0">Car brand...</option>
-					</select>
-
-					<input type="text" id="autocom" autocomplete="off"/>
-
-					<input type="button" value="Search" id="search_button"/>
-
-					<div id="search_auto"></div>
-					
-				</form>
-			</div>
-
-		</header>
-	</div>
-</div>
-
-<div id="page_container">
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-5">
+      <a class="navbar-brand" href="index.php?page=ctrl_home&op=list">
+        La Taberna De los Dados
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="search-bar">
+          <div class="search-item search__type">
+            <select id="type_game">
+              <option value="" disabled selected>Tipo de juego</option>
+            </select>
+          </div>
+  
+          <div class="divider"></div>
+  
+          <div class="search-item search__brand">
+            <select id="brand_game">
+              <option value="" disabled selected>Marca</option>
+            </select>
+          </div>
+  
+          <div class="divider"></div>
+  
+          <div class="search-item search__city">
+            <input
+              type="text"
+              id="autocom"
+              placeholder="Ciudad"
+              autocomplete="off"
+            />
+            <div id="search_game" class="autocomplete">
+            </div>
+          </div>
+  
+          <div class="divider"></div>
+  
+          <div class="search-item search__lupa">
+            <input type="button" value="Q" id="search-btn" />
+          </div>
+        </div>

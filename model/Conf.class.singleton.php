@@ -9,7 +9,7 @@
         private function __construct() {
             $cnfg = parse_ini_file(UTILS."db.ini");
             $this->_userdb = $cnfg['user'];
-            $this->_passdb = $cnfg['pass'];
+            $this->_passdb = $cnfg[''];
             $this->_hostdb = $cnfg['host'];
             $this->_db = $cnfg['db'];
         }
