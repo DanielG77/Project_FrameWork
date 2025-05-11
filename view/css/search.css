@@ -1,0 +1,252 @@
+/* Fondo de la navbar con degradado */
+.navbar.bg-dark {
+    background: linear-gradient(to right, #9b1c1c, #9a1616, #8B0000, #5C3317) !important;
+  }
+  
+  /* Contenedor unificado del search bar */
+  .search-bar {
+    display: inline-flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 25px; /* Bordes redondeados */
+    overflow: hidden;
+    padding: 0.25rem;
+  }
+  
+  /* Cada elemento dentro de la barra */
+  .search-bar .search-item {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Inputs y selects sin borde ni fondo para integrarlos en la barra */
+  .search-bar select,
+  .search-bar input[type="text"] {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+  }
+  
+  /* Quitar la apariencia nativa del select */
+  .search-bar select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  /* Divisor entre elementos */
+  .search-bar .divider {
+    width: 1px;
+    height: 2rem;
+    background-color: #ccc;
+  }
+  
+  /* Botón de búsqueda (lupa) */
+  .search__lupa input[type="button"] {
+    background-color: #f15175;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    line-height: 40px;
+  }
+  
+  /* Contenedor de sugerencias (autocomplete) */
+  .autocomplete-suggestions {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    display: none;
+    z-index: 9999;
+  }
+  
+  /* Mostrar el autocomplete al enfocar el input de ciudad */
+  .search__city input:focus + .autocomplete-suggestions {
+    display: block;
+  }
+  
+  /* Estilo para cada sugerencia */
+  .autocomplete-suggestions div {
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .autocomplete-suggestions div:hover {
+    background-color: #eee;
+  }
+  
+
+  /**/
+  /**/
+  /**/
+
+  /* ------------------------- NAVBAR ------------------------- */
+.navbar.bg-dark {
+  background: linear-gradient(to right, #9b1c1c, #9a1616, #8B0000, #5C3317) !important;
+  padding: 0.5rem 1rem;
+}
+
+/* ---------------------- USER MENU ---------------------- */
+#user_menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  padding: 0 15px;
+  transition: all 0.3s ease;
+}
+
+#user_menu:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+.avatar-img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  transition: transform 0.3s ease;
+}
+
+.avatar-img:hover {
+  transform: scale(1.1);
+}
+
+#des_inf_user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-weight: 500;
+}
+
+#logout {
+  color: #ffd7d7;
+  transition: color 0.3s ease;
+  margin-left: 10px;
+}
+
+#logout:hover {
+  color: #ff6b6b;
+  transform: scale(1.1);
+}
+
+/* ---------------------- LOGIN LINK ---------------------- */
+#login_link .nav-link {
+  color: #ffd7d7 !important;
+  transition: all 0.3s ease;
+}
+
+#login_link .nav-link:hover {
+  color: #ff6b6b !important;
+  transform: translateX(3px);
+}
+
+/* ---------------------- DROPDOWN MENU ---------------------- */
+.user-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #9b1c1c;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-width: 180px;
+  z-index: 10000;
+}
+
+#user_menu:hover .user-dropdown {
+  display: block;
+}
+
+.user-dropdown a {
+  color: white !important;
+  padding: 10px 15px;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.user-dropdown a:hover {
+  background-color: #8B0000;
+  transform: translateX(5px);
+}
+
+/* ---------------------- RESPONSIVE ---------------------- */
+@media (max-width: 768px) {
+  #user_menu {
+      padding: 10px 0;
+      flex-direction: column;
+      align-items: flex-start;
+  }
+  
+  .user-dropdown {
+      position: static;
+      width: 100%;
+  }
+}
+
+/* (Mantener el resto de tus estilos existentes para search bar y autocomplete) */
+
+
+
+
+
+
+/*  */
+/* footer */
+/*  */
+    .footer-link {
+        color: #8B572A !important;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    
+    .footer-link:hover {
+        color: #FF3E30 !important;
+        padding-left: 5px;
+    }
+    
+    .btn-newsletter {
+        background: #FF3E30;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        margin-top: 10px;
+        border-radius: 20px;
+        transition: all 0.3s;
+    }
+    
+    .btn-newsletter:hover {
+        background: #8B572A;
+        transform: scale(1.05);
+    }
+    
+    .social-icon {
+        font-size: 24px;
+        color: #8B572A;
+        margin-right: 15px;
+        transition: all 0.3s;
+    }
+    
+    .social-icon:hover {
+        color: #FF3E30;
+        transform: translateY(-3px);
+    }
+    
+    .newsletter-form input {
+        border-radius: 20px;
+        padding: 8px 15px;
+        margin-bottom: 10px;
+    }

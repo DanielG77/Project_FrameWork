@@ -33,11 +33,11 @@
                 require_once ($path);
                 if (method_exists($model, $function)) {
                     $obj = $model::getInstance();
-                    //return $obj;
+                    // return $obj;
                     if ($args != null) {
                         return call_user_func(array($obj, $function), $args);
                     }
-                    //return $function;
+                    // return $function;
                     return call_user_func(array($obj, $function));
                 }
             }

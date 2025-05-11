@@ -10848,3 +10848,22 @@ html {
   background-repeat: no-repeat;
   min-height: 15rem;
 }
+
+#icono {
+    display: inline-block;
+    height: 20px;
+    width: 70px;
+    background-image: url(../images/Icono.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-left: -4%;
+    margin-top: -3px;
+}
+
+#icono a {
+    display: inline-block;
+    height: 50px;
+    width: 75px;
+    margin-left: 1%;
+    position: absolute; 
+}

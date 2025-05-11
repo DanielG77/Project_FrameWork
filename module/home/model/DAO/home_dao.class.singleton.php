@@ -13,26 +13,35 @@
             return self::$_instance;
         }
 
-        //public function select_data_carrusel($db) {
-        public function select_data_carrusel() {
-            return 'hola select_data_carrusel';
-            // $sql = "SELECT * FROM brand LIMIT 6";
-
-        //     $stmt = $db -> ejecutar($sql);
-        //     return $db -> listar($stmt);
-        }
-
-        public function select_data_category($db) {
-
-            $sql = "SELECT * FROM category LIMIT 3";
+        public function select_data_carrusel($db) {
+        // public function select_data_carrusel() {
+            // return 'hola select_data_carrusel';
+            $sql = "SELECT * FROM types";
+            return $sql;
 
             $stmt = $db -> ejecutar($sql);
             return $db -> listar($stmt);
         }
 
-        public function select_data_type($db) {
+        public function select_data_category($db) {
 
-            $sql = "SELECT * FROM type LIMIT 4";
+            $sql = "SELECT * FROM categories";
+
+            $stmt = $db -> ejecutar($sql);
+            return $db -> listar($stmt);
+        }
+
+        public function select_data_brands($db) {
+
+            $sql = "SELECT * FROM brands";
+
+            $stmt = $db -> ejecutar($sql);
+            return $db -> listar($stmt);
+        }
+
+        public function select_data_cities($db) {
+
+            $sql = "SELECT * FROM cities";
 
             $stmt = $db -> ejecutar($sql);
             return $db -> listar($stmt);

@@ -1,503 +1,197 @@
-function carousel_Types() {
-    ajaxPromise('/programas/courses_home/module/home/controller/ctrl_home.php?op=Carousel_Type', 'GET', 'JSON')
-    .then(function(data) {
-        let carousel = $(".carouselType");
-        carousel.empty();
-
-        for (let row in data) {
-            $('<div></div>')
-                .addClass("item_carrousel")
-                .appendTo(carousel)
-                .attr('id', data[row].name_typ)
-                .html(`
-                    <div class="main-carousel-item">
-                        <div class="image-container">
-                            <img src="${data[row].img_typ}" alt="${data[row].name_typ}">
-                        </div>
-                        <div class="type-overlay">
-                            <h2 class="type-title">${data[row].name_typ}</h2>
-                            <div class="type-border"></div>
-                        </div>
-                    </div>
-                `);
-        }
-
-        carousel.owlCarousel({
-            loop: true,
-            margin: 0,
-            nav: true,
-            dots: true,
-            autoplay: true,
-            autoplayTimeout: 7000,
-            responsive: {
-                0: { items: 1 },
-                600: { items: 1 },
-                1000: { items: 1 }
-            },
-            navText: [
-                '<svg width="40" height="40" viewBox="0 0 24 24"><path fill="white" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>',
-                '<svg width="40" height="40" viewBox="0 0 24 24"><path fill="white" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>'
-            ]
-        });
+function carrusel(){
+    $.ajax({
+      type: "POST",
+      dataType: "json",
+      url: friendlyURL('?module=home&op=carrusel'),
     })
-    .catch(function(error) {
-        console.error("Error cargando los datos:", error);
-    });
-}
+    .done(function( data ) {
+      for (row in data) {
+        $('<div></div>').attr('class',"carrusel_elements").attr('id', data[row].brand_name).appendTo(".carrusel_list").html( 
+          "<img class='carrusel_img' id='' src='http://localhost/Ejercicios/Framework_PHP_OO_MVC/" + data[row].brand_img +"' alt=''>"
+        )
+      }
+        
+      var slider = new Glider(document.querySelector('.carrusel_list'),{ 
+        slidesToShow: 1,
+        dots: '.carrusel_indicator',
+        draggable: true,
+      });
 
-function carousel_City() {
-    ajaxPromise('/programas/courses_home/module/home/controller/ctrl_home.php?op=Carousel_Cities', 'GET', 'JSON')
-    .then(function(data) {
-        let carousel = $(".carouselCities");
-        carousel.empty();
+      slideAutoPaly(slider, '.carrusel_list');
 
-        for (let row in data) {
-            $('<div></div>')
-                .addClass("item city-card")
-                .attr('id', data[row].name_cities) // Asignar el ID al div
-                .appendTo(carousel)
-                .html(`
-                    <div class="city-container">
-                        <p>${data[row].name_cities}</p>
-                        <img src="${data[row].img_cities}" alt="${data[row].name_cities}">
-                    </div>
-                `);
-        }
+      function slideAutoPaly(glider, selector, delay = 4000, repeat = true) {
+        let autoplay = null;
+        const slidesCount = glider.track.childElementCount;
+        let nextIndex = 1;
+        let pause = true;
 
-        // Configuración para mostrar 5 imágenes en pantallas grandes
-        carousel.owlCarousel({
-            loop: true,
-            margin: 15,
-            nav: true,
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            responsive: {
-                0: { items: 1 },    // Móviles: 1 por fila
-                600: { items: 2 },  // Tablets: 2 por fila
-                1000: { items: 5 }  // Escritorio: 5 por fila
-            },
-        });
-    })
-    .catch(function(error) {
-        console.error("Error cargando los datos del carrusel de ciudades:", error);
-    });
-}
-
-function carousel_categories() {
-    ajaxPromise('/programas/courses_home/module/home/controller/ctrl_home.php?op=homePageCategory','GET', 'JSON')
-    .then(function(data) {
-        let carousel = $(".carouseCategories");
-        carousel.empty();
-
-        for (let row in data) {
-            $('<div></div>')
-                .addClass("item categories-card")
-                .appendTo(carousel)
-                .attr('id', data[row].name_cat)
-                .html(`
-                    <div class="category-card">
-                        <div class="category-image-container">
-                            <img src="${data[row].img_cat}" alt="${data[row].name_cat}">
-                            <div class="category-overlay">
-                                <h3 class="category-title">${data[row].name_cat}</h3>
-                            </div>
-                        </div>
-                    </div>
-                `);
-        }
-
-        carousel.owlCarousel({
-            loop: false,
-            margin: 20,
-            nav: true,
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            responsive: {
-                0: { items: 2 },
-                600: { items: 3 },
-                1000: { items: 5 }
-            },
-            navText: [
-                '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>',
-                '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>'
-            ]
-        });
-    })
-    .catch(function(error) {
-        console.error("Error cargando los datos:", error);
-    });
-}
-
-function carousel_categories_favs() {
-    ajaxPromise('/programas/courses_home/module/home/controller/ctrl_home.php?op=homePageCategoryPOPU','GET', 'JSON')
-    .then(function(data) {
-        let carousel = $(".carouseCategories");
-        carousel.empty();
-
-        for (let row in data) {
-            $('<div></div>')
-                .addClass("item categories-card")
-                .appendTo(carousel)
-                .attr('id', data[row].name_cat)
-                .html(`
-                    <div class="category-card">
-                        <div class="category-image-container">
-                            <img src="${data[row].img_cat}" alt="${data[row].name_cat}">
-                            <div class="category-overlay">
-                                <h3 class="category-title">${data[row].name_cat}</h3>
-                            </div>
-                        </div>
-                    </div>
-                `);
-        }
-
-        carousel.owlCarousel({
-            loop: false,
-            margin: 20,
-            nav: true,
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            responsive: {
-                0: { items: 2 },
-                600: { items: 3 },
-                1000: { items: 5 }
-            },
-            navText: [
-                '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>',
-                '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>'
-            ]
-        });
-    })
-    .catch(function(error) {
-        console.error("Error cargando los datos:", error);
-    });
-}
-
-function carousel_brands() {
-    ajaxPromise('/programas/courses_home/module/home/controller/ctrl_home.php?op=homePageBrands','GET', 'JSON')
-    .then(function(data) {
-        let carousel = $(".carouseBrands");
-        carousel.empty();
-
-        for (let row in data) {
-            $('<div></div>')
-                .addClass("item brand-card")
-                .appendTo(carousel)
-                .attr('id', data[row].name_brand)
-                .html(`
-                    <div class="brand-card-inner">
-                        <div class="brand-img-container">
-                            <img src="${data[row].img_bra}" alt="${data[row].name_brand}" class="brand-image">
-                            <div class="brand-text-overlay">
-                                <p class="brand-name">${data[row].name_brand}</p>
-                            </div>
-                        </div>
-                    </div>
-                `);
-        }
-
-        carousel.owlCarousel({
-            loop: false,
-            margin: 15,
-            nav: true,
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 4000,
-            responsive: {
-                0: { items: 2 },
-                480: { items: 3 },
-                768: { items: 4 },
-                1024: { items: 5 }
-            },
-            navText: [
-                '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>',
-                '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>'
-            ]
-        });
-    })
-    .catch(function(error) {
-        console.error("Error cargando los datos del carrusel de marcas:", error);
-    });
-}
-
-function carousel_MostVisited() {
-    ajaxPromise('/programas/courses_home/module/home/controller/ctrl_home.php?op=popular_prods', 'GET', 'JSON')
-    .then(function(data) {
-        let carousel = $(".carouselPopuProds");
-        carousel.empty();
-
-        for (let row in data) {
-            const images = data[row].images_prod.split(',');
-            
-            const productHTML = `
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <div class="nested-carousel">
-                            ${images.map(img => `
-                                <div class="nested-item">
-                                    <img src="${img}" alt="${data[row].name_prod}" class="product-image">
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="product-badge">Más vendido</div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${data[row].name_prod}</h3>
-                        <div class="price-container">
-                            <span class="product-price">$${data[row].price}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            // <span class="original-price">$${parseFloat(data[row].price) * 1.2}</span> //descuentos introducir en la linia 186 cuando sea necesario
-
-            $('<div></div>')
-                .addClass("item more_related_card")
-                .attr('id', data[row].id_prod)
-                .appendTo(carousel)
-                .html(productHTML);
-        }
-
-        // Inicializar carrusel principal
-        carousel.owlCarousel({
-            loop: true,
-            margin: 20,
-            nav: false,
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            responsive: {
-                0: { items: 1 },
-                600: { items: 2 },
-                1000: { items: 5 }
-            },
-            onInitialized: function() {
-                $('.nested-carousel').each(function() {
-                    $(this).owlCarousel({
-                        items: 1,
-                        loop: true,
-                        nav: true,
-                        dots: false,
-                        autoplay: true,
-                        autoplayTimeout: 3000,
-                        navText: ['‹', '›']
-                    });
-                });
+        function slide() {
+          autoplay = setInterval(() => {
+            if (nextIndex >= slidesCount) {
+              if (!repeat) {
+                clearInterval(autoplay);
+              } else {
+                nextIndex = 0;
+              }
             }
-        });
-    })
-    .catch(function(error) {
-        console.error("Error cargando los datos:", error);
-    });
-}
-
-function carousel_MostRating() {
-    ajaxPromise('/programas/courses_home/module/home/controller/ctrl_home.php?op=rating_prods', 'GET', 'JSON')
-    .then(function(data) {
-        let carousel = $(".carouselRatingProds");
-        carousel.empty();
-
-        for (let row in data) {
-            const images = data[row].images_prod.split(',');
-            
-            const productHTML = `
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <div class="nested-carousel">
-                            ${images.map(img => `
-                                <div class="nested-item">
-                                    <img src="${img}" alt="${data[row].name_prod}" class="product-image">
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="product-badge">Más Popular</div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${data[row].name_prod}</h3>
-                        <div class="price-container">
-                            <span class="product-price">$${data[row].price}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            // <span class="original-price">$${parseFloat(data[row].price) * 1.2}</span> //descuentos introducir en la linia 186 cuando sea necesario
-
-            $('<div></div>')
-                .addClass("item more_popu_card")
-                .attr('id', data[row].id_prod)
-                .appendTo(carousel)
-                .html(productHTML);
+            glider.scrollItem(nextIndex++);
+          }, delay);
         }
 
-        // Inicializar carrusel principal
-        carousel.owlCarousel({
-            loop: true,
-            margin: 20,
-            nav: false,
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            responsive: {
-                0: { items: 1 },
-                600: { items: 2 },
-                1000: { items: 5 }
-            },
-            onInitialized: function() {
-                $('.nested-carousel').each(function() {
-                    $(this).owlCarousel({
-                        items: 1,
-                        loop: true,
-                        nav: true,
-                        dots: false,
-                        autoplay: true,
-                        autoplayTimeout: 3000,
-                        navText: ['‹', '›']
-                    });
-                });
-            }
-        });
+        slide();
+
+        var element = document.querySelector(selector);
+        element.addEventListener('mouseover', (event) => {
+          if (pause) {
+              clearInterval(autoplay);
+              pause = false;
+          }
+        }, 300);
+
+        element.addEventListener('mouseout', (event) => {
+          if (!pause) {
+            slide();
+            pause = true;
+          }
+        }, 300);
+      }
+
     })
-    .catch(function(error) {
-        console.error("Error cargando los datos:", error);
-    });
-}
-
-function clicks(){
-    $(document).on("click",'div.item_carrousel', function (){
-
-        localStorage.removeItem('filter_shop');
-        localStorage.removeItem('name_typ');
-
-        var filters_typ = [];
-        filters_typ.push(['name_typ', this.getAttribute('id')]);
-
-        var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
-        filter_shop = filter_shop.filter(filter => filter[0] !== 'name_typ');
-        filter_shop.push(['name_typ', this.getAttribute('id')]);
-        localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
-
-        setTimeout(function(){ 
-            window.location.href = 'index.php?page=ctrl_shop&op=list';
-        }, 1000);  
+    .fail(function() {
+      console.log('Error: Carousel error');
     }); 
+}
 
-    $(document).on("click", 'div.city-card', function() {
+function category() {
+  ajaxPromise(friendlyURL("?module=home&op=category"), 'GET', 'JSON')
+  .then(function( data ) {
+      for (row in data) {
+        content = data[row].category_name.replace(/_/g, " ");
+        $('<div></div>').attr('class', "category_elements").attr('id', data[row].category_name).appendTo("#cat").html(
+          "<div class='col-4 col-12-medium'>"+
+            "<section class='box feature'>"+
+              "<img src='http://localhost/Ejercicios/Framework_PHP_OO_MVC/" + data[row].category_img + "' id='"+ data[row].cod_category +"'/>"+
+              "<div class='inner'>"+        
+                "<h2 class='category_title'>"+ content +"</h2>"+
+              "</div>"+
+            "</section>"+
+          "</div>"
+        )
+      }
+  })
+  .catch(function() {
+    console.log('Error: Categories error');
+  });    
+}
 
-        localStorage.removeItem('filter_shop');
-        localStorage.removeItem('name_cities');
-
-        var filter_maps = [];
-        filter_maps.push(['name_cities', this.getAttribute('id')]); 
-        
-        var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
-        filter_shop = filter_shop.filter(filter => filter[0] !== 'name_cities');
-        filter_shop.push(['name_cities', this.getAttribute('id')]);
-        localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
-
-        setTimeout(function() {
-            window.location.href = 'index.php?page=ctrl_shop&op=list';
-        }, 300);
+function types() {
+    ajaxPromise(friendlyURL("?module=home&op=type"), 'GET', 'JSON')
+    .then(function( data ) {
+      for (row in data) {
+          $('<div></div>').attr('class', "card").attr('id', data[row].type_name).appendTo(".container_cards").html(
+            "<div class='face face1'>"+
+              "<div class='content'>"+
+                "<img src='http://localhost/Ejercicios/Framework_PHP_OO_MVC/" + data[row].type_img +"'>"+
+              "</div>"+
+            "</div>"+
+            "<div class='face face2'>"+
+              "<div class='content'>"+
+                "<h2>"+ data[row].type_name +"</h2>"+
+              "</div>"+ 
+            "</div>" 
+          )
+      }
+    })
+    .catch(function() {
+      console.log('Error: Types error');
     });
+}
 
-    $(document).on("click", 'div.categories-card', function() {
+function clicks() {
+  $(document).on("click",'.carrusel_elements', function (){
+    var filters = [];
+    filters.push({"brand_name":[this.getAttribute('id')]});
+    localStorage.removeItem('filters')
+    localStorage.setItem('filters', JSON.stringify(filters));
+    localStorage.setItem('currentPage', 'shop-list');
+      setTimeout(function(){ 
+        window.location.href = friendlyURL('index.php?module=shop&op=view');
+      }, 200);  
+  }); 
 
-        localStorage.removeItem('filter_shop');
-        localStorage.removeItem('name_cat');
+  $(document).on("click",'.category_elements', function (){
+    var filters = [];
+    filters.push({"category_name":[this.getAttribute('id')]});
+    localStorage.removeItem('filters')
+    localStorage.setItem('filters', JSON.stringify(filters));
+    localStorage.setItem('currentPage', 'shop-list');
+      setTimeout(function(){ 
+        window.location.href = friendlyURL('index.php?module=shop&op=view');
+      }, 200);  
+  });
 
-        var filter_maps = [];
-        var name_catergoria = this.getAttribute('id');
+  $(document).on("click",'.card', function (){
+    var filters = [];
+    filters.push({"type_name":[this.getAttribute('id')]});
+    localStorage.removeItem('filters')
+    localStorage.setItem('filters', JSON.stringify(filters)); 
+    localStorage.setItem('currentPage', 'shop-list');
+      setTimeout(function(){ 
+        window.location.href = friendlyURL('index.php?module=shop&op=view');
+      }, 200);  
+  });
+}
 
-        localStorage.setItem('name_cat', "["+JSON.stringify(name_catergoria)+"]");
-        filter_maps.push(['name_cat', name_catergoria]);         
-        
-        var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
-        filter_shop = filter_shop.filter(filter => filter[0] !== 'name_cat');
-        filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
-        localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
+function load_suggestions() {
+  var limit = 3;
 
-        setTimeout(function() {
-            window.location.href = 'index.php?page=ctrl_shop&op=list';
-        }, 300);
+  $(document).on("click", '#load_more_button', function () {
+    $('#news_container').empty();
+    limit = limit + 3;
+
+    $.ajax({
+      type: 'GET',
+      dataType: "json",
+      url: "https://www.googleapis.com/books/v1/volumes?q=electric%20car",
+    }).done(function (data) {
+      var DatosJson = JSON.parse(JSON.stringify(data));
+      for (i = 0; i < limit; i++) {
+        var ElementDiv = document.createElement('div');
+        ElementDiv.innerHTML =
+            "<br><div id='cont_img'><img src='" + data['items'][i]['volumeInfo']['imageLinks']['thumbnail'] + "' class='cart' cat='" + data['items'][i]['volumeInfo']['categories'] + "' data-toggle='modal' data-target='#exampleModal'></div><div id='list_header'><hr><span id='li_brand'>  " + DatosJson.items[i].volumeInfo.title + "</br>" + "</span></div></hr>";
+        document.getElementById("news_container").appendChild(ElementDiv);
+      }
+      if (limit === 9) {
+        $('.load_more_button').remove();
+      }
     });
+  })
+}
 
-    $(document).on("click", 'div.brand-card', function() {
+function get_suggestions() {
+  limit = 3;
 
-        localStorage.removeItem('filter_shop');
-        localStorage.removeItem('name_brand');
-
-        var filter_maps = [];
-        filter_maps.push(['name_brand', this.getAttribute('id')]); 
-        
-        var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
-        filter_shop = filter_shop.filter(filter => filter[0] !== 'name_brand');
-        filter_shop.push(['name_brand', this.getAttribute('id')]);
-        localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
-
-        setTimeout(function() {
-            window.location.href = 'index.php?page=ctrl_shop&op=list';
-        }, 300);
-    });
-
-    $(document).on("click", 'div.more_related_card', function() {
-        localStorage.removeItem('filter_shop');
-        localStorage.removeItem('id_prod');
-    
-        var idProd = this.getAttribute('id');
-        localStorage.setItem('id_prod', idProd);
-    
-        setTimeout(function() {
-            window.location.href = 'index.php?page=ctrl_shop&op=list';
-        }, 300);
-    });
-
-    $(document).on("click", 'div.more_popu_card', function() {
-        localStorage.removeItem('filter_shop');
-        localStorage.removeItem('id_prod');
-    
-        var idProd = this.getAttribute('id');
-        localStorage.setItem('id_prod', idProd);
-    
-        setTimeout(function() {
-            window.location.href = 'index.php?page=ctrl_shop&op=list';
-        }, 300);
-    });
+  $.ajax({
+    type: 'GET',
+    dataType: "json",
+    url: "https://www.googleapis.com/books/v1/volumes?q=electric%20car",
+  }).done(function (data) {
+    var DatosJson = JSON.parse(JSON.stringify(data));
+    DatosJson.items.length = limit;
+    for (i = 0; i < DatosJson.items.length; i++) {
+        var ElementDiv = document.createElement('div');
+        ElementDiv.innerHTML =
+            "<br><div id='cont_img'><img src='" + data['items'][i]['volumeInfo']['imageLinks']['thumbnail'] + "' class='cart' cat='" + data['items'][i]['volumeInfo']['categories'] + "' data-toggle='modal' data-target='#exampleModal'></div><div id='list_header'><hr><span id='li_brand'>  " + DatosJson.items[i].volumeInfo.title + "</br>" + "</span></div></hr>";
+        document.getElementById("news_container").appendChild(ElementDiv);
+    }
+  });
+  load_suggestions();
 }
 
 $(document).ready(function() {
-    carousel_Types();
-    // carousel_categories();
-    carousel_brands();
-    carousel_City();
-    carousel_MostVisited();
-    carousel_MostRating();
-    carousel_categories_favs();
-    clicks();
+  types();
+  category();
+  carrusel();
+  get_suggestions();
+  clicks();
 });
-
-
-
-//Datacards Simples
-
-// function loadBrands() {
-//     // console.log("hola")
-//     // return false;
-//     ajaxPromise('/programas/courses_home/module/home/controller/ctrl_home.php?op=homePageBrands','GET', 'JSON')
-//     .then(function(data) {
-//         for (row in data) {
-//             $('<div></div>').attr('class', "div_cate").attr({ 'id': data[row].id_brands }).appendTo('#containerBrands')
-//                 .html(
-//                     "<li class='portfolio-item'>" +
-//                     "<div class='item-main'>" +
-//                     "<div class='portfolio-image'>" +
-//                     "<img src = " + data[row].img_bra + " alt='foto' </img> " +
-//                     "</div>" +
-//                     "<h5>" + data[row].name_brand + "</h5>" +
-//                     "</div>" +
-//                     "</li>"
-//                 )
-//         }
-//     })
-// }

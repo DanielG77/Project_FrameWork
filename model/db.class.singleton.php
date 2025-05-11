@@ -29,6 +29,7 @@
         }
 
         public static function getInstance() {
+            // return 'hola';
             if (!(self::$_instance instanceof self))
                 self::$_instance = new self();
             return self::$_instance;

@@ -8,6 +8,10 @@
     include($path . "utils/common.inc.php");
     //include($path . "utils/mail.inc.php");
     include($path . "paths.php");
+    include($path . "model/db.class.singleton.php");
+    include($path . "model/Conf.class.singleton.php");
+    include($path . "model/jwt.class.php");
+    include($path . "model/middleware_auth.php");
 
     include($path . "module/home/model/BLL/home_bll.class.singleton.php");
     include($path . "module/home/model/DAO/home_dao.class.singleton.php");
@@ -41,8 +45,8 @@
             if(isset($_GET['op'])){
                 $this -> uriFunction = ($_GET['op'] === "") ? 'view' : $_GET['op'];
             }else{
-                $this -> uriFunction = 'view';
-                // $this -> uriFunction = 'carrusel';
+                // $this -> uriFunction = 'view';
+                $this -> uriFunction = 'carrusel';
             }
         }
     
