@@ -22,14 +22,28 @@
             return $this -> bll -> get_carrusel_BLL();
         }
 
-        // public function get_category() {
-        //     return $this -> bll -> get_category_BLL();
-        // }
+        public function get_category() {
+            return $this -> bll -> get_category_BLL();
+        }
 
-        // public function get_type() {
-        //     // return 'hola car type';
-        //     return $this -> bll -> get_type_BLL();
-        // }
+        public function get_brand() {
+            // return 'hola car brands';
+            return $this -> bll -> get_brand_BLL();
+        }
 
+        public function get_city() {
+            // return 'hola car brands';
+            return $this -> bll -> get_city_BLL();
+        }
+
+        public function get_popular() {
+            // return 'hola car brands';
+            return $this -> bll -> get_popular_BLL();
+        }
+
+        public function get_rating() {
+            // return 'hola car brands';
+            return $this -> bll -> get_rating_BLL();
+        }
     }
 ?>

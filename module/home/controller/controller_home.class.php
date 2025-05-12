@@ -18,9 +18,23 @@
             echo json_encode(common::load_model('home_model', 'get_category'));
         }
         
-        // function type() {
-        //     // echo json_encode('Hola');
-        //     echo json_encode(common::load_model('home_model', 'get_type'));
-        // }
+        function brand() {
+            // echo json_encode('Hola');
+            echo json_encode(common::load_model('home_model', 'get_brand'));
+        }
+
+        function city() {
+            // echo json_encode('Hola');
+            echo json_encode(common::load_model('home_model', 'get_city'));
+        }
+
+        function popular() {
+            // echo json_encode('Hola');
+            echo json_encode(common::load_model('home_model', 'get_popular'));
+        }
+        function rating() {
+            // echo json_encode('Hola');
+            echo json_encode(common::load_model('home_model', 'get_rating'));
+        }
     }
 ?>
