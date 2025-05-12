@@ -1,10 +1,49 @@
 function carrusel(){
     thing = IMG_BRAND;
     console.log(thing);
-    ajaxPromise(friendlyURL("?module=home&op=category"), 'GET', 'JSON')
+    ajaxPromise(friendlyURL("?module=home&op=carrusel"), 'GET', 'JSON')
     .then(function(data) {
-        console.log(data);
-    
+        let carousel = $(".carouselType");
+        carousel.empty();
+
+        for (let row in data) {
+            $('<div></div>')
+                .addClass("item_carrousel")
+                .appendTo(carousel)
+                .attr('id', data[row].name_typ)
+                .html(`
+                    <div class="main-carousel-item">
+                        <div class="image-container">
+                            <img src="${IMG_TYPE}${data[row].img_typ}" alt="${data[row].name_typ}">
+                        </div>
+                        <div class="type-overlay">
+                            <h2 class="type-title">${data[row].name_typ}</h2>
+                            <div class="type-border"></div>
+                        </div>
+                    </div>
+                `);
+        }
+
+        carousel.owlCarousel({
+            loop: true,
+            margin: 0,
+            nav: true,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 7000,
+            responsive: {
+                0: { items: 1 },
+                600: { items: 1 },
+                1000: { items: 1 }
+            },
+            navText: [
+                '<svg width="40" height="40" viewBox="0 0 24 24"><path fill="white" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>',
+                '<svg width="40" height="40" viewBox="0 0 24 24"><path fill="white" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>'
+            ]
+        });
+    })
+    .catch(function(error) {
+        console.error("Error cargando los datos:", error);    
     })
 }
 
