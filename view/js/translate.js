@@ -4,7 +4,7 @@ function changeLang(lang) {
     var elmnts = document.querySelectorAll('[data-tr]');
 
     $.ajax({
-        url: 'http://localhost/Ejercicios/Framework_PHP_OO_MVC/view/lang/' + lang + '.json',
+        url: 'http://localhost/programas/Project_FrameWork/view/lang/' + lang + '.json',
             type: 'GET',  /// GET
             dataType: 'JSON',
             success: function (data) {

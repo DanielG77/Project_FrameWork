@@ -17,7 +17,7 @@
         // public function select_data_carrusel() {
             // return 'hola select_data_carrusel';
             $sql = "SELECT * FROM types";
-            return $sql;
+            // return $sql;
 
             $stmt = $db -> ejecutar($sql);
             return $db -> listar($stmt);

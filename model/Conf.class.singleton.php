@@ -7,11 +7,17 @@
         static $_instance;
 
         private function __construct() {
-            $cnfg = parse_ini_file(UTILS."db.ini");
-            $this->_userdb = $cnfg['root'];
-            $this->_passdb = $cnfg[''];
-            $this->_hostdb = $cnfg['localhost'];
-            $this->_db = $cnfg['datapop'];
+            // $cnfg = parse_ini_file(UTILS."db.ini");
+            // $this->_userdb = $cnfg['root'];
+            // $this->_passdb = $cnfg[''];
+            // $this->_hostdb = $cnfg['localhost'];
+            // $this->_db = $cnfg['datapop'];
+        
+            $this->_userdb = 'root';
+            $this->_passdb = '';
+            $this->_hostdb = 'localhost';
+            $this->_db = 'datapop';
+
         }
 
         private function __clone() {

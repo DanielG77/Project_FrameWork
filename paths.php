@@ -35,6 +35,11 @@
     
     //IMG
     define('IMG_PATH', SITE_ROOT . 'view/images/');
+    define('IMG_BRAND', SITE_ROOT . 'view/images/img_brand/');
+    define('IMG_CATEGORY', SITE_ROOT . 'view/images/img_category/');
+    define('IMG_CITIE', SITE_ROOT . 'view/images/img_citie/');
+    define('IMG_TYPE', SITE_ROOT . 'view/images/img_type/');
+    define('IMG_PROD', SITE_ROOT . 'view/images/img_prod/');
     
     //MODEL_HOME
     define('UTILS_HOME', SITE_ROOT . 'module/home/utils/');

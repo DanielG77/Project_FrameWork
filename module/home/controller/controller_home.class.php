@@ -12,9 +12,11 @@
             echo json_encode(common::load_model('home_model', 'get_carrusel'));
         }
 
-        // function category() {
-        //     echo json_encode(common::load_model('home_model', 'get_category'));
-        // }
+        function category() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('home_model', 'get_category'));
+        }
         
         // function type() {
         //     // echo json_encode('Hola');

@@ -45,8 +45,8 @@
             if(isset($_GET['op'])){
                 $this -> uriFunction = ($_GET['op'] === "") ? 'view' : $_GET['op'];
             }else{
-                // $this -> uriFunction = 'view';
-                $this -> uriFunction = 'carrusel';
+                $this -> uriFunction = 'view';
+                // $this -> uriFunction = 'carrusel';
             }
         }
     
