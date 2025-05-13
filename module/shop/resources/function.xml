@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<functions>
+    <function>
+        <name>view</name>
+        <uri>view</uri>
+    </function>
+    <function>
+        <name>products</name>
+        <uri>products</uri>
+    </function>
+    <!-- <function>
+        <name>category</name>
+        <uri>category</uri>
+    </function> -->
+    <!-- <function>
+        <name>brand</name>
+        <uri>brand</uri>
+    </function> -->
+    <!-- <function>
+        <name>city</name>
+        <uri>city</uri>
+    </function> -->
+    <!-- <function>
+        <name>popular</name>
+        <uri>popular</uri>
+    </function> -->
+    <!-- <function>
+        <name>rating</name>
+        <uri>rating</uri>
+    </function> -->
+</functions>

@@ -49,7 +49,7 @@
     define('JS_VIEW_HOME', SITE_PATH . 'module/home/view/js/');
     define ('VIEW_PATH_HOME', SITE_ROOT . 'module/home/view/');
 
-    //MODEL_HOME
+    //MODEL_SEARCH
     define('DAO_SEARCH', SITE_ROOT . 'module/search/model/DAO/');
     define('BLL_SEARCH', SITE_ROOT . 'module/search/model/BLL/');
     define('MODEL_SEARCH', SITE_ROOT . 'module/search/model/model/');
