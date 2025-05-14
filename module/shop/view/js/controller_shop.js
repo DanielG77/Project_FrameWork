@@ -23,9 +23,77 @@ function shopAllproducts() {
     // } 
     // else {
     console.log("hola");
-   ajaxPromise(friendlyURL("?module=shop&op=products"), 'GET', 'JSON')
+    ajaxPromise(friendlyURL("?module=shop&op=products"), 'GET', 'JSON')
     .then(function(data) {
-        console.log(data);
+        if(data != "shop_vacio") {
+            $("#content_shop_nogames").hide();
+            // console.log("hola_shop");
+            // console.log(data);
+            for (row in data) {
+                $('<div></div>')
+                    .addClass("product-card")
+                    .attr('id', data[row].id_prod)
+                    .appendTo('#content_shop_games')
+                    .html(
+                        "<div class='div_list_prod'>" + 
+                            "<div class='product-carousel-container-search'>" + 
+                                "<div id='product-carousel-search-" + data[row].id_prod + "' class='owl-carousel-search owl-theme-search'></div>" +
+                            "</div>" +
+                            "<h5 class='product-title div_list_prods' id='" + data[row].id_prod + "'>" + data[row].name_prod + "</h5>" +
+                            "<p class='product-price'>" + data[row].price + "€</p>" +
+                        "</div>"
+                    );
+
+                //imágenes en el carrusel
+                let images = data[row].images_prod.split(',');
+                for (let i = 0; i < images.length; i++) {
+                    let image = images[i].trim();
+
+                    $('<div></div>')
+                    .attr({ 'class': 'item-search' })
+                    .html(
+                        "<div class='content-img-details-search'>" +
+                            "<img src='" + image + "' alt='Product Image' class='carousel-image-search' />" +
+                        "</div>"
+                    )
+                    .appendTo('#product-carousel-search-' + data[row].id_prod);
+                }
+
+                // Inicializar Owl Carousel
+                $('#product-carousel-search-' + data[row].id_prod).owlCarousel({
+                    items: 1,
+                    loop: false, // Desactivar el loop para que no sea infinito
+                    nav: true,
+                    dots: true,
+                    autoplay: false,
+                    autoplayTimeout: 0,
+                    autoplayHoverPause: false
+                });
+            }
+            // if (localStorage.getItem('id')) {
+            //     document.getElementById(move_id).scrollIntoView();
+            // }
+            // mapBox_all(data);
+        } else {
+            $("#content_shop_games").hide();
+            const noProductsHTML = `
+                <div class="no-products-container">
+                    <div class="no-products-content">
+                        <div class="no-products-illustration">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                                <path d="M0 0h24v24H0z" fill="none"/>
+                            </svg>
+                        </div>
+                        <h3 class="no-products-title">¡Ups! No encontramos resultados</h3>
+                        <p class="no-products-subtitle">Prueba ajustando tus filtros de búsqueda</p>
+                        <button class="filter_remove" id="Remove_filter">Remove</button>
+                    </div>
+                </div>
+            `;
+            
+            $('#content_shop_nogames').html(noProductsHTML);
+        }
     });
 
         // ajaxForSearch('?module=shop&op=products')
@@ -440,105 +508,105 @@ function shopAllproducts() {
 //     });
 // }
 
-function clicks() {
-    $(document).on("click", ".product-card", function () {
-        var id_prod = this.getAttribute('id');
-        localStorage.removeItem('id_prod');
+// function clicks() {
+//     $(document).on("click", ".product-card", function () {
+//         var id_prod = this.getAttribute('id');
+//         localStorage.removeItem('id_prod');
 
-        $(".left-column-shop, .right-column-shop").hide();
-        $(".left-column-details, .right-column-details").show();
-        more_visiteds(id_prod);
-        loadDetails(id_prod);
-    });
+//         $(".left-column-shop, .right-column-shop").hide();
+//         $(".left-column-details, .right-column-details").show();
+//         more_visiteds(id_prod);
+//         loadDetails(id_prod);
+//     });
 
-    $(document).on("click", ".popup-content", function () {
-        var id_prod = this.getAttribute('id');
+//     $(document).on("click", ".popup-content", function () {
+//         var id_prod = this.getAttribute('id');
         
-        $(".left-column-shop, .right-column-shop").hide();
-        $(".left-column-details, .right-column-details").show();
-        more_visiteds(id_prod);
-        loadDetails(id_prod);
-    });
+//         $(".left-column-shop, .right-column-shop").hide();
+//         $(".left-column-details, .right-column-details").show();
+//         more_visiteds(id_prod);
+//         loadDetails(id_prod);
+//     });
 
-    $(document).on("click", ".related-product-card", function () {
-        var id_prod = this.getAttribute('id');
+//     $(document).on("click", ".related-product-card", function () {
+//         var id_prod = this.getAttribute('id');
         
-        $("html, body").animate({ scrollTop: 0 }, "slow");
+//         $("html, body").animate({ scrollTop: 0 }, "slow");
     
-        $(".left-column-shop, .right-column-shop").hide();
-        $(".left-column-details, .right-column-details").show();
-        more_visiteds(id_prod);
-        loadDetails(id_prod);
+//         $(".left-column-shop, .right-column-shop").hide();
+//         $(".left-column-details, .right-column-details").show();
+//         more_visiteds(id_prod);
+//         loadDetails(id_prod);
         
-    });
+//     });
 
-    // Filtros  
+//     // Filtros  
     
-    $(document).on('click', '.filter_remove', function () {
-        localStorage.removeItem('name_typ');
-        localStorage.removeItem('name_cat');
-        localStorage.removeItem('name_brand');
-        localStorage.removeItem('name_cities');
-        localStorage.removeItem('name_typ_sell');
-        localStorage.removeItem('filter_shop');
-        localStorage.removeItem('move');
+//     $(document).on('click', '.filter_remove', function () {
+//         localStorage.removeItem('name_typ');
+//         localStorage.removeItem('name_cat');
+//         localStorage.removeItem('name_brand');
+//         localStorage.removeItem('name_cities');
+//         localStorage.removeItem('name_typ_sell');
+//         localStorage.removeItem('filter_shop');
+//         localStorage.removeItem('move');
 
-        window.location.reload();
-    });
+//         window.location.reload();
+//     });
     
-    $(document).on("click", '.button_categories', function() {
+//     $(document).on("click", '.button_categories', function() {
 
-        localStorage.removeItem('filter_shop');
-        localStorage.removeItem('name_cat');
+//         localStorage.removeItem('filter_shop');
+//         localStorage.removeItem('name_cat');
 
-        var filter_maps = [];
-        var name_catergoria = this.getAttribute('id');
+//         var filter_maps = [];
+//         var name_catergoria = this.getAttribute('id');
 
-        localStorage.setItem('name_cat', "["+JSON.stringify(name_catergoria)+"]");
-        filter_maps.push(['name_cat', name_catergoria]);         
+//         localStorage.setItem('name_cat', "["+JSON.stringify(name_catergoria)+"]");
+//         filter_maps.push(['name_cat', name_catergoria]);         
         
-        var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
-        filter_shop = filter_shop.filter(filter => filter[0] !== 'name_cat');
-        filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
-        localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
+//         var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
+//         filter_shop = filter_shop.filter(filter => filter[0] !== 'name_cat');
+//         filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
+//         localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
 
-        setTimeout(function() {
-            window.location.href = 'index.php?page=ctrl_shop&op=list';
-        }, 300);
-    });
+//         setTimeout(function() {
+//             window.location.href = 'index.php?page=ctrl_shop&op=list';
+//         }, 300);
+//     });
 
-    // Valoracion
-    $(document).on("click", ".container__items label", function() {
-        var ratingValue = $(this).find('.label-description').data('content');
+//     // Valoracion
+//     $(document).on("click", ".container__items label", function() {
+//         var ratingValue = $(this).find('.label-description').data('content');
         
-        var productId = $(this).closest('.container__items').attr('id');
+//         var productId = $(this).closest('.container__items').attr('id');
         
-        if (productId && ratingValue) {
-            console.log("ID Producto:", productId, "Rating:", ratingValue);
+//         if (productId && ratingValue) {
+//             console.log("ID Producto:", productId, "Rating:", ratingValue);
             
-            rating(productId, ratingValue);
+//             rating(productId, ratingValue);
             
-            $(this).siblings().removeClass('selected');
-            $(this).addClass('selected');
-        } else {
-            console.error("No se pudo obtener el ID del producto o el valor de la valoración");
-        }
-    });
+//             $(this).siblings().removeClass('selected');
+//             $(this).addClass('selected');
+//         } else {
+//             console.error("No se pudo obtener el ID del producto o el valor de la valoración");
+//         }
+//     });
 
-    // Botones Like
-    $(document).on("click", ".list__heart", function() {
-        var id_prod = this.getAttribute('id');
-        click_like(id_prod, "list_all");
-    });
+//     // Botones Like
+//     $(document).on("click", ".list__heart", function() {
+//         var id_prod = this.getAttribute('id');
+//         click_like(id_prod, "list_all");
+//     });
 
-    $(document).on("click", ".details__heart", function() {
-        console.log("Corazonzito");
-        var id_prod = this.getAttribute('id');
-        console.log(id_prod);
-        click_likes(id_prod, "details");
-    });
+//     $(document).on("click", ".details__heart", function() {
+//         console.log("Corazonzito");
+//         var id_prod = this.getAttribute('id');
+//         console.log(id_prod);
+//         click_likes(id_prod, "details");
+//     });
 
-}
+// }
 
 // function more_visiteds(id_prod){
 //     // console.log("VISITITAAS");
@@ -1089,7 +1157,7 @@ $(document).ready(function() {
     shopAllproducts();
     // pagination();
     // filter_button();
-    clicks();
+    // clicks();
     
 });
 
