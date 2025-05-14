@@ -2,19 +2,19 @@
     // echo $_SERVER['DOCUMENT_ROOT'] . '/1_Fw_PHP_OO_MVC_jQuery_AngularJS/Framework/5_begin_framework_ORM/';
     // exit;
 
-    //require 'autoload.php';
+    require 'autoload.php';
     
-    $path = $_SERVER['DOCUMENT_ROOT'] . '/programas/Project_FrameWork/';
-    include($path . "utils/common.inc.php");
+    // $path = $_SERVER['DOCUMENT_ROOT'] . '/programas/Project_FrameWork/';
+    // include($path . "utils/common.inc.php");
     //include($path . "utils/mail.inc.php");
-    include($path . "paths.php");
-    include($path . "model/db.class.singleton.php");
-    include($path . "model/Conf.class.singleton.php");
-    include($path . "model/jwt.class.php");
-    include($path . "model/middleware_auth.php");
+    // include($path . "paths.php");
+    // include($path . "model/db.class.singleton.php");
+    // include($path . "model/Conf.class.singleton.php");
+    // include($path . "model/jwt.class.php");
+    // include($path . "model/middleware_auth.php");
 
-    include($path . "module/home/model/BLL/home_bll.class.singleton.php");
-    include($path . "module/home/model/DAO/home_dao.class.singleton.php");
+    // include($path . "module/home/model/BLL/home_bll.class.singleton.php");
+    // include($path . "module/home/model/DAO/home_dao.class.singleton.php");
 
     //ob_start();
     //session_start();

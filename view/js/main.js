@@ -54,10 +54,23 @@ function friendlyURL(url) {
 
 /* LOAD MENU */
 function load_menu() {
+    console.log("hola load menu");
+    //"Shop"
+    $('<li></li>')
+        .attr({ 'class': 'nav_item-shop' })
+        .html('<a href="' + friendlyURL("?module=shop&op=view") + '" class="nav-link">Shop</a>')
+        .appendTo('.navbar-nav'); // Cambiar a .navbar-nav para que funcione con tu estructura
+
+    //"Login"
+    $('<li></li>')
+        .attr({ 'class': 'nav_item-login', 'id': 'login_link' })
+        .html('<a href="' + friendlyURL("?module=login&op=view") + '" class="nav-link" data-tr="Log in">Log in</a>')
+        .appendTo('.navbar-nav');
+        
     // $('<li></li>').attr({'class' : 'nav_item-shop'}).html('<a href="' + friendlyURL("?module=home&op=view") + '" class="nav_link">Home</a>').appendTo('.nav_list');
     $('<li></li>').attr({'class' : 'nav_item-shop'}).html('<a href="' + friendlyURL("?module=shop&op=view") + '" class="nav_link">Shop</a>').appendTo('.nav_list');
-    $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=contact&op=view") + '" class="nav_link">Contact us</a>').appendTo('.nav_list');
-    $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=contact") + '" class="nav_link">Contact us</a>').appendTo('.nav_list');
+    // $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=contact&op=view") + '" class="nav_link">Contact us</a>').appendTo('.nav_list');
+    // $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=contact") + '" class="nav_link">Contact us</a>').appendTo('.nav_list');
     
     // ajaxPromise(friendlyURL('?module=login&op=data_user'), 'POST', 'JSON', {token: localStorage.getItem('token')})
     // .then(function(data) {
@@ -68,7 +81,7 @@ function load_menu() {
     //     }
     //     click_profile(data[0]);
     // }).catch(function() {
-    $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=login&op=view") + '" class="nav_link" data-tr="Log in">Log in</a>').appendTo('.nav_list');
+    // $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=login&op=view") + '" class="nav_link" data-tr="Log in">Log in</a>').appendTo('.nav_list');
     // });
 }
 

@@ -6,9 +6,9 @@
             common::load_view('top_page_shop.html', VIEW_PATH_SHOP . 'shop.html');
         }
         function products() {
-            // echo 'hola view';
+            // echo 'hola carrusel';
             // exit;
-            common::load_view('shop_model', VIEW_PATH_SHOP . 'get_products');
+            echo json_encode(common::load_model('shop_model', 'get_products'));
         }
     }
 ?>

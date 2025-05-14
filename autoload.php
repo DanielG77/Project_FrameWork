@@ -1,31 +1,29 @@
 <?php
-    spl_autoload_register(null,false);
-    spl_autoload_extensions('.php,.class.php');
+    require_once("paths.php");
+    require_once(SITE_ROOT . 'model/middleware_auth.php');
+    
+    spl_autoload_extensions('.php,.inc.php,.class.php,.class.singleton.php');
     spl_autoload_register('loadClasses');
-
-    function loadClasses($className){
-        // controller
-        if (file_exists(CONTROLLER_PATH.$className.'.class.php')){
-            include_once CONTROLLER_PATH.$className.'.class.php';
+    
+    function loadClasses($className) {
+        $breakClass = explode('_', $className);
+        $modelName = "";
+        
+        if (isset($breakClass[1])) {
+            $modelName = strtoupper($breakClass[1]);
         }
-        // model
-        if (file_exists(MODEL_PATH.$className.'.class.php')){
-            include_once MODEL_PATH.$className.'.class.php';
-        }
-        // module controller
-        if (file_exists(MODULES_PATH.strtolower($className).'/controller/'.strtolower($className).'.class.php')) {
-            include_once MODULES_PATH.strtolower($className).'/controller/'.strtolower($className).'.class.php';
-        }
-        // module model
-        if (file_exists(MODULES_PATH.strtolower($className).'/model/'.$className.'.class.php')) {
-            include_once MODULES_PATH.strtolower($className).'/model/'.$className.'.class.php';
-        }
-        // components controller
-        if (file_exists(COMPONENTS_PATH.strtolower($className).'/controller/'.strtolower($className).'.class.php')) {
-            include_once COMPONENTS_PATH.strtolower($className).'/controller/'.strtolower($className).'.class.php';
-        }
-        // components model
-        if (file_exists(COMPONENTS_PATH.strtolower($className).'/model/'.$className.'.class.php')) {
-            include_once COMPONENTS_PATH.strtolower($className).'/model/'.$className.'.class.php';
+        
+        if (file_exists(SITE_ROOT . 'module/' . $breakClass[0] . '/model/'. $modelName . '/' . $className . '.class.singleton.php')) {
+            set_include_path('module/' . $breakClass[0] . '/model/' . $modelName.'/');
+            spl_autoload($className);
+        }else if (file_exists(SITE_ROOT . 'model/' . $className . '.class.singleton.php')){
+            set_include_path(SITE_ROOT . 'model/');
+            spl_autoload($className);
+        }else if (file_exists(SITE_ROOT . 'model/' . $className . '.class.php')){
+            set_include_path(SITE_ROOT . 'model/');
+            spl_autoload($className);
+        }else if (file_exists(SITE_ROOT . 'utils/' . $className . '.inc.php')) {
+            set_include_path(SITE_ROOT . 'utils/');
+            spl_autoload($className);
         }
     }

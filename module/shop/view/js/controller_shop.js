@@ -22,8 +22,8 @@ function shopAllproducts() {
         // loadDetails(id_prod);
     // } 
     // else {
-    console.log("hola shop");
-    ajaxPromise(friendlyURL('?module=shop&op=products'), 'POST',  'JSON')
+    console.log("hola");
+   ajaxPromise(friendlyURL("?module=shop&op=products"), 'GET', 'JSON')
     .then(function(data) {
         console.log(data);
     });
