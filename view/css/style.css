@@ -10851,19 +10851,21 @@ html {
 
 #icono {
     display: inline-block;
-    height: 20px;
-    width: 70px;
+    height: 50px; /* Ajusta la altura según el tamaño del logotipo */
+    width: 50px; /* Ajusta el ancho según el tamaño del logotipo */
     background-image: url(../images/Icono.png);
-    background-size: cover;
+    background-size: contain; /* Asegura que la imagen se escale proporcionalmente */
     background-repeat: no-repeat;
-    margin-left: -4%;
-    margin-top: -3px;
+    background-position: center; /* Centra la imagen dentro del contenedor */
+    margin-left: 0; /* Ajusta el margen para alinear correctamente */
+    margin-right: 10px; /* Espacio entre el logo y el texto */
+    vertical-align: middle; /* Alinea el logo verticalmente con el texto */
 }
 
 #icono a {
     display: inline-block;
-    height: 50px;
-    width: 75px;
-    margin-left: 1%;
-    position: absolute; 
+    height: 100%; /* Ocupa todo el espacio del contenedor del logotipo */
+    width: 100%; /* Ocupa todo el espacio del contenedor del logotipo */
+    position: relative; /* Permitirá una mejor alineación si es necesario */
+    text-decoration: none; /* Elimina subrayados o estilos no deseados */
 }

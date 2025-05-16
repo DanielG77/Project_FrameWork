@@ -24,13 +24,13 @@
 			// return $this -> dao -> select_data_carrusel();
 		}
 
-		// public function get_category_BLL() {
-		// 	return $this -> dao -> select_data_category($this -> db);
-		// }
+		public function get_filters_BLL() {
+			return $this -> dao -> select_data_filters($this -> db);
+		}
 
-		// public function get_brand_BLL() {
-		// 	return $this -> dao -> select_data_brand($this -> db);
-		// }
+		public function get_product_filters_BLL() {
+			return $this -> dao -> select_data_product_filters($this -> db, $_POST['filtro_shop']);
+		}
 
 		// public function get_city_BLL() {
 		// 	return $this -> dao -> select_data_city($this -> db);

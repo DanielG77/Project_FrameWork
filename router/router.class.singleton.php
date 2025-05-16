@@ -3,18 +3,6 @@
     // exit;
 
     require 'autoload.php';
-    
-    // $path = $_SERVER['DOCUMENT_ROOT'] . '/programas/Project_FrameWork/';
-    // include($path . "utils/common.inc.php");
-    //include($path . "utils/mail.inc.php");
-    // include($path . "paths.php");
-    // include($path . "model/db.class.singleton.php");
-    // include($path . "model/Conf.class.singleton.php");
-    // include($path . "model/jwt.class.php");
-    // include($path . "model/middleware_auth.php");
-
-    // include($path . "module/home/model/BLL/home_bll.class.singleton.php");
-    // include($path . "module/home/model/DAO/home_dao.class.singleton.php");
 
     //ob_start();
     //session_start();
@@ -75,6 +63,7 @@
                             $controllerName = 'controller_' . (String) $row -> name;
                             $this -> nameModule = (String) $row -> name;
                             return new $controllerName;
+                            // getInstance();
                         }
                     }
                 }

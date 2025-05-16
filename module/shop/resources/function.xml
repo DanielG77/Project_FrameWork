@@ -8,14 +8,14 @@
         <name>products</name>
         <uri>products</uri>
     </function>
-    <!-- <function>
-        <name>category</name>
-        <uri>category</uri>
-    </function> -->
-    <!-- <function>
-        <name>brand</name>
-        <uri>brand</uri>
-    </function> -->
+    <function>
+        <name>filters</name>
+        <uri>filters</uri>
+    </function>
+    <function>
+        <name>product_filters</name>
+        <uri>product_filters</uri>
+    </function>
     <!-- <function>
         <name>city</name>
         <uri>city</uri>

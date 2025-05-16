@@ -10,5 +10,17 @@
             // exit;
             echo json_encode(common::load_model('shop_model', 'get_products'));
         }
+
+        function filters() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_filters'));
+        }
+
+        function product_filters() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_product_filters'));
+        }
     }
 ?>

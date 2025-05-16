@@ -22,14 +22,14 @@
             return $this -> bll -> get_products_BLL();
         }
 
-        // public function get_category() {
-        //     return $this -> bll -> get_category_BLL();
-        // }
+        public function get_filters() {
+            return $this -> bll -> get_filters_BLL();
+        }
 
-        // public function get_brand() {
-        //     // return 'hola car brands';
-        //     return $this -> bll -> get_brand_BLL();
-        // }
+        public function get_product_filters() {
+            // return 'hola car brands';
+            return $this -> bll -> get_product_filters_BLL();
+        }
 
         // public function get_city() {
         //     // return 'hola car brands';

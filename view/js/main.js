@@ -54,21 +54,36 @@ function friendlyURL(url) {
 
 /* LOAD MENU */
 function load_menu() {
-    console.log("hola load menu");
-    //"Shop"
-    $('<li></li>')
-        .attr({ 'class': 'nav_item-shop' })
-        .html('<a href="' + friendlyURL("?module=shop&op=view") + '" class="nav-link">Shop</a>')
-        .appendTo('.navbar-nav'); // Cambiar a .navbar-nav para que funcione con tu estructura
+    // console.log("hola load menu");
+    // Logo
+  $('<a></a>')
+    .attr({ 'class': 'enlaze', 'id': 'enlaze', 'href': friendlyURL("?module=home&op=view") })
+    .appendTo('#icono');
+    
+    //Marca
+    $('<a></a>')
+        .attr({ 'class': 'navbar-brand', 'id': 'navbar-brand', 'href': friendlyURL("?module=home&op=view") })
+        .text('La Taberna De los Dados')
+        .appendTo('.nav_bar_logitp');
 
-    //"Login"
+   
+
+    // "Shop"
     $('<li></li>')
-        .attr({ 'class': 'nav_item-login', 'id': 'login_link' })
-        .html('<a href="' + friendlyURL("?module=login&op=view") + '" class="nav-link" data-tr="Log in">Log in</a>')
+        .attr({ 'class': 'nav-item' })
+        .html('<a href="' + friendlyURL("?module=shop&op=view") + '" class="nav-link">Shop</a>')
         .appendTo('.navbar-nav');
+
+    // "Login"
+    $('<li></li>')
+        .attr({ 'class': 'nav-item', 'id': 'login_link' })
+        .html('<a href="' + friendlyURL("?module=login&op=view") + '" class="nav-link">Log in</a>')
+        .appendTo('.navbar-nav');
+
+   
         
     // $('<li></li>').attr({'class' : 'nav_item-shop'}).html('<a href="' + friendlyURL("?module=home&op=view") + '" class="nav_link">Home</a>').appendTo('.nav_list');
-    $('<li></li>').attr({'class' : 'nav_item-shop'}).html('<a href="' + friendlyURL("?module=shop&op=view") + '" class="nav_link">Shop</a>').appendTo('.nav_list');
+    // $('<li></li>').attr({'class' : 'nav_item-shop'}).html('<a href="' + friendlyURL("?module=shop&op=view") + '" class="nav_link">Shop</a>').appendTo('.nav_list');
     // $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=contact&op=view") + '" class="nav_link">Contact us</a>').appendTo('.nav_list');
     // $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=contact") + '" class="nav_link">Contact us</a>').appendTo('.nav_list');
     

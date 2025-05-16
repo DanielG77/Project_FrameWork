@@ -1,5 +1,5 @@
 function shopAllproducts() {
-    // var prefiltro_shop = localStorage.getItem('filter_shop') || false;
+    var filters = localStorage.getItem('filter_shop') || false;
     // var id_prod = localStorage.getItem('id_prod') || false;
     // var categoria = localStorage.getItem('name_cat') || false;
     // var ubicacion = localStorage.getItem('ubication') || false;
@@ -11,69 +11,85 @@ function shopAllproducts() {
     //     localStorage.removeItem('id_prod');
     //     categ_visited(categoria);
     // }
-    // if (prefiltro_shop != false) {
-        // var filtro_shop = JSON.parse(prefiltro_shop);
-        // pagination();
-        // ajaxForSearch('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=filtres', total_prod = 0, items_page = 3, filtro_shop);      
-    // }
+    if (filters != false) {
+        var filtro_data = JSON.parse(filters);
+        ajaxForSearch('?module=shop&op=product_filters', filtro_data);      
+    }
     // else if(id_prod != false){
         // localStorage.removeItem('id_prod');
         // more_visiteds(id_prod);
         // loadDetails(id_prod);
     // } 
-    // else {
-    console.log("hola");
-    ajaxPromise(friendlyURL("?module=shop&op=products"), 'GET', 'JSON')
+    else {
+        ajaxForSearch('?module=shop&op=products', undefined)
+            // ajaxForSearch('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=all_games', total_prod = 0, items_page = 3, undefined);
+    }
+    
+}
+
+function ajaxForSearch(durl, filters) {
+    ajaxPromise(friendlyURL(durl), 'POST',  'JSON', filters)
     .then(function(data) {
         if(data != "shop_vacio") {
             $("#content_shop_nogames").hide();
-            // console.log("hola_shop");
-            // console.log(data);
-            for (row in data) {
-                $('<div></div>')
-                    .addClass("product-card")
-                    .attr('id', data[row].id_prod)
-                    .appendTo('#content_shop_games')
-                    .html(
-                        "<div class='div_list_prod'>" + 
-                            "<div class='product-carousel-container-search'>" + 
-                                "<div id='product-carousel-search-" + data[row].id_prod + "' class='owl-carousel-search owl-theme-search'></div>" +
-                            "</div>" +
-                            "<h5 class='product-title div_list_prods' id='" + data[row].id_prod + "'>" + data[row].name_prod + "</h5>" +
-                            "<p class='product-price'>" + data[row].price + "€</p>" +
-                        "</div>"
-                    );
+            $('#content_shop_games').empty(); // Limpiar contenedor
+            
+            data.forEach(product => {
+                const productHTML = `
+                    <div class="product-card" id="${product.id_prod}">
+                        <div class="product-header">
+                            ${product.name_status ? `<span class="product-status">${product.name_status}</span>` : ''}
+                            <div class="product-carousel-container">
+                                <div id="carousel-${product.id_prod}" class="owl-carousel">
+                                    ${product.images_prod.split(',').map(img => `
+                                        <div class="item">
+                                            <img src="${IMG_PROD}${img.trim()}" alt="${product.name_prod}" class="product-image">
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-body">
+                            <div class="product-info">
+                                <span class="product-price">${product.price}€</span>
+                                <h3 class="product-title">${product.name_prod}</h3>
+                                <div class="product-meta">
+                                ${product.names_cat ? `
+                                <div class="popup-categories">
+                                    ${product.names_cat.split(',').map(cat => `
+                                        <span class="popup-category">${cat.trim()}</span>
+                                    `).join('')}
+                                </div>
+                                ` : ''}                                    
+                                <span class="product-location">${product.name_cities}</span>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="price-container">
+                                    ${product.name_typ_sell ? `<span class="sell-type">${product.name_typ_sell}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
 
-                //imágenes en el carrusel
-                let images = data[row].images_prod.split(',');
-                for (let i = 0; i < images.length; i++) {
-                    let image = images[i].trim();
-
-                    $('<div></div>')
-                    .attr({ 'class': 'item-search' })
-                    .html(
-                        "<div class='content-img-details-search'>" +
-                            "<img src='" + image + "' alt='Product Image' class='carousel-image-search' />" +
-                        "</div>"
-                    )
-                    .appendTo('#product-carousel-search-' + data[row].id_prod);
-                }
-
+                $('#content_shop_games').append(productHTML);
+                
                 // Inicializar Owl Carousel
-                $('#product-carousel-search-' + data[row].id_prod).owlCarousel({
+                $(`#carousel-${product.id_prod}`).owlCarousel({
                     items: 1,
-                    loop: false, // Desactivar el loop para que no sea infinito
+                    loop: true,
                     nav: true,
-                    dots: true,
-                    autoplay: false,
-                    autoplayTimeout: 0,
-                    autoplayHoverPause: false
+                    dots: false,
+                    autoplay: true,
+                    autoplayTimeout: 5000,
+                    navText: ['‹', '›']
                 });
-            }
-            // if (localStorage.getItem('id')) {
-            //     document.getElementById(move_id).scrollIntoView();
-            // }
-            // mapBox_all(data);
+            });
+
+            //Carga de Funciones Extras
+            mapBox_all(data);
+
         } else {
             $("#content_shop_games").hide();
             const noProductsHTML = `
@@ -95,19 +111,339 @@ function shopAllproducts() {
             $('#content_shop_nogames').html(noProductsHTML);
         }
     });
-
-        // ajaxForSearch('?module=shop&op=products')
-            // ajaxForSearch('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=all_games', total_prod = 0, items_page = 3, undefined);
-    // }
-    
 }
 
-// function ajaxForSearch(durl) {
-//     ajaxPromise(friendlyURL(durl), 'POST',  'JSON')
-//     .then(function(data) {
-//         console.log(data);
-//     });
-// }
+function mapBox_all(data) {
+    const customIcon = L.icon({
+        iconUrl: '/programas/Project_FrameWork/view/images/marcador-de-posicion.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+    });
+
+    const mapContainer = document.getElementById('map');
+    if (mapContainer) {
+        const map = L.map('map').setView([data[0].latitud, data[0].longitud], 5);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        data.forEach(product => {
+            const marker = L.marker([product.latitud, product.longitud], { icon: customIcon }).addTo(map);
+            
+            const popupContent = `
+                <div class="map-popup">
+                    <div class="popup-carousel owl-carousel">
+                        ${product.images_prod.split(',').map(img => `
+                            <div class="item">
+                                <img src="${IMG_PROD}${img.trim()}" alt="${product.name_prod}" class="popup-image">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="popup-info">
+                        <h4 class="popup-title">${product.name_prod}</h4>
+                        <div class="popup-details">
+                            <p class="popup-price">${product.price}€</p>
+                            <p class="popup-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${product.name_cities}
+                            </p>
+                            ${product.names_cat ? `
+                            <div class="popup-categories">
+                                ${product.names_cat.split(',').map(cat => `
+                                    <span class="popup-category">${cat.trim()}</span>
+                                `).join('')}
+                            </div>
+                        ` : ''}                        
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+            
+            marker.on('popupopen', () => {
+                $(`.popup-carousel`).owlCarousel({
+                    items: 1,
+                    loop: true,
+                    nav: true,
+                    dots: false,
+                    autoplay: false,
+                    navText: ['‹', '›']
+                });
+            });
+        });
+    } else {
+        console.error("Map container not found");
+    }
+}
+
+function print_filters() {
+    ajaxPromise(friendlyURL('?module=shop&op=filters'), 'POST',  'JSON')
+    .then(function(filters) {
+        // console.log("hola filtres nuevo framework");
+        // console.log(filters);
+        $('#filters').empty();
+        
+        var filtersContainer = $('<div class="filters-main-container"></div>').css({
+            'display': 'flex',
+            'flex-wrap': 'wrap',
+            'align-items': 'flex-start',
+            'gap': '15px'
+        });
+
+        filters.forEach(function(filter) {
+            var valores = filter.valores.split(',');
+            var tipo = filter.typ_filtro.toLowerCase();
+
+            if(tipo === 'select' || tipo === 'order_by') {
+                var divFilter = $('<div class="div-filters"></div>').css({'display': 'flex','flex-direction': 'column'});
+                var select = $('<select></select>')
+                    .addClass(filter.name_filtro)
+                    .attr('id', filter.name_filtro)
+                    .css('min-width', '120px');
+
+                select.append('<option selected="selected" value="" disabled>' + filter.name_filtro + '</option>');
+                
+                valores.forEach(function(val) {
+                    select.append($('<option></option>').attr('value', val).text(val));
+                });
+                
+                divFilter.append(select);
+                filtersContainer.append(divFilter);
+            } 
+           else if(tipo === 'checkbox') {
+                var checkboxContainer = $('<div class="checkbox-container"></div>').css({
+                    'border': '1px solid #ddd',
+                    'padding': '8px',
+                    'border-radius': '4px',
+                    'cursor': 'pointer',
+                    'transition': 'all 0.3s ease'
+                });
+
+                // Cabecera plegable
+                var header = $('<div class="filter-header"></div>').css({
+                    'display': 'flex',
+                    'justify-content': 'space-between',
+                    'align-items': 'center'
+                }).append(
+                    $('<div class="filter-title">').text(filter.name_filtro),
+                    $('<i class="fas fa-chevron-down toggle-icon"></i>').css({
+                        'transition': 'transform 0.3s ease',
+                        'font-size': '0.8rem'
+                    })
+                );
+
+                // Contenedor de checkboxes (inicialmente oculto)
+                var content = $('<div class="checkbox-content"></div>').css({
+                    'display': 'none',
+                    'flex-direction': 'column',
+                    'gap': '5px',
+                    'padding-top': '8px',
+                    'border-top': '1px solid #eee',
+                    'margin-top': '8px'
+                });
+
+                valores.forEach(function(val) {
+                    var cleanVal = val.trim().replace(/\s+/g, '_');
+                    var checkboxDiv = $('<div class="checkbox-item"></div>');
+                    var checkbox = $('<input type="checkbox" />')
+                        .addClass(filter.name_filtro)
+                        .attr('id', `${filter.name_filtro}_${cleanVal}`)
+                        .val(val.trim());
+                    
+                    checkboxDiv.append($('<label></label>').append(checkbox).append(' ' + val.trim()));
+                    content.append(checkboxDiv);
+                });
+
+                // Evento de clic para toggle
+                header.on('click', function() {
+                    content.slideToggle(300);
+                    $(this).find('.toggle-icon').toggleClass('rotated');
+                });
+
+                checkboxContainer.append(header, content);
+                filtersContainer.append(checkboxContainer);
+            }
+            else if(tipo === 'radiobutton') {
+                var divFilter = $('<div class="div-filters"></div>').css({'display': 'flex','flex-direction': 'column'});
+                divFilter.append($('<div class="filter-title">').text(filter.name_filtro));
+                
+                valores.forEach(function(val) {
+                    var cleanVal = val.trim().replace(/\s+/g, '_');
+                    var radioDiv = $('<div class="radio-item"></div>');
+                    var radio = $('<input type="radio" />')
+                        .addClass(filter.name_filtro)
+                        .attr('name', filter.name_filtro)
+                        .attr('id', `${filter.name_filtro}_${cleanVal}`)
+                        .val(val.trim());
+                    
+                    radioDiv.append($('<label></label>').append(radio).append(' ' + val.trim()));
+                    divFilter.append(radioDiv);
+                });
+
+                filtersContainer.append(divFilter);
+            }
+        });
+
+        var buttonsContainer = $('<div class="filter-buttons"></div>').css({
+            'display': 'flex',
+            'gap': '10px',
+            'align-self': 'center'
+        }).append(
+            $('<button class="filter_button" id="Button_filter">Filter</button>'),
+            $('<button class="filter_remove" id="Remove_filter">Remove</button>')
+        );
+
+        filtersContainer.append(buttonsContainer);
+        $('#filters').append(filtersContainer);
+
+        // Highlight después de cargar el DOM
+        const storedFilters = localStorage.getItem('filter_shop');
+        if (storedFilters) {
+            JSON.parse(storedFilters).forEach(filter => {
+                const [filterName, storedValue] = filter;
+                
+                // Selects
+                const select = $(`#${filterName}`);
+                if (select.length) {
+                    select.val(storedValue);
+                    return;
+                }
+
+                // Checkboxes
+                const checkboxes = $(`.${filterName}[type="checkbox"]`);
+                if (checkboxes.length) {
+                    try {
+                        const values = JSON.parse(storedValue);
+                        checkboxes.each(function() {
+                            $(this).prop('checked', values.includes($(this).val()));
+                        });
+                    } catch(e) {
+                        console.error('Error parsing checkbox values:', e);
+                    }
+                    return;
+                }
+
+                // Radio buttons
+                const radio = $(`.${filterName}[type="radio"][value="${storedValue}"]`);
+                if (radio.length) {
+                    radio.prop('checked', true);
+                }
+            });
+        }
+    })
+}
+
+function filter_button() {
+    //type
+    $(document).on('change', '.name_typ', function () {
+        if ($(this).attr('type') === 'checkbox') {
+            let selectedValues = $('.name_typ:checked').map(function () {
+                return this.value;
+            }).get(); 
+            localStorage.setItem('name_typ', JSON.stringify(selectedValues));
+        } else {
+                localStorage.setItem('name_typ', this.value);
+        }
+    }).val(localStorage.getItem('name_typ'));
+   
+    //category
+    $(document).on('change', '.name_cat', function () {
+        if ($(this).attr('type') === 'checkbox') {
+            let selectedValues = $('.name_cat:checked').map(function () {
+                return this.value;
+            }).get(); 
+            localStorage.setItem('name_cat', JSON.stringify(selectedValues));
+        } else {
+            localStorage.setItem('name_cat', this.value);
+        }
+    }).val(localStorage.getItem('name_cat'));
+
+    //brand
+    $(document).on('change', '.name_brand', function () {
+        if ($(this).attr('type') === 'checkbox') {
+            let selectedValues = $('.name_brand:checked').map(function () {
+                return this.value;
+            }).get(); 
+            localStorage.setItem('name_brand', JSON.stringify(selectedValues));
+        } else {
+            localStorage.setItem('name_brand', this.value);
+        }
+    }).val(localStorage.getItem('name_brand'));
+
+    //brand
+    $(document).on('change', '.name_cities', function () {
+        if ($(this).attr('type') === 'checkbox') {
+            let selectedValues = $('..name_cities:checked').map(function () {
+                return this.value;
+            }).get(); 
+            localStorage.setItem('name_cities', JSON.stringify(selectedValues));
+        } else {
+            localStorage.setItem('name_cities', this.value);
+        }
+    }).val(localStorage.getItem('name_cities'));
+
+    //cities
+    $(document).on('change', '.name_typ_sell', function () {
+        if ($(this).attr('type') === 'checkbox') {
+            let selectedValues = $('.name_typ_sell:checked').map(function () {
+                return this.value;
+            }).get(); 
+            localStorage.setItem('name_typ_sell', JSON.stringify(selectedValues));
+        } else {
+            localStorage.setItem('name_typ_sell', this.value);
+        }
+    }).val(localStorage.getItem('name_typ_sell'));
+
+    $(document).on('change', '.order_by', function () {
+        if ($(this).attr('type') === 'checkbox') {
+            let selectedValues = $('.order_by:checked').map(function () {
+                return this.value;
+            }).get(); 
+            localStorage.setItem('order_by', JSON.stringify(selectedValues));
+        } else {
+            localStorage.setItem('order_by', this.value);
+        }
+    }).val(localStorage.getItem('order_by'));
+
+    $(document).on('click', '.filter_button', function () {
+        localStorage.removeItem('move');
+        var filter_shop = [];
+
+        if (localStorage.getItem('name_typ')) {
+            filter_shop.push(['name_typ', localStorage.getItem('name_typ')]);
+        }
+
+        if (localStorage.getItem('name_cat')) {
+            filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
+            // categ_visited(localStorage.getItem('name_cat'))
+        }
+
+        if (localStorage.getItem('name_brand')) {
+            filter_shop.push(['name_brand', localStorage.getItem('name_brand')]);
+        }
+
+        if (localStorage.getItem('name_cities')) {
+            filter_shop.push(['name_cities', localStorage.getItem('name_cities')]);
+        }
+
+        if (localStorage.getItem('name_typ_sell')) {
+            filter_shop.push(['name_typ_sell', localStorage.getItem('name_typ_sell')]);
+        }
+
+        if (localStorage.getItem('order_by')) {
+            filter_shop.push(['order_by', localStorage.getItem('order_by')]);
+        }
+
+        if (filter_shop.length > 0) {
+            localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
+            window.location.reload();
+        } else {
+            alert('Por favor, seleccione al menos un filtro.');
+        }
+    });
+}
 
 // function loadDetails(id_prod) {
 //     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=details_game&id=' + id_prod, 'GET', 'JSON', false)
@@ -267,248 +603,8 @@ function shopAllproducts() {
 //     });
 // }
 
-// function print_filters() {
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=print_filtres', 'GET', 'JSON', false)
-//     .then(function(filters) {
-//         $('#filters').empty();
-        
-//         var filtersContainer = $('<div class="filters-main-container"></div>').css({
-//             'display': 'flex',
-//             'flex-wrap': 'wrap',
-//             'align-items': 'flex-start',
-//             'gap': '15px'
-//         });
 
-//         filters.forEach(function(filter) {
-//             var valores = filter.valores.split(',');
-//             var tipo = filter.typ_filtro.toLowerCase();
-
-//             if(tipo === 'select' || tipo === 'order_by') {
-//                 var divFilter = $('<div class="div-filters"></div>').css({'display': 'flex','flex-direction': 'column'});
-//                 var select = $('<select></select>')
-//                     .addClass(filter.name_filtro)
-//                     .attr('id', filter.name_filtro)
-//                     .css('min-width', '120px');
-
-//                 select.append('<option selected="selected" value="" disabled>' + filter.name_filtro + '</option>');
-                
-//                 valores.forEach(function(val) {
-//                     select.append($('<option></option>').attr('value', val).text(val));
-//                 });
-                
-//                 divFilter.append(select);
-//                 filtersContainer.append(divFilter);
-//             } 
-//             else if(tipo === 'checkbox') {
-//                 var checkboxContainer = $('<div class="checkbox-container"></div>').css({
-//                     'display': 'flex',
-//                     'flex-direction': 'column',
-//                     'border': '1px solid #ddd',
-//                     'padding': '8px',
-//                     'border-radius': '4px'
-//                 });
-
-//                 checkboxContainer.append($('<div class="filter-title">').text(filter.name_filtro));
-
-//                 valores.forEach(function(val) {
-//                     var cleanVal = val.trim().replace(/\s+/g, '_');
-//                     var checkboxDiv = $('<div class="checkbox-item"></div>');
-//                     var checkbox = $('<input type="checkbox" />')
-//                         .addClass(filter.name_filtro)
-//                         .attr('id', `${filter.name_filtro}_${cleanVal}`)
-//                         .val(val.trim());
-                    
-//                     checkboxDiv.append($('<label></label>').append(checkbox).append(' ' + val.trim()));
-//                     checkboxContainer.append(checkboxDiv);
-//                 });
-                
-//                 filtersContainer.append(checkboxContainer);
-//             } 
-//             else if(tipo === 'radiobutton') {
-//                 var divFilter = $('<div class="div-filters"></div>').css({'display': 'flex','flex-direction': 'column'});
-//                 divFilter.append($('<div class="filter-title">').text(filter.name_filtro));
-                
-//                 valores.forEach(function(val) {
-//                     var cleanVal = val.trim().replace(/\s+/g, '_');
-//                     var radioDiv = $('<div class="radio-item"></div>');
-//                     var radio = $('<input type="radio" />')
-//                         .addClass(filter.name_filtro)
-//                         .attr('name', filter.name_filtro)
-//                         .attr('id', `${filter.name_filtro}_${cleanVal}`)
-//                         .val(val.trim());
-                    
-//                     radioDiv.append($('<label></label>').append(radio).append(' ' + val.trim()));
-//                     divFilter.append(radioDiv);
-//                 });
-
-//                 filtersContainer.append(divFilter);
-//             }
-//         });
-
-//         var buttonsContainer = $('<div class="filter-buttons"></div>').css({
-//             'display': 'flex',
-//             'gap': '10px',
-//             'align-self': 'center'
-//         }).append(
-//             $('<button class="filter_button" id="Button_filter">Filter</button>'),
-//             $('<button class="filter_remove" id="Remove_filter">Remove</button>')
-//         );
-
-//         filtersContainer.append(buttonsContainer);
-//         $('#filters').append(filtersContainer);
-
-//         // Highlight después de cargar el DOM
-//         const storedFilters = localStorage.getItem('filter_shop');
-//         if (storedFilters) {
-//             JSON.parse(storedFilters).forEach(filter => {
-//                 const [filterName, storedValue] = filter;
-                
-//                 // Selects
-//                 const select = $(`#${filterName}`);
-//                 if (select.length) {
-//                     select.val(storedValue);
-//                     return;
-//                 }
-
-//                 // Checkboxes
-//                 const checkboxes = $(`.${filterName}[type="checkbox"]`);
-//                 if (checkboxes.length) {
-//                     try {
-//                         const values = JSON.parse(storedValue);
-//                         checkboxes.each(function() {
-//                             $(this).prop('checked', values.includes($(this).val()));
-//                         });
-//                     } catch(e) {
-//                         console.error('Error parsing checkbox values:', e);
-//                     }
-//                     return;
-//                 }
-
-//                 // Radio buttons
-//                 const radio = $(`.${filterName}[type="radio"][value="${storedValue}"]`);
-//                 if (radio.length) {
-//                     radio.prop('checked', true);
-//                 }
-//             });
-//         }
-//     })
-//     .catch(function(error) {
-//         console.error('Error al obtener filtros: ', error);
-//     });
-// }
-
-// function filter_button() {
-
-//     //type
-//     $(document).on('change', '.name_typ', function () {
-//         if ($(this).attr('type') === 'checkbox') {
-//             let selectedValues = $('.name_typ:checked').map(function () {
-//                 return this.value;
-//             }).get(); 
-//             localStorage.setItem('name_typ', JSON.stringify(selectedValues));
-//         } else {
-//                 localStorage.setItem('name_typ', this.value);
-//         }
-//     }).val(localStorage.getItem('name_typ'));
-   
-//     //category
-//     $(document).on('change', '.name_cat', function () {
-//         if ($(this).attr('type') === 'checkbox') {
-//             let selectedValues = $('.name_cat:checked').map(function () {
-//                 return this.value;
-//             }).get(); 
-//             localStorage.setItem('name_cat', JSON.stringify(selectedValues));
-//         } else {
-//             localStorage.setItem('name_cat', this.value);
-//         }
-//     }).val(localStorage.getItem('name_cat'));
-
-//     //brand
-//     $(document).on('change', '.name_brand', function () {
-//         if ($(this).attr('type') === 'checkbox') {
-//             let selectedValues = $('.name_brand:checked').map(function () {
-//                 return this.value;
-//             }).get(); 
-//             localStorage.setItem('name_brand', JSON.stringify(selectedValues));
-//         } else {
-//             localStorage.setItem('name_brand', this.value);
-//         }
-//     }).val(localStorage.getItem('name_brand'));
-
-//     //brand
-//     $(document).on('change', '.name_cities', function () {
-//         if ($(this).attr('type') === 'checkbox') {
-//             let selectedValues = $('..name_cities:checked').map(function () {
-//                 return this.value;
-//             }).get(); 
-//             localStorage.setItem('name_cities', JSON.stringify(selectedValues));
-//         } else {
-//             localStorage.setItem('name_cities', this.value);
-//         }
-//     }).val(localStorage.getItem('name_cities'));
-
-//     //cities
-//     $(document).on('change', '.name_typ_sell', function () {
-//         if ($(this).attr('type') === 'checkbox') {
-//             let selectedValues = $('.name_typ_sell:checked').map(function () {
-//                 return this.value;
-//             }).get(); 
-//             localStorage.setItem('name_typ_sell', JSON.stringify(selectedValues));
-//         } else {
-//             localStorage.setItem('name_typ_sell', this.value);
-//         }
-//     }).val(localStorage.getItem('name_typ_sell'));
-
-//     $(document).on('change', '.order_by', function () {
-//         if ($(this).attr('type') === 'checkbox') {
-//             let selectedValues = $('.order_by:checked').map(function () {
-//                 return this.value;
-//             }).get(); 
-//             localStorage.setItem('order_by', JSON.stringify(selectedValues));
-//         } else {
-//             localStorage.setItem('order_by', this.value);
-//         }
-//     }).val(localStorage.getItem('order_by'));
-
-//     $(document).on('click', '.filter_button', function () {
-//         localStorage.removeItem('move');
-//         var filter_shop = [];
-
-//         if (localStorage.getItem('name_typ')) {
-//             filter_shop.push(['name_typ', localStorage.getItem('name_typ')]);
-//         }
-
-//         if (localStorage.getItem('name_cat')) {
-//             filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
-//             // categ_visited(localStorage.getItem('name_cat'))
-//         }
-
-//         if (localStorage.getItem('name_brand')) {
-//             filter_shop.push(['name_brand', localStorage.getItem('name_brand')]);
-//         }
-
-//         if (localStorage.getItem('name_cities')) {
-//             filter_shop.push(['name_cities', localStorage.getItem('name_cities')]);
-//         }
-
-//         if (localStorage.getItem('name_typ_sell')) {
-//             filter_shop.push(['name_typ_sell', localStorage.getItem('name_typ_sell')]);
-//         }
-
-//         if (localStorage.getItem('order_by')) {
-//             filter_shop.push(['order_by', localStorage.getItem('order_by')]);
-//         }
-
-//         if (filter_shop.length > 0) {
-//             localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
-//             window.location.reload();
-//         } else {
-//             alert('Por favor, seleccione al menos un filtro.');
-//         }
-//     });
-// }
-
-// function clicks() {
+function clicks() {
 //     $(document).on("click", ".product-card", function () {
 //         var id_prod = this.getAttribute('id');
 //         localStorage.removeItem('id_prod');
@@ -542,38 +638,38 @@ function shopAllproducts() {
 
 //     // Filtros  
     
-//     $(document).on('click', '.filter_remove', function () {
-//         localStorage.removeItem('name_typ');
-//         localStorage.removeItem('name_cat');
-//         localStorage.removeItem('name_brand');
-//         localStorage.removeItem('name_cities');
-//         localStorage.removeItem('name_typ_sell');
-//         localStorage.removeItem('filter_shop');
-//         localStorage.removeItem('move');
+    $(document).on('click', '.filter_remove', function () {
+        localStorage.removeItem('name_typ');
+        localStorage.removeItem('name_cat');
+        localStorage.removeItem('name_brand');
+        localStorage.removeItem('name_cities');
+        localStorage.removeItem('name_typ_sell');
+        localStorage.removeItem('filter_shop');
+        localStorage.removeItem('move');
 
-//         window.location.reload();
-//     });
+        window.location.reload();
+    });
     
-//     $(document).on("click", '.button_categories', function() {
+    // $(document).on("click", '.button_categories', function() {
 
-//         localStorage.removeItem('filter_shop');
-//         localStorage.removeItem('name_cat');
+    //     localStorage.removeItem('filter_shop');
+    //     localStorage.removeItem('name_cat');
 
-//         var filter_maps = [];
-//         var name_catergoria = this.getAttribute('id');
+    //     var filter_maps = [];
+    //     var name_catergoria = this.getAttribute('id');
 
-//         localStorage.setItem('name_cat', "["+JSON.stringify(name_catergoria)+"]");
-//         filter_maps.push(['name_cat', name_catergoria]);         
+    //     localStorage.setItem('name_cat', "["+JSON.stringify(name_catergoria)+"]");
+    //     filter_maps.push(['name_cat', name_catergoria]);         
         
-//         var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
-//         filter_shop = filter_shop.filter(filter => filter[0] !== 'name_cat');
-//         filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
-//         localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
+    //     var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
+    //     filter_shop = filter_shop.filter(filter => filter[0] !== 'name_cat');
+    //     filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
+    //     localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
 
-//         setTimeout(function() {
-//             window.location.href = 'index.php?page=ctrl_shop&op=list';
-//         }, 300);
-//     });
+    //     setTimeout(function() {
+    //         window.location.href = 'index.php?page=ctrl_shop&op=list';
+    //     }, 300);
+    // });
 
 //     // Valoracion
 //     $(document).on("click", ".container__items label", function() {
@@ -606,7 +702,7 @@ function shopAllproducts() {
 //         click_likes(id_prod, "details");
 //     });
 
-// }
+}
 
 // function more_visiteds(id_prod){
 //     // console.log("VISITITAAS");
@@ -628,31 +724,7 @@ function shopAllproducts() {
 //     });
 // }
 
-// function mapBox_all(data) {
-//     // Verifica que el contenedor del mapa exista antes de inicializar el mapa
-//     var mapContainer = document.getElementById('map');
-//     if (mapContainer) {
-//         var map = L.map('map').setView([data[0].latitud, data[0].longitud], 5);
 
-//         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//         }).addTo(map);
-        
-//         // console.log(data);
-//         for (let row in data) {
-//             const marker = L.marker([data[row].latitud, data[row].longitud]).addTo(map);
-//             const popupContent = 
-//             `<div class="popup-content" id= ` + data[row].id_prod + `style="cursor: pointer;">
-//                 <p style="text-align:Left;">Precio: <b>${data[row].price}€</b></p>
-//                 <p style="text-align:Left;">Producto: <b>${data[row].name_prod}</b></p>
-//             </div>`;
-            
-//             marker.bindPopup(popupContent);
-//         }
-//     } else {
-//         console.error("Map container not found");
-//     }
-// }
 
 // function mapBox_Details(product) {
 //     var mapContainer = document.getElementById('mapDetails');
@@ -1153,11 +1225,11 @@ function shopAllproducts() {
 
 
 $(document).ready(function() {
-    // print_filters();
+    print_filters();
     shopAllproducts();
     // pagination();
-    // filter_button();
-    // clicks();
+    filter_button();
+    clicks();
     
 });
 

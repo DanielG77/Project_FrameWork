@@ -1,35 +1,44 @@
-<html>
-<body>
-    <!-- list-games -->
-    <div class="" id="filters"></div>
-    <div class="main-container">
+<!-- list-games -->
+<div class="shop-wrapper">
+    <div id="filters" class="filters-container"></div>
+    
+    <div class="main-container shop-page">
+        <!-- Columna izquierda: Listado de productos -->
         <div class="left-column-shop">
-            <div class="product-container" id="content_shop_games"></div>
-            <div class="product-container" id="content_shop_nogames"></div>
+            <div class="products-grid" id="content_shop_games"></div>
+            <div id="content_shop_nogames" class="no-products-message"></div>
         </div>
+        
+        <!-- Columna derecha: Mapa -->
         <div class="right-column-shop">
-            <div id="map" style="width: 465px; height: 480px;"></div>
+            <div id="map" class="shop-map"></div>
         </div>
     </div>
-    <!-- details-games -->
-    <div class="main-container details-page">
-        <div class="left-column-details">
-            <div class="date_img" id="container-date-img"></div>
-        </div>
-        <div class="right-column-details">
-            <div id="details-shop">
-                <!-- <div id="mapDetails" style="height: 180px;"></div> -->
-                <div class="date_prod" id="container-date-prod"></div>
+</div>
+
+<!-- details-games -->
+<div class="main-container details-page">
+    <!-- Columna izquierda: Galería de imágenes -->
+    <div class="product-gallery">
+        <div class="product-carousel" id="container-date-img"></div>
+    </div>
+    
+    <!-- Columna derecha: Detalles del producto -->
+    <div class="product-details">
+        <div class="product-info-card">
+            <div id="container-date-prod"></div>
+            <div class="product-map-wrapper">
+                <div id="mapDetails" class="product-mini-map"></div>
             </div>
         </div>
     </div>
-    <div id="mapDetails" class="mapDetails" style="height: 180px;"></div>
+</div>
+
+<!-- Sección de accesorios -->
+<div class="related-products-section">
     <div class="results_acesories"></div>
     <div class="results"></div>
-    <div id="pagination" class="pagination">
+</div>
 
-   </div>
-
-    
-</body>
-</html>
+<!-- Paginación -->
+<div id="pagination" class="pagination-container"></div>
