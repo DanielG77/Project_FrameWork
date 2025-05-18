@@ -16,16 +16,16 @@
         <name>product_filters</name>
         <uri>product_filters</uri>
     </function>
-    <!-- <function>
-        <name>city</name>
-        <uri>city</uri>
-    </function> -->
-    <!-- <function>
-        <name>popular</name>
-        <uri>popular</uri>
-    </function> -->
-    <!-- <function>
-        <name>rating</name>
-        <uri>rating</uri>
-    </function> -->
+    <function>
+        <name>details</name>
+        <uri>details</uri>
+    </function>
+    <function>
+        <name>count_paginacion</name>
+        <uri>count_paginacion</uri>
+    </function> 
+    <function>
+        <name>count_paginacion_filters</name>
+        <uri>count_paginacion_filters</uri>
+    </function>
 </functions>

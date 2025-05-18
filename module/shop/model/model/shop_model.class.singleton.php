@@ -26,24 +26,24 @@
             return $this -> bll -> get_filters_BLL();
         }
 
-        public function get_product_filters() {
+        public function get_product_filters($filter) {
             // return 'hola car brands';
-            return $this -> bll -> get_product_filters_BLL();
+            return $this->bll->get_product_filters_BLL($filter);
         }
 
-        // public function get_city() {
-        //     // return 'hola car brands';
-        //     return $this -> bll -> get_city_BLL();
-        // }
+        public function get_details($id) {
+            // return 'hola car brands';
+            return $this -> bll -> get_details_BLL($id);
+        }
 
-        // public function get_popular() {
-        //     // return 'hola car brands';
-        //     return $this -> bll -> get_popular_BLL();
-        // }
+        public function get_count_paginacion() {
+            // return 'hola car brands';
+            return $this -> bll -> get_count_paginacion_BLL();
+        }
 
-        // public function get_rating() {
-        //     // return 'hola car brands';
-        //     return $this -> bll -> get_rating_BLL();
-        // }
+        public function get_count_paginacion_filters($filter) {
+            // return 'hola car brands';
+            return $this -> bll -> get_count_paginacion_filters_BLL($filter);
+        }
     }
 ?>

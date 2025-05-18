@@ -28,20 +28,20 @@
 			return $this -> dao -> select_data_filters($this -> db);
 		}
 
-		public function get_product_filters_BLL() {
-			return $this -> dao -> select_data_product_filters($this -> db, $_POST['filtro_shop']);
+		public function get_product_filters_BLL($filter) {
+			return $this -> dao -> select_data_product_filters($this -> db, $filter);
 		}
 
-		// public function get_city_BLL() {
-		// 	return $this -> dao -> select_data_city($this -> db);
-		// }
+		public function get_details_BLL($id) {
+			return $this -> dao -> select_data_details($this -> db, $id);
+		}
 
-		// public function get_popular_BLL() {
-		// 	return $this -> dao -> select_data_popular($this -> db);
-		// }
+		public function get_count_paginacion_BLL() {
+			return $this -> dao -> select_data_count_paginacion($this -> db);
+		}
 
-		// public function get_rating_BLL() {
-		// 	return $this -> dao -> select_data_rating($this -> db);
-		// }
+		public function get_count_paginacion_filters_BLL($filter) {
+			return $this -> dao -> select_data_count_paginacion_filters($this -> db, $filter);
+		}
 	}
 ?>

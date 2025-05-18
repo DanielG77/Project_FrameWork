@@ -3,7 +3,7 @@ function shopAllproducts() {
     // var id_prod = localStorage.getItem('id_prod') || false;
     // var categoria = localStorage.getItem('name_cat') || false;
     // var ubicacion = localStorage.getItem('ubication') || false;
-    // console.log("FILTROSSSS");
+    // console.log("hola_show_products");
     // console.log(categoria);
 
     // if((categoria!=false) && (ubicacion=="shop")){ // Primer LLanze els filtros
@@ -28,7 +28,7 @@ function shopAllproducts() {
 }
 
 function ajaxForSearch(durl, filters) {
-    ajaxPromise(friendlyURL(durl), 'POST',  'JSON', filters)
+    ajaxPromise(friendlyURL(durl), 'POST',  'JSON', { 'filters': filters})
     .then(function(data) {
         if(data != "shop_vacio") {
             $("#content_shop_nogames").hide();
@@ -445,175 +445,175 @@ function filter_button() {
     });
 }
 
-// function loadDetails(id_prod) {
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=details_game&id=' + id_prod, 'GET', 'JSON', false)
-//     .then(function(product) {
-//         $(".pagination").hide();
-//         $('#content_shop_games').empty();
-//         $('.date_img_dentro').empty();
-//         $('.date_prod_dentro').empty();
-//         $('.date_img').empty();
-//         $('#filters').empty();
-//         $('.related-products-grid').empty();
-//         $('.related-accesorie-grid').empty();
+function loadDetails(id) {
+    ajaxPromise(friendlyURL('?module=shop&op=details'), 'POST',  'JSON', {"id":id})
+    .then(function(product) {
+        // console.log(product);
+        $(".pagination").hide();
+        $('#content_shop_games').empty();
+        $('.date_img_dentro').empty();
+        $('.date_prod_dentro').empty();
+        $('.date_img').empty();
+        $('#filters').empty();
+        $('.related-products-grid').empty();
+        $('.related-accesorie-grid').empty();
 
-//         $("#mapDetails").show();
-//         $(".details-page").show();
-//         $(".left-column-details, .right-column-details").show();
-//         $(".left-column-shop, .right-column-shop").hide();
+        $("#mapDetails").show();
+        $(".details-page").show();
+        $(".left-column-details, .right-column-details").show();
+        $(".left-column-shop, .right-column-shop").hide();
         
-//         let images = product.images_prod.split(',');
+        // let images = product.images_prod.split(',');
 
-//         // Crear contenedor para Owl Carousel
-//         $('<div></div>')
-//         .attr({ 'id': 'product-carousel', class: 'owl-carousel owl-theme' })
-//         .appendTo('.date_img');
+        // Crear contenedor para Owl Carousel
+        // $('<div></div>')
+        // .attr({ 'id': 'product-carousel', class: 'owl-carousel owl-theme' })
+        // .appendTo('.date_img');
 
-//         // Cargar imágenes en el slider
-//         for (let i = 0; i < images.length; i++) {
-//             let image = images[i].trim();
-//             $('<div></div>')
-//             .attr({ 'class': 'item' })
-//             .html(
-//                 "<div class='content-img-details'>" +
-//                     "<img src='" + image + "' alt='Product Image' class='carousel-image' />" +
-//                 "</div>"
-//             ).appendTo('#product-carousel');
-//         }
+        // Cargar imágenes en el slider
+        // for (let i = 0; i < images.length; i++) {
+            // let image = images[i].trim();
+            // $('<div></div>')
+            // .attr({ 'class': 'item' })
+            // .html(
+                // "<div class='content-img-details'>" +
+                    // "<img src='" + image + "' alt='Product Image' class='carousel-image' />" +
+                // "</div>"
+            // ).appendTo('#product-carousel');
+        // }
 
-//         // Inicializar Owl Carousel
-//         $('#product-carousel').owlCarousel({
-//             items: 1,
-//             loop: false,
-//             nav: true,
-//             dots: true,
-//             autoplay: false,
-//             autoplayTimeout: 0,
-//             autoplayHoverPause: false
-//         });
+        // Inicializar Owl Carousel
+        // $('#product-carousel').owlCarousel({
+        //     items: 1,
+        //     loop: false,
+        //     nav: true,
+        //     dots: true,
+        //     autoplay: false,
+        //     autoplayTimeout: 0,
+        //     autoplayHoverPause: false
+        // });
 
-//         let name_brands = product.name_brands.split(',').join(', ');
-//         let name_extras = product.name_extras.split(',').join(', ');
-//         let names_typs = product.names_typs.split(',').join(', ');
-//         let names_typ_sell = product.names_typ_sell.split(',').join(', ');
+        // let name_brands = product.name_brands.split(',').join(', ');
+        // let name_extras = product.name_extras.split(',').join(', ');
+        // let names_typs = product.names_typs.split(',').join(', ');
+        // let names_typ_sell = product.names_typ_sell.split(',').join(', ');
 
-//         $('<div></div>').attr({ 'id': product.id_prod, class: 'date_prod_dentro' }).appendTo('.date_prod')
-//         .html(
-//             "<div class='list_product_details'>" +
-//             "<div class='product-info_details'>" +
-//             "<div class='product-content_details'>" +
-//             "<div class='product-title-container'>" +
-//                 "<h1><b>" + product.name_prod + "</b></h1>" +
-//                 "<button class='details__heart' id='" + id_prod + "'>" +
-//                     "<i class='" + (product.is_liked ? "fas" : "far") + " fa-heart'></i>" +
-//                 "</button>" +
-//             "</div>" +
+        // $('<div></div>').attr({ 'id': id, class: 'date_prod_dentro' }).appendTo('.date_prod')
+        // .html(
+        //     "<div class='list_product_details'>" +
+        //     "<div class='product-info_details'>" +
+        //     "<div class='product-content_details'>" +
+        //     "<div class='product-title-container'>" +
+        //         "<h1><b>" + product.name_prod + "</b></h1>" +
+        //         // "<button class='details__heart' id='" + id + "'>" +
+        //         //     "<i class='" + (product.is_liked ? "fas" : "far") + " fa-heart'></i>" +
+        //         // "</button>" +
+        //     "</div>" +
             
-//             "<div class='container-new'>" +
-//                 "<div class='container__items' id='" + product.id_prod + "'>" +
-//                     "<input type='radio' name='stars' id='st5'>" +
-//                     "<label for='st5'>" +
-//                         "<div class='star-stroke'>" +
-//                             "<div class='star-fill'></div>" +
-//                         "</div>" +
-//                         "<div class='label-description' data-content='5'></div>" +
-//                     "</label>" +
-//                     "<input type='radio' name='stars' id='st4'>" +
-//                     "<label for='st4'>" +
-//                         "<div class='star-stroke'>" +
-//                             "<div class='star-fill'></div>" +
-//                         "</div>" +
-//                         "<div class='label-description' data-content='4'></div>" +
-//                     "</label>" +
-//                     "<input type='radio' name='stars' id='st3'>" +
-//                     "<label for='st3'>" +
-//                         "<div class='star-stroke'>" +
-//                             "<div class='star-fill'></div>" +
-//                         "</div>" +
-//                         "<div class='label-description' data-content='3'></div>" +
-//                     "</label>" +
-//                     "<input type='radio' name='stars' id='st2'>" +
-//                     "<label for='st2'>" +
-//                         "<div class='star-stroke'>" +
-//                             "<div class='star-fill'></div>" +
-//                         "</div>" +
-//                         "<div class='label-description' data-content='2'></div>" +
-//                     "</label>" +
-//                     "<input type='radio' name='stars' id='st1'>" +
-//                     "<label for='st1'>" +
-//                         "<div class='star-stroke'>" +
-//                             "<div class='star-fill'></div>" +
-//                         "</div>" +
-//                         "<div class='label-description' data-content='1'></div>" +
-//                     "</label>" +
-//                 "</div>" +
-//             "</div>" +
+        //     "<div class='container-new'>" +
+        //         "<div class='container__items' id='" + id + "'>" +
+        //             "<input type='radio' name='stars' id='st5'>" +
+        //             "<label for='st5'>" +
+        //                 "<div class='star-stroke'>" +
+        //                     "<div class='star-fill'></div>" +
+        //                 "</div>" +
+        //                 "<div class='label-description' data-content='5'></div>" +
+        //             "</label>" +
+        //             "<input type='radio' name='stars' id='st4'>" +
+        //             "<label for='st4'>" +
+        //                 "<div class='star-stroke'>" +
+        //                     "<div class='star-fill'></div>" +
+        //                 "</div>" +
+        //                 "<div class='label-description' data-content='4'></div>" +
+        //             "</label>" +
+        //             "<input type='radio' name='stars' id='st3'>" +
+        //             "<label for='st3'>" +
+        //                 "<div class='star-stroke'>" +
+        //                     "<div class='star-fill'></div>" +
+        //                 "</div>" +
+        //                 "<div class='label-description' data-content='3'></div>" +
+        //             "</label>" +
+        //             "<input type='radio' name='stars' id='st2'>" +
+        //             "<label for='st2'>" +
+        //                 "<div class='star-stroke'>" +
+        //                     "<div class='star-fill'></div>" +
+        //                 "</div>" +
+        //                 "<div class='label-description' data-content='2'></div>" +
+        //             "</label>" +
+        //             "<input type='radio' name='stars' id='st1'>" +
+        //             "<label for='st1'>" +
+        //                 "<div class='star-stroke'>" +
+        //                     "<div class='star-fill'></div>" +
+        //                 "</div>" +
+        //                 "<div class='label-description' data-content='1'></div>" +
+        //             "</label>" +
+        //         "</div>" +
+        //     "</div>" +
             
-//             "<h1><b>" + product.price + "€" + "</b></h1>" +
-//             "<p><b>Estado:</b> " + (product.name_status || "N/A") + "</p>" +
-//             "<a class='button_carrito' href='#'>Add to Cart</a>" +
-//             "<a class='button_buy' href='#'>Buy</a>" +
-//             "<hr class='hr-shop'>" +
-//             "<table id='table-shop'>" +
-//             "<tr><td><i id='col-ico' class='fa-solid fa-person fa-2xl'></i> &nbsp;" + (name_brands || "N/A") + "</td></tr>" +
-//             "<div class='buttoncategories' id='buttoncategories'>" +
-//             "<tr><td><i class='fa-solid fa-cogs fa-2xl'></i> &nbsp;" + (names_typs || "N/A") + "</td></tr>" +
-//             "<tr><td><i class='fa-solid fa-shopping-cart fa-2xl'></i> &nbsp;" + (names_typ_sell || "N/A") + "</td></tr>" +
-//             "<tr><td><i class='fa-solid fa-location-dot fa-2xl'></i> &nbsp;" + (product.name_cities || "N/A") + "</td></tr>" +
-//             "</table>" +
-//             "<hr class='hr-shop'>" +
-//             "<h3><b>More Information:</b></h3>" +
-//             "<p>" + (product.description_prod || "No description available.") + "</p>" +
-//             "<hr class='hr-shop'>" + 
-//             "<h3><b>Extras:</b></h3>" +
-//             "<p>" + (name_extras || "No extras available.") + "</p>" +
-//             "</div>" +
-//             "</div>" +
-//             "</div>"
-//         );
+        //     "<h1><b>" + product.price + "€" + "</b></h1>" +
+        //     "<p><b>Estado:</b> " + (product.name_status || "N/A") + "</p>" +
+        //     "<a class='button_carrito' href='#'>Add to Cart</a>" +
+        //     "<a class='button_buy' href='#'>Buy</a>" +
+        //     "<hr class='hr-shop'>" +
+        //     "<table id='table-shop'>" +
+        //     "<tr><td><i id='col-ico' class='fa-solid fa-person fa-2xl'></i> &nbsp;" + (product.name_brands || "N/A") + "</td></tr>" +
+        //     "<div class='buttoncategories' id='buttoncategories'>" +
+        //     "<tr><td><i class='fa-solid fa-cogs fa-2xl'></i> &nbsp;" + (product.names_typs || "N/A") + "</td></tr>" +
+        //     "<tr><td><i class='fa-solid fa-shopping-cart fa-2xl'></i> &nbsp;" + (product.names_typ_sell || "N/A") + "</td></tr>" +
+        //     "<tr><td><i class='fa-solid fa-location-dot fa-2xl'></i> &nbsp;" + (product.name_cities || "N/A") + "</td></tr>" +
+        //     "</table>" +
+        //     "<hr class='hr-shop'>" +
+        //     "<h3><b>More Information:</b></h3>" +
+        //     "<p>" + (product.description_prod || "No description available.") + "</p>" +
+        //     "<hr class='hr-shop'>" + 
+        //     "<h3><b>Extras:</b></h3>" +
+        //     "<p>" + (product.name_extras || "No extras available.") + "</p>" +
+        //     "</div>" +
+        //     "</div>" +
+        //     "</div>"
+        // );
 
-//         let names_cat = product.names_cat.split(',');
+        // let names_cat = product.names_cat.split(',');
 
-//         for (let i = 0; i < names_cat.length; i++) {
-//             let name_cats = names_cat[i].trim();
-//             $('<div></div>')
-//             .attr({ 'class': 'item' })
-//             .html(
-//                 "<a class='button_categories' id='" + name_cats + "'>"+ name_cats+"</a>" 
-//             ).appendTo('.buttoncategories');
-//         }
+        // for (let i = 0; i < names_cat.length; i++) {
+        //     let name_cats = names_cat[i].trim();
+        //     $('<div></div>')
+        //     .attr({ 'class': 'item' })
+        //     .html(
+        //         "<a class='button_categories' id='" + name_cats + "'>"+ name_cats+"</a>" 
+        //     ).appendTo('.buttoncategories');
+        // }
 
-//         // Evento para el botón de like
-//         $(`#like_${product.id_prod}`).on('click', function() {
-//             $(this).find('i').toggleClass('fas far');
-//             $(this).addClass('heart-animation');
-//             setTimeout(() => {
-//                 $(this).removeClass('heart-animation');
-//             }, 800);
+        // Evento para el botón de like
+        // $(`#like_${product.id_prod}`).on('click', function() {
+        //     $(this).find('i').toggleClass('fas far');
+        //     $(this).addClass('heart-animation');
+        //     setTimeout(() => {
+        //         $(this).removeClass('heart-animation');
+        //     }, 800);
             
-//             // Aquí puedes añadir tu lógica AJAX para guardar el like
-//             console.log(`Producto ${product.id_prod} like status: ${$(this).find('i').hasClass('fas')}`);
-//         });
+        //     // Aquí puedes añadir tu lógica AJAX para guardar el like
+        //     console.log(`Producto ${product.id_prod} like status: ${$(this).find('i').hasClass('fas')}`);
+        // });
 
-//         mapBox_Details(product);
-//         more_accesori_related(names_typs);
-//         more_games_related(names_typs, product.id_prod);
-//     }).catch(function(error) {
-//         console.error("Error al cargar detalles:", error);
-//     });
-// }
-
+        // mapBox_Details(product);
+        // more_accesori_related(names_typs);
+        // more_games_related(names_typs, product.id_prod);
+    }).catch(function(error) {
+        console.error("Error al cargar detalles:", error);
+    });
+}
 
 function clicks() {
-//     $(document).on("click", ".product-card", function () {
-//         var id_prod = this.getAttribute('id');
-//         localStorage.removeItem('id_prod');
+    $(document).on("click", ".product-card", function () {
+        var id = this.getAttribute('id');
+        // localStorage.removeItem('id_prod');
 
-//         $(".left-column-shop, .right-column-shop").hide();
-//         $(".left-column-details, .right-column-details").show();
-//         more_visiteds(id_prod);
-//         loadDetails(id_prod);
-//     });
+        $(".left-column-shop, .right-column-shop").hide();
+        $(".left-column-details, .right-column-details").show();
+        // more_visiteds(id_prod);
+        loadDetails(id);
+    });
 
 //     $(document).on("click", ".popup-content", function () {
 //         var id_prod = this.getAttribute('id');
@@ -644,6 +644,7 @@ function clicks() {
         localStorage.removeItem('name_brand');
         localStorage.removeItem('name_cities');
         localStorage.removeItem('name_typ_sell');
+        localStorage.removeItem('order_by');
         localStorage.removeItem('filter_shop');
         localStorage.removeItem('move');
 
@@ -752,110 +753,108 @@ function clicks() {
 //     }
 // }
 
-// function pagination() {
-//     // console.log("HOLISSSS");
-//     var filtro_shop = JSON.parse(localStorage.getItem('filter_shop'));
-//     // console.log(filter_shop);
-//     if (filtro_shop != undefined) {
-//         // console.log("entras qui?");
-//         var url = "/programas/courses_home/module/shop/controller/ctrl_shop.php?op=count_filtres";
-//     } else {
-//         var url = "/programas/courses_home/module/shop/controller/ctrl_shop.php?op=count";
-//     }
+function paginacion() {
+    
+    console.log("hola paginacion");
+    var filters = localStorage.getItem('filter_shop') || false;
+    if (filters === undefined || filters === false || filters === false) {
+            var url = "?module=shop&op=count_paginacion";
+    } else {
+            var filter_data = JSON.parse(filters);
+            var url = "?module=shop&op=count_paginacion_filters";
 
-//     // console.log(url);
-//     // console.log(filtro_shop);
-//     // console.log("LOCK SKY");
-//     ajaxPromise(url, 'POST', 'JSON', { 'filtro_shop': filtro_shop })
-//     .then(function(data) {
-//         console.log("AQUISERA");
-//         // console.log(data);
-//         var total_prod = data[0].contador;
-//         // console.log(total_prod);
+    }
+   
 
-//         localStorage.setItem('total_prod', total_prod);
-//         var total_pages = total_prod >= 3 ? Math.ceil(total_prod / 3) : 1;
-//         // console.log(total_pages);
-//         var currentPage = localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0;
-//         console.log(currentPage);
+    ajaxPromise(friendlyURL(url), 'POST', 'JSON', { 'filters': filter_data })
+    .then(function(data) {
+        // console.log(data);
+        var total_prod = data[0].contador;
+        // console.log(total_prod);
+        localStorage.setItem('total_prod', total_prod);
+        var total_pages = total_prod >= 8 ? Math.ceil(total_prod / 8) : 1;
+        // console.log(total_pages);
+        var currentPage = localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0;
+        // console.log(currentPage);
 
+        var paginationHtml = '<div class="pagination-container">';
+        if(currentPage!=0){
+            paginationHtml += `
+                <div class="arrow">
+                <svg width="18" height="18"><use xlink:href="#left" /></svg>
+                <span class="arrow-text">Previous</span>
+                </div>`;
+        }
 
-//         var paginationHtml = '<div class="pagination-container">';
-//         if(currentPage!=0){
-//             paginationHtml += `
-//                 <div class="arrow">
-//                 <svg width="18" height="18"><use xlink:href="#left" /></svg>
-//                 <span class="arrow-text">Previous</span>
-//                 </div>`;
-//         }
-//         for (let i = 1; i <= total_pages; i++) {
-//             paginationHtml += `
-//                 <div class="pagination-number ${i === currentPage ? 'pagination-active' : ''}">
-//                   ${i}
-//                 </div>
-//             `;
-//         }
-//         if((localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0) < (total_prod-3)){
+        for (let i = 1; i <= total_pages; i++) {
+            paginationHtml += `
+                <div class="pagination-number ${i === currentPage ? 'pagination-active' : ''}">
+                  ${i}
+                </div>
+            `;
+        }
 
-//             paginationHtml += `
-//                 <div class="arrow">
-//                 <svg width="18" height="18"><use xlink:href="#right" /></svg>
-//                 <span class="arrow-text">Next</span>
-//                 </div>`;
-//         }
-//         paginationHtml += '</div>';
-//         $('#pagination').html(paginationHtml);
+        if((localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0) < (total_prod-8)){
 
-//         $('#pagination').on('click', '.pagination-number', function(event) {
-//             event.preventDefault();
-//             var num = parseInt($(this).text());
-//             total_prod = 3 * (num - 1);
+            paginationHtml += `
+                <div class="arrow">
+                <svg width="18" height="18"><use xlink:href="#right" /></svg>
+                <span class="arrow-text">Next</span>
+                </div>`;
+        }
 
-//             //con la variable move soy capaz de saber en que pagina estoy
-//             localStorage.setItem('move', JSON.stringify(total_prod));
+        paginationHtml += '</div>';
+        $('#pagination').html(paginationHtml);
 
-//             window.location.reload();
-//             $('html, body').animate({ scrollTop: $(".wrap") });
+        $('#pagination').on('click', '.pagination-number', function(event) {
+            event.preventDefault();
+            var num = parseInt($(this).text());
+            total_prod = 8 * (num - 1);
 
-//         });
+            //con la variable move soy capaz de saber en que pagina estoy
+            localStorage.setItem('move', JSON.stringify(total_prod));
 
-//         $(document).ready(function() {
-//             $('#pagination').on('click', '.arrow', function(event) {
-//                 event.preventDefault();
+            window.location.reload();
+            $('html, body').animate({ scrollTop: $(".wrap") });
+
+        });
+
+        $(document).ready(function() {
+            $('#pagination').on('click', '.arrow', function(event) {
+                event.preventDefault();
                 
-//                 var direction = $(this).find('.arrow-text').text();
+                var direction = $(this).find('.arrow-text').text();
         
-//                 var actualyposition = localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0;
+                var actualyposition = localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0;
         
-//                 var total_prod = parseInt(localStorage.getItem('total_prod')) || 0;
+                var total_prod = parseInt(localStorage.getItem('total_prod')) || 0;
         
-//                 // localStorage.setItem('Actual position', actualyposition);
+                // localStorage.setItem('Actual position', actualyposition);
                 
+                if (direction === 'Next') {
+                    var next_page = actualyposition + 8;
+                    localStorage.setItem("Next page:", next_page);
+                    localStorage.setItem("actualyposition:", actualyposition);
 
-//                 if (direction === 'Next') {
-//                     var next_page = actualyposition + 3;
-//                     localStorage.setItem("Next page:", next_page);
-//                     localStorage.setItem("actualyposition:", actualyposition);
-
-//                     if (next_page <= total_prod) {
-//                         localStorage.setItem('move', JSON.stringify(next_page));
-//                         window.location.reload();
-//                     }
-//                 } else if (direction === 'Previous') {
-//                     var prev_page = actualyposition - 3; 
-//                     localStorage.setItem("Next page:", next_page);
-//                     localStorage.setItem("actualyposition:", actualyposition);
-//                     if (prev_page >= 0) {
-//                         localStorage.setItem('move', JSON.stringify(prev_page));
-//                         window.location.reload();
-//                     }
-//                 }
+                    if (next_page <= total_prod) {
+                        localStorage.setItem('move', JSON.stringify(next_page));
+                        window.location.reload();
+                    }
+                } else if (direction === 'Previous') {
+                    var prev_page = actualyposition - 8; 
+                    localStorage.setItem("Next page:", next_page);
+                    localStorage.setItem("actualyposition:", actualyposition);
+                    if (prev_page >= 0) {
+                        localStorage.setItem('move', JSON.stringify(prev_page));
+                        window.location.reload();
+                    }
+                }
         
-//                 $('html, body').animate({ scrollTop: $(".wrap") });
-//             });
-//         });
-//     });
-// }
+                $('html, body').animate({ scrollTop: $(".wrap") });
+            });
+        });
+    });
+}
 
 // function games_related(loadeds = 0, type_game, total_items, id_prod) {
 //     let items = 5; 
@@ -1227,7 +1226,7 @@ function clicks() {
 $(document).ready(function() {
     print_filters();
     shopAllproducts();
-    // pagination();
+    paginacion();
     filter_button();
     clicks();
     

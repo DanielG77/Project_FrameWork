@@ -196,64 +196,194 @@
             return $db -> listar($stmt);
         }
 
-        // public function select_data_city($db) {
+        public function select_data_details($db, $id) {
 
-        //     $sql = "SELECT * FROM cities";
+            $sql = "SELECT pr.id_prod, pr.name_prod, pr.description_prod, pr.price, sta.name_status, AVG(pr.rating) AS rating_vg,
+		GROUP_CONCAT(DISTINCT prim.image_prod ORDER BY prim.image_prod) AS images_prod, 
+		GROUP_CONCAT(DISTINCT c.name_cat) AS names_cat, GROUP_CONCAT(DISTINCT e.name_extra) AS name_extras,
+		GROUP_CONCAT(DISTINCT b.name_brand ) AS name_brands, GROUP_CONCAT(DISTINCT t.name_typ) AS names_typs,
+		GROUP_CONCAT(DISTINCT ts.name_typ_sell) AS names_typ_sell, pr.latitud, pr.longitud
+		FROM products pr INNER JOIN prod_images prim ON pr.id_prod = prim.product_id
+		INNER JOIN product_category pc ON pr.id_prod = pc.id_prod
+		INNER JOIN categories c ON c.id_cat = pc.id_cat
+		INNER JOIN product_extras pe ON pr.id_prod = pe.id_prod
+		INNER JOIN extras e ON e.id_extra = pe.id_extra
+		INNER JOIN product_brand pb ON pr.id_prod = pb.id_prod
+		INNER JOIN brands b ON b.id_brands = pb.id_brand
+		INNER JOIN product_type pt ON pr.id_prod = pt.id_prod
+		INNER JOIN types t ON t.id_typ = pt.id_typ
+		INNER JOIN product_type_sell tsp ON pr.id_prod = tsp.id_prod
+		INNER JOIN type_sell ts ON ts.id_typ_sell = tsp.id_typ_sell
+		INNER JOIN cities cit ON pr.id_city = cit.id_cities
+		INNER JOIN status_prod sta ON sta.id_stat= pr.id_stat 
+		WHERE pr.id_prod = '$id'
+		GROUP BY pr.id_prod";
 
-        //     $stmt = $db -> ejecutar($sql);
-        //     return $db -> listar($stmt);
-        // }
+            $stmt = $db -> ejecutar($sql);
+            return $db -> listar($stmt);
+        }
 
-        //  public function select_data_popular($db) {
+         public function select_data_count_paginacion($db) {
 
-        //     $sql = "SELECT pr.id_prod, pr.name_prod, pr.description_prod, pr.price, cit.name_cities, sta.name_status, GROUP_CONCAT(DISTINCT prim.image_prod ORDER BY prim.image_prod) AS images_prod, 
-		// 		GROUP_CONCAT(DISTINCT c.name_cat) AS names_cat, GROUP_CONCAT(DISTINCT e.name_extra) AS name_extras, GROUP_CONCAT(DISTINCT b.name_brand ) AS name_brands,
- 		// 		GROUP_CONCAT(DISTINCT t.name_typ) AS names_typs, GROUP_CONCAT(DISTINCT ts.name_typ_sell) AS names_typ_sell, pr.latitud, pr.longitud
-		// 		FROM products pr INNER JOIN prod_images prim ON pr.id_prod = prim.product_id
-		// 		INNER JOIN product_category pc ON pr.id_prod = pc.id_prod
-		// 		INNER JOIN categories c ON c.id_cat = pc.id_cat
-		// 		INNER JOIN product_extras pe ON pr.id_prod = pe.id_prod
-		// 		INNER JOIN extras e ON e.id_extra = pe.id_extra
-		// 		INNER JOIN product_brand pb ON pr.id_prod = pb.id_prod
-		// 		INNER JOIN brands b ON b.id_brands = pb.id_brand
-		// 		INNER JOIN product_type pt ON pr.id_prod = pt.id_prod
-		// 		INNER JOIN types t ON t.id_typ = pt.id_typ
-		// 		INNER JOIN product_type_sell tsp ON pr.id_prod = tsp.id_prod
-		// 		INNER JOIN type_sell ts ON ts.id_typ_sell = tsp.id_typ_sell
-		// 		INNER JOIN cities cit ON pr.id_city = cit.id_cities
-        //         INNER JOIN status_prod sta ON sta.id_stat= pr.id_stat 
-		// 		GROUP BY pr.id_prod
-        //         ORDER BY pr.visitas DESC
-		// 		LIMIT 10 ";
+            $sql = "SELECT COUNT(DISTINCT pr.id_prod) AS contador
+				FROM products pr INNER JOIN prod_images prim ON pr.id_prod = prim.product_id
+				INNER JOIN product_category pc ON pr.id_prod = pc.id_prod
+				INNER JOIN categories c ON c.id_cat = pc.id_cat
+				INNER JOIN product_extras pe ON pr.id_prod = pe.id_prod
+				INNER JOIN extras e ON e.id_extra = pe.id_extra
+				INNER JOIN product_brand pb ON pr.id_prod = pb.id_prod
+				INNER JOIN brands b ON b.id_brands = pb.id_brand
+				INNER JOIN product_type pt ON pr.id_prod = pt.id_prod
+				INNER JOIN types t ON t.id_typ = pt.id_typ
+				INNER JOIN product_type_sell tsp ON pr.id_prod = tsp.id_prod
+				INNER JOIN type_sell ts ON ts.id_typ_sell = tsp.id_typ_sell
+				INNER JOIN cities cit ON pr.id_city = cit.id_cities
+				INNER JOIN status_prod sta ON sta.id_stat= pr.id_stat";
 
-        //     $stmt = $db -> ejecutar($sql);
-        //     return $db -> listar($stmt);
-        // }
+            $stmt = $db -> ejecutar($sql);
+            return $db -> listar($stmt);
+        }
 
-        // public function select_data_rating($db) {
+        public function select_data_count_paginacion_filters($db, $filter) {
 
-        //     $sql = "SELECT pr.id_prod, pr.name_prod, pr.description_prod, pr.price, cit.name_cities, sta.name_status, GROUP_CONCAT(DISTINCT prim.image_prod ORDER BY prim.image_prod) AS images_prod, 
-		// 		GROUP_CONCAT(DISTINCT c.name_cat) AS names_cat, GROUP_CONCAT(DISTINCT e.name_extra) AS name_extras, GROUP_CONCAT(DISTINCT b.name_brand ) AS name_brands,
- 		// 		GROUP_CONCAT(DISTINCT t.name_typ) AS names_typs, GROUP_CONCAT(DISTINCT ts.name_typ_sell) AS names_typ_sell, pr.latitud, pr.longitud
-		// 		FROM products pr INNER JOIN prod_images prim ON pr.id_prod = prim.product_id
-		// 		INNER JOIN product_category pc ON pr.id_prod = pc.id_prod
-		// 		INNER JOIN categories c ON c.id_cat = pc.id_cat
-		// 		INNER JOIN product_extras pe ON pr.id_prod = pe.id_prod
-		// 		INNER JOIN extras e ON e.id_extra = pe.id_extra
-		// 		INNER JOIN product_brand pb ON pr.id_prod = pb.id_prod
-		// 		INNER JOIN brands b ON b.id_brands = pb.id_brand
-		// 		INNER JOIN product_type pt ON pr.id_prod = pt.id_prod
-		// 		INNER JOIN types t ON t.id_typ = pt.id_typ
-		// 		INNER JOIN product_type_sell tsp ON pr.id_prod = tsp.id_prod
-		// 		INNER JOIN type_sell ts ON ts.id_typ_sell = tsp.id_typ_sell
-		// 		INNER JOIN cities cit ON pr.id_city = cit.id_cities
-        //         INNER JOIN status_prod sta ON sta.id_stat= pr.id_stat 
-		// 		GROUP BY pr.id_prod
-        //         ORDER BY pr.rating DESC
-		// 		LIMIT 10";
+            $sql = "SELECT COUNT(DISTINCT p.id_prod) AS contador
+				FROM products p
+				INNER JOIN types t
+				INNER JOIN product_type tp
+				INNER JOIN product_category cp
+				INNER JOIN categories c
+                INNER JOIN product_brand bp
+                INNER JOIN brands b
+				INNER JOIN product_type_sell tps
+                INNER JOIN type_sell ts
+                INNER JOIN cities cit
+				INNER JOIN prod_images pi
+			
+				ON p.id_prod=tp.id_prod AND tp.id_typ=t.id_typ 
+				AND p.id_prod=cp.id_prod AND cp.id_cat=c.id_cat
+                AND p.id_prod=bp.id_prod AND b.id_brands=bp.id_brand
+                AND p.id_prod=tps.id_prod AND tps.id_typ_sell=ts.id_typ_sell
+				AND p.id_prod=pi.product_id
+                AND cit.id_cities=p.id_city";
 
-        //     $stmt = $db -> ejecutar($sql);
-        //     return $db -> listar($stmt);
-        // }
+			$consulta = "";
+			$ordenar = "";
+            for ($i=0; $i < count($filter); $i++){
+
+				$nom = $filter[$i][0];
+				$nom_fil = $filter[$i][1];				
+
+				// return $nom;
+				// return $nom_fil;
+				// return $value_fil;
+
+				switch($nom){
+					case "name_typ":
+						if(($nom_fil!=null) && ($nom_fil!=0 )&& ($nom_fil!="undefined")){
+							if (!empty($consulta)) {
+								$consulta .= " AND ";
+							}
+							// Comprobar si $nom_fil tiene formato JSON
+							$decodedValue = json_decode($nom_fil, true);
+							if (json_last_error() === JSON_ERROR_NONE) {
+								$consulta .= " t." . $nom . " IN ('" . implode("', '", $decodedValue) . "')";
+							} else {
+								$consulta .= " t." . $nom . "=" . "'$nom_fil'";
+							}
+						}
+						break;
+
+            		case "name_cat":
+						if(($nom_fil!=null) && ($nom_fil!=0 )&& ($nom_fil!="undefined")){
+
+							if (!empty($consulta)) {
+								$consulta .= " AND ";
+							}
+							$decodedValue = json_decode($nom_fil, true);
+							if (json_last_error() === JSON_ERROR_NONE) {
+								$consulta .= " c." . $nom . " IN ('" . implode("', '", $decodedValue) . "')";
+							} else {
+								$consulta .= " c." . $nom . "=" . "'$nom_fil'";
+							}
+						}
+						break;
+						
+					case "name_brand":
+						if(($nom_fil!=null) && ($nom_fil!=0 )&& ($nom_fil!="undefined")){
+
+							if (!empty($consulta)) {
+								$consulta .= " AND ";
+							}
+							// Comprobar si $nom_fil tiene formato JSON
+							$decodedValue = json_decode($nom_fil, true);
+							if (json_last_error() === JSON_ERROR_NONE) {
+								$consulta .= " b." . $nom . " IN ('" . implode("', '", $decodedValue) . "')";
+							} else {
+								$consulta .= " b." . $nom . "=" . "'$nom_fil'";
+							}
+						}
+						break;
+
+					case "name_cities":
+						if(($nom_fil!=null) && ($nom_fil!=0 )&& ($nom_fil!="undefined")){
+
+							if (!empty($consulta)) {
+								$consulta .= " AND ";
+							}
+							// Comprobar si $nom_fil tiene formato JSON
+							$decodedValue = json_decode($nom_fil, true);
+							if (json_last_error() === JSON_ERROR_NONE) {
+								$consulta .= " cit." . $nom . " IN ('" . implode("', '", $decodedValue) . "')";
+							} else {
+								$consulta .= " cit." . $nom . "=" . "'$nom_fil'";
+							}
+						}
+						break;
+	
+					case "name_typ_sell":
+						if(($nom_fil!=null) && ($nom_fil!=0 )&& ($nom_fil!="undefined")){
+
+							// Decodificar el JSON
+							$value_fil = json_decode($nom_fil, true);
+							
+							if (!empty($consulta)) {
+								$consulta .= " AND ";
+							}
+							
+							// Construir la consulta
+							$consulta .= " ts." . $nom . " IN (";
+							
+							for ($j = 0; $j < count($value_fil); $j++) {
+								if ($j == 0) {
+									$consulta .= "'" . $value_fil[$j] . "'";
+								} else {
+									$consulta .= ", '" . $value_fil[$j] . "'";
+								}
+							}
+							
+							$consulta .= ") ";
+						}
+						break;	
+
+					case "order_by":
+						if(($nom!=null) && ($nom!=0 )&& ($nom!="undefined")){
+
+							// Comprobar si $nom_fil tiene formato JSON
+								$ordenar .= " ORDER BY p." . $nom_fil;
+						}
+						break;			
+				}
+			}
+			if (!empty($consulta)) {
+				$sql .= " WHERE " . $consulta;
+			}
+			
+			if (!empty($ordenar)) {
+				$sql .=	$ordenar;
+			}
+
+            $stmt = $db -> ejecutar($sql);
+            return $db -> listar($stmt);
+        }
     }
 ?>

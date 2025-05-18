@@ -20,7 +20,25 @@
         function product_filters() {
             // echo 'hola carrusel';
             // exit;
-            echo json_encode(common::load_model('shop_model', 'get_product_filters'));
+            echo json_encode(common::load_model('shop_model', 'get_product_filters', $_POST['filters']));
+        }
+
+        function details() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_details', $_POST['id']));
+        }
+
+         function count_paginacion() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_count_paginacion'));
+        }
+
+         function count_paginacion_filters() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_count_paginacion_filters', $_POST['filters']));
         }
     }
 ?>
