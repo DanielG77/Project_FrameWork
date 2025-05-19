@@ -197,32 +197,34 @@
         }
 
         public function select_data_details($db, $id) {
+    	$sql = "SELECT pr.id_prod, pr.name_prod, pr.description_prod, pr.price, sta.name_status, AVG(pr.rating) AS rating_vg,
+        GROUP_CONCAT(DISTINCT prim.image_prod ORDER BY prim.image_prod) AS images_prod, 
+        GROUP_CONCAT(DISTINCT c.name_cat) AS names_cat, GROUP_CONCAT(DISTINCT e.name_extra) AS name_extras,
+        GROUP_CONCAT(DISTINCT b.name_brand ) AS name_brands, GROUP_CONCAT(DISTINCT t.name_typ) AS names_typs,
+        GROUP_CONCAT(DISTINCT ts.name_typ_sell) AS names_typ_sell, pr.latitud, pr.longitud
+        FROM products pr 
+        INNER JOIN prod_images prim ON pr.id_prod = prim.product_id
+        INNER JOIN product_category pc ON pr.id_prod = pc.id_prod
+        INNER JOIN categories c ON c.id_cat = pc.id_cat
+        INNER JOIN product_extras pe ON pr.id_prod = pe.id_prod
+        INNER JOIN extras e ON e.id_extra = pe.id_extra
+        INNER JOIN product_brand pb ON pr.id_prod = pb.id_prod
+        INNER JOIN brands b ON b.id_brands = pb.id_brand
+        INNER JOIN product_type pt ON pr.id_prod = pt.id_prod
+        INNER JOIN types t ON t.id_typ = pt.id_typ
+        INNER JOIN product_type_sell tsp ON pr.id_prod = tsp.id_prod
+        INNER JOIN type_sell ts ON ts.id_typ_sell = tsp.id_typ_sell
+        INNER JOIN cities cit ON pr.id_city = cit.id_cities
+        INNER JOIN status_prod sta ON sta.id_stat= pr.id_stat 
+        WHERE pr.id_prod = '$id'
+        GROUP BY pr.id_prod";
 
-            $sql = "SELECT pr.id_prod, pr.name_prod, pr.description_prod, pr.price, sta.name_status, AVG(pr.rating) AS rating_vg,
-		GROUP_CONCAT(DISTINCT prim.image_prod ORDER BY prim.image_prod) AS images_prod, 
-		GROUP_CONCAT(DISTINCT c.name_cat) AS names_cat, GROUP_CONCAT(DISTINCT e.name_extra) AS name_extras,
-		GROUP_CONCAT(DISTINCT b.name_brand ) AS name_brands, GROUP_CONCAT(DISTINCT t.name_typ) AS names_typs,
-		GROUP_CONCAT(DISTINCT ts.name_typ_sell) AS names_typ_sell, pr.latitud, pr.longitud
-		FROM products pr INNER JOIN prod_images prim ON pr.id_prod = prim.product_id
-		INNER JOIN product_category pc ON pr.id_prod = pc.id_prod
-		INNER JOIN categories c ON c.id_cat = pc.id_cat
-		INNER JOIN product_extras pe ON pr.id_prod = pe.id_prod
-		INNER JOIN extras e ON e.id_extra = pe.id_extra
-		INNER JOIN product_brand pb ON pr.id_prod = pb.id_prod
-		INNER JOIN brands b ON b.id_brands = pb.id_brand
-		INNER JOIN product_type pt ON pr.id_prod = pt.id_prod
-		INNER JOIN types t ON t.id_typ = pt.id_typ
-		INNER JOIN product_type_sell tsp ON pr.id_prod = tsp.id_prod
-		INNER JOIN type_sell ts ON ts.id_typ_sell = tsp.id_typ_sell
-		INNER JOIN cities cit ON pr.id_city = cit.id_cities
-		INNER JOIN status_prod sta ON sta.id_stat= pr.id_stat 
-		WHERE pr.id_prod = '$id'
-		GROUP BY pr.id_prod";
-
-            $stmt = $db -> ejecutar($sql);
-            return $db -> listar($stmt);
-        }
-
+    $stmt = $db->ejecutar($sql);
+    $result = $stmt->fetch_object();
+    $stmt->close();
+    return $result;
+		}
+		
          public function select_data_count_paginacion($db) {
 
             $sql = "SELECT COUNT(DISTINCT pr.id_prod) AS contador

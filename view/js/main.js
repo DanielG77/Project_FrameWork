@@ -77,7 +77,7 @@ function load_menu() {
     // "Login"
     $('<li></li>')
         .attr({ 'class': 'nav-item', 'id': 'login_link' })
-        .html('<a href="' + friendlyURL("?module=login&op=view") + '" class="nav-link">Log in</a>')
+        .html('<a href="' + friendlyURL("?module=auth&op=view") + '" class="nav-link">Log in</a>')
         .appendTo('.navbar-nav');
 
    

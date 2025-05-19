@@ -9,17 +9,22 @@
         <uri>shop</uri>
     </module>
     <module>
+        <name>auth</name>
+        <uri>auth</uri>
+    </module>
+    <!-- <module>
         <name>search</name>
         <uri>search</uri>
-    </module>
+    </module> -->
+   
     <!-- <module>
         <name>crud</name>
         <uri>crud</uri>
     </module> -->
-    <module>
+    <!-- <module>
         <name>contact</name>
         <uri>contact</uri>
-    </module>
+    </module> -->
     <module>
         <name>errors</name>
         <uri>errors</uri>
@@ -28,9 +33,5 @@
         <name>cart</name>
         <uri>cart</uri>
     </module> -->
-    <module>
-        <name>login</name>
-        <uri>login</uri>
-        <uri>register</uri>
-    </module>
+   
 </modules>
