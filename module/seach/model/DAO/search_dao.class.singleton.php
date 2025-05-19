@@ -1,19 +1,17 @@
 <?php
-    $path = $_SERVER['DOCUMENT_ROOT'] . '/programas/courses_home';
-	include($path . "/model/connect.php");
-    
-	class DAOSearch {
+    class search_dao {
+        static $_instance;
 
-		// function select_type_game(): bool|mysqli_result{
-		// 	$sql = "SELECT DISTINCT t.*
-		// 			FROM types t INNER JOIN product_type pt ON t.id_typ=pt.id_typ";
+        private function __construct() {
+        }
 
-		// 	// return $sql;
-		// 	$conexion = connect::con();
-        //     $res = mysqli_query($conexion, $sql);
-        //     connect::close($conexion);
-        //     return $res;
-        // }
+        public static function getInstance() {
+            //return 'hola getInstance dao';
+            if(!(self::$_instance instanceof self)){
+                self::$_instance = new self();
+            }
+            return self::$_instance;
+        }
 
 		// function select_brand(){
         //     $sql = "SELECT DISTINCT b.*

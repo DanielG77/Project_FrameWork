@@ -12,10 +12,10 @@
         <name>auth</name>
         <uri>auth</uri>
     </module>
-    <!-- <module>
+    <module>
         <name>search</name>
         <uri>search</uri>
-    </module> -->
+    </module>
    
     <!-- <module>
         <name>crud</name>

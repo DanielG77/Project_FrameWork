@@ -1,12 +1,12 @@
 <?php
-    class shop_model {
+    class search_model {
 
         private $bll;
         static $_instance;
         
         function __construct() {
             // return 'hola __construct';
-            $this -> bll = shop_bll::getInstance();
+            $this -> bll = search_bll::getInstance();
         }
 
         public static function getInstance() {
