@@ -60,16 +60,44 @@
 				if ($rdo === 'ok') {
 					return "ok";
 				} else {
-					return "error_user";
+					return "error_user_ok";
 				}
 			} else {
 				return "error_general";
 			}
 		}
 
-		// public function get_filters_BLL() {
-		// 	return $this -> dao -> select_data_filters($this -> db);
-		// }
+		public function get_login_BLL($args) {
+			// Validar que los campos existen
+			if (!isset($args['username_log'], $args['password_log'])) {
+				return "error_args";
+			}
+
+			// USERNAME
+			try {
+				$user = $this->dao->select_username($this->db, $args['username_log']);
+			} catch (Exception $e) {
+				return "error_user";
+			}
+
+			if ($user === "error_user" || empty($user)) {
+				return "error_user";
+			}
+
+			// PASSWORD
+			if (password_verify($args['password_log'], $user['password'])) {
+				try {
+					$token = create_token($user["username"]);
+					$_SESSION['username'] = $user['username'];
+					$_SESSION['tiempo'] = time();
+				} catch (Exception $e) {
+					return "error_token";
+				}
+				return $token;
+			} else {
+				return "error_passwd";
+			}
+		}
 
 		// public function get_product_filters_BLL($filter) {
 		// 	return $this -> dao -> select_data_product_filters($this -> db, $filter);

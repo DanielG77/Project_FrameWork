@@ -16,7 +16,7 @@ function authyread(authy) {
             .appendTo('#grid_align__item')
             .html(
                 
-                "<svg xmlns='http://www.w3.org/2000/svg' class='site__logo' href='index.php?page=ctrl_home&op=list' width='56' height='84' viewBox='77.7 214.9 274.7 412'><defs><linearGradient id='a' x1='0%' y1='0%' y2='0%'><stop offset='0%' stop-color='#8ceabb'/><stop offset='100%' stop-color='#378f7b'/></linearGradient></defs><path fill='url(#a)' d='M215 214.9c-83.6 123.5-137.3 200.8-137.3 275.9 0 75.2 61.4 136.1 137.3 136.1s137.3-60.9 137.3-136.1c0-75.1-53.7-152.4-137.3-275.9z'/></svg>" +
+                "<div class='container px-5'><div id='icono'></div><ul class='nav_bar_logitp'></ul>" +
                 "<h2>Sign In</h2>" +
                 "<form method='post' class='formulito' id='formulito'>" +
                     "<div class='form__field'>" +
@@ -104,9 +104,15 @@ function signup() {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     });
+
                     localStorage.setItem('location_auth', "SingIn");
-                    setTimeout(' window.location.href = "index.php?module=ctrl_auth&op=list"; ', 1000);
-                }
+
+                    // Redirección amigable según 'ubication'
+                    let url = friendlyURL('?module=auth&op=view');
+                
+                    setTimeout(function() {
+                            window.location.href = url;
+                        }, 1000);                }
             });
     }
 }
@@ -116,7 +122,7 @@ function signin() {
     if (validateSignIn() != true) {
         username_log = ($('#user_email').val());
         password_log = ($('#passwordlog').val());
-        ajaxPromise('/programas/courses_home/module/auth/controller/ctrl_auth.php?op=login', 'POST', 'JSON', { 'username_log': username_log, 'password_log': password_log })
+        ajaxPromise(friendlyURL('?module=auth&op=login'), 'POST', 'JSON', { 'username_log': username_log, 'password_log': password_log })
             .then(function(result) {
                 console.log(result);
                     if (result == "error_user") {
@@ -133,12 +139,20 @@ function signin() {
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        setTimeout(' window.location.href = "index.php?module=ctrl_shop&op=list"; ', 1000);
-                            if (localStorage.getItem('redirect_like')) {
-                            setTimeout(' window.location.href = "index.php?module=ctrl_shop&op=list"; ', 1000);
+                       
+                        // Redirección amigable según 'ubication'
+                        let ubication = localStorage.getItem('ubication') || false; // Puedes cambiar el nombre si es 'location', pero escribiste 'ubication'
+                        let url;
+
+                        if (ubication === "home") {
+                            url = friendlyURL('?module=home&op=view');
                         } else {
-                            setTimeout(' window.location.href = "index.php?module=ctrl_home&op=list"; ', 1000);
+                            url = friendlyURL('?module=shop&op=view');
+
                         }
+                        setTimeout(function() {
+                            window.location.href = url;
+                        }, 1000);
                     }
         });
     }

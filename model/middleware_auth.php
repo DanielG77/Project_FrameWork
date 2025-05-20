@@ -36,4 +36,16 @@ class middleware{
         $JWT = new jwt();
         return $JWT -> encode($header, $payload, $secret);
     }
+
+    public static function create_token($user){
+        $jwt = parse_ini_file(UTILS . "jwt.ini");
+
+        $header = $jwt['header'];
+        $secret = $jwt['secret'];
+        $payload = json_encode(['iat' => time(), 'exp' => time() + (600), 'name' => $user]);
+
+        $JWT = new JWT;
+        $token = $JWT->encode($header, $payload, $secret);
+        return $token;
+    }
 }

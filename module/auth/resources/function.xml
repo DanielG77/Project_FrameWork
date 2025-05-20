@@ -8,11 +8,11 @@
         <name>register</name>
         <uri>register</uri>
     </function>
-    <!-- <function>
-        <name>filters</name>
-        <uri>filters</uri>
+     <function>
+        <name>login</name>
+        <uri>login</uri>
     </function>
-    <function>
+    <!-- <function>
         <name>product_filters</name>
         <uri>product_filters</uri>
     </function>

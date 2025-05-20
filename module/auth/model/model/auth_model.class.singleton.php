@@ -21,5 +21,10 @@
             // return 'hola get_carrusel';
             return $this -> bll -> get_register_BLL($arguments);
         }
+
+        public function get_login($arguments) {
+            // return 'hola get_carrusel';
+            return $this -> bll -> get_login_BLL($arguments);
+        }
     }
 ?>
