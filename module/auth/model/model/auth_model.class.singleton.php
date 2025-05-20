@@ -16,5 +16,10 @@
             }
             return self::$_instance;
         }
+
+         public function get_register($arguments) {
+            // return 'hola get_carrusel';
+            return $this -> bll -> get_register_BLL($arguments);
+        }
     }
 ?>

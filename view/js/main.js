@@ -66,8 +66,6 @@ function load_menu() {
         .text('La Taberna De los Dados')
         .appendTo('.nav_bar_logitp');
 
-   
-
     // "Shop"
     $('<li></li>')
         .attr({ 'class': 'nav-item' })

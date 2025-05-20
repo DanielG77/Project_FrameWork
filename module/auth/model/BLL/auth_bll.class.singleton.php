@@ -18,11 +18,54 @@
 			return self::$_instance;
 		}
 
-		// public function get_products_BLL() {
-		// 	//return 'hola get_carrusel_BLL';
-		// 	return $this -> dao -> select_data_products($this -> db);
-		// 	// return $this -> dao -> select_data_carrusel();
-		// }
+		public function get_register_BLL($args) {
+			// Validar que los campos existen
+			if (!isset($args['email'], $args['username'], $args['passworda'])) {
+				return "error_args";
+			}
+
+			// EMAIL
+			try {
+				$check = $this->dao->select_email($this->db, $args['email']);
+			} catch (Exception $e) {
+				return "error_email";
+			}
+
+			if ($check === "no_email") {
+				$check_email = true;
+			} else {
+				return "email_exist";
+			}
+
+			// USERNAME
+			try {
+				$check = $this->dao->select_username($this->db, $args['username']);
+			} catch (Exception $e) {
+				return "error_username";
+			}
+
+			if ($check === "no_username") {
+				$check_username = true;
+			} else {
+				return "username_exist";
+			}
+
+			// REGISTRO
+			if ($check_email === true && $check_username === true) {
+				try {
+					$rdo = $this->dao->insert_user($this->db, $args['username'], $args['email'], $args['passworda']);
+				} catch (Exception $e) {
+					return "error_user";
+				}
+				if ($rdo === 'ok') {
+					return "ok";
+				} else {
+					return "error_user";
+				}
+			} else {
+				return "error_general";
+			}
+		}
 
 		// public function get_filters_BLL() {
 		// 	return $this -> dao -> select_data_filters($this -> db);

@@ -44,7 +44,7 @@ function authyread(authy) {
             .appendTo('#grid_align__item')
             .html(
                 
-                "<svg xmlns='http://www.w3.org/2000/svg' class='site__logo' href='index.php?page=ctrl_home&op=list' width='56' height='84' viewBox='77.7 214.9 274.7 412'><defs><linearGradient id='a' x1='0%' y1='0%' y2='0%'><stop offset='0%' stop-color='#8ceabb'/><stop offset='100%' stop-color='#378f7b'/></linearGradient></defs><path fill='url(#a)' d='M215 214.9c-83.6 123.5-137.3 200.8-137.3 275.9 0 75.2 61.4 136.1 137.3 136.1s137.3-60.9 137.3-136.1c0-75.1-53.7-152.4-137.3-275.9z'/></svg>" +
+                "<div class='container px-5'><div id='icono'></div><ul class='nav_bar_logitp'></ul>" +
                 "<h2>Sign Up</h2>" +
                 "<form method='post' class='formulito' id='formulito'>" +
                     "<div class='form__field'>" +
@@ -89,7 +89,7 @@ function signup() {
         passwordo = ($('#secondpassword').val());
         // console.log(email);
 
-        ajaxPromise('/programas/courses_home/module/auth/controller/ctrl_auth.php?op=register', 'POST', 'JSON', { 'email': email, 'username': username, 'passworda': passworda })
+        ajaxPromise(friendlyURL('?module=auth&op=register'), 'POST', 'JSON', { 'email': email, 'username': username, 'passworda': passworda })
             .then(function(result) {
                 // console.log(result);
                 if (result == "email_exist") {

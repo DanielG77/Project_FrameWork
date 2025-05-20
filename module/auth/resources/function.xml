@@ -4,11 +4,11 @@
         <name>view</name>
         <uri>view</uri>
     </function>
-    <!-- <function>
-        <name>products</name>
-        <uri>products</uri>
-    </function>
     <function>
+        <name>register</name>
+        <uri>register</uri>
+    </function>
+    <!-- <function>
         <name>filters</name>
         <uri>filters</uri>
     </function>
