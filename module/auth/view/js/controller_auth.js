@@ -97,7 +97,6 @@ function signup() {
                 } else if (result == "username_exist") {
                     document.getElementById('error_usern_log').innerHTML = "El usuario ya esta en uso, intentalo con otro"
                 } else if (result == "ok") {
-                    console.log("QUE ES ESTO");
                     Swal.fire({
                         title: '¡Registro exitoso!',
                         text: 'Tu cuenta ha sido creada correctamente.',
@@ -107,12 +106,13 @@ function signup() {
 
                     localStorage.setItem('location_auth', "SingIn");
 
-                    // Redirección amigable según 'ubication'
-                    let url = friendlyURL('?module=auth&op=view');
+            //         // Redirección amigable según 'ubication'
+            //         let url = friendlyURL('?module=auth&op=view');
                 
-                    setTimeout(function() {
-                            window.location.href = url;
-                        }, 1000);                }
+            //         setTimeout(function() {
+            //                 window.location.href = url;
+            //             }, 1000);                
+            }
             });
     }
 }
@@ -122,6 +122,7 @@ function signin() {
     if (validateSignIn() != true) {
         username_log = ($('#user_email').val());
         password_log = ($('#passwordlog').val());
+        
         ajaxPromise(friendlyURL('?module=auth&op=login'), 'POST', 'JSON', { 'username_log': username_log, 'password_log': password_log })
             .then(function(result) {
                 console.log(result);
@@ -141,17 +142,17 @@ function signin() {
                         });
                        
                         // Redirección amigable según 'ubication'
-                        let ubication = localStorage.getItem('ubication') || false; // Puedes cambiar el nombre si es 'location', pero escribiste 'ubication'
-                        let url;
+                        // let ubication = localStorage.getItem('ubication') || false; // Puedes cambiar el nombre si es 'location', pero escribiste 'ubication'
+                        // let url;
 
-                        if (ubication === "home") {
-                            url = friendlyURL('?module=home&op=view');
-                        } else {
-                            url = friendlyURL('?module=shop&op=view');
+                        // if (ubication === "home") {
+                        //     url = friendlyURL('?module=home&op=view');
+                        // } else {
+                        //     url = friendlyURL('?module=shop&op=view');
 
-                        }
+                        // }
                         setTimeout(function() {
-                            window.location.href = url;
+                            window.location.href = "?module=home&op=view";
                         }, 1000);
                     }
         });

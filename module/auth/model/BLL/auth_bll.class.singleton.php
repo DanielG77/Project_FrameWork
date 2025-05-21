@@ -73,22 +73,30 @@
 				return "error_args";
 			}
 
-			// USERNAME
+			// Primero intenta buscar por email
 			try {
-				$user = $this->dao->select_username($this->db, $args['username_log']);
+				$user = $this->dao->select_user_email($this->db, $args['username_log']);
 			} catch (Exception $e) {
 				return "error_user";
 			}
 
-			if ($user === "error_user" || empty($user)) {
-				return "error_user";
+			// Si no se encuentra el email, intenta buscar por username
+			if ($user === "no_email" || empty($user)) {
+				try {
+					$user = $this->dao->select_user_username($this->db, $args['username_log']);
+				} catch (Exception $e) {
+					return "error_user";
+				}
+				if ($user === "error_user" || empty($user)) {
+					return "error_user";
+				}
 			}
 
 			// PASSWORD
-			if (password_verify($args['password_log'], $user['password'])) {
+			if (password_verify($args['password_log'], $user->password)) {
 				try {
-					$token = create_token($user["username"]);
-					$_SESSION['username'] = $user['username'];
+					$token = middleware::create_token($user->username);
+					$_SESSION['username'] = $user->username;
 					$_SESSION['tiempo'] = time();
 				} catch (Exception $e) {
 					return "error_token";

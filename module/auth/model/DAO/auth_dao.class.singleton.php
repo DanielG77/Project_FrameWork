@@ -74,5 +74,30 @@
             }
         }
 
+        public function select_user_email($db, $email) {
+            $sql = "SELECT * FROM `usuario` WHERE email = '$email'";
+            $stmt = $db->ejecutar($sql);
+            $result = $db->listar($stmt);
+
+            if (empty($result)) {
+                return "no_email";
+            } else {
+                // Devuelve el primer resultado como objeto
+                return (object) $result[0];
+            }
+        }
+
+        public function select_user_username($db, $username) {
+            $sql = "SELECT * FROM `usuario` WHERE username = '$username'";
+            $stmt = $db->ejecutar($sql);
+            $result = $db->listar($stmt);
+
+            if (empty($result)) {
+                return "no_email";
+            } else {
+                // Devuelve el primer resultado como objeto
+                return (object) $result[0];
+            }
+        }
     }
 ?>
