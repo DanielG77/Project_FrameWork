@@ -55,6 +55,8 @@ function friendlyURL(url) {
 /* LOAD MENU */
 function load_menu() {
     // console.log("hola load menu");
+    const token = localStorage.getItem('token');
+
     // Logo
   $('<a></a>')
     .attr({ 'class': 'enlaze', 'id': 'enlaze', 'href': friendlyURL("?module=home&op=view") })
@@ -77,25 +79,45 @@ function load_menu() {
         .attr({ 'class': 'nav-item', 'id': 'login_link' })
         .html('<a href="' + friendlyURL("?module=auth&op=view") + '" class="nav-link">Log in</a>')
         .appendTo('.navbar-nav');
-
-   
-        
-    // $('<li></li>').attr({'class' : 'nav_item-shop'}).html('<a href="' + friendlyURL("?module=home&op=view") + '" class="nav_link">Home</a>').appendTo('.nav_list');
-    // $('<li></li>').attr({'class' : 'nav_item-shop'}).html('<a href="' + friendlyURL("?module=shop&op=view") + '" class="nav_link">Shop</a>').appendTo('.nav_list');
-    // $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=contact&op=view") + '" class="nav_link">Contact us</a>').appendTo('.nav_list');
-    // $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=contact") + '" class="nav_link">Contact us</a>').appendTo('.nav_list');
     
-    // ajaxPromise(friendlyURL('?module=login&op=data_user'), 'POST', 'JSON', {token: localStorage.getItem('token')})
-    // .then(function(data) {
-    //     if (data[0].user_type === 'admin') {
-    //         menu_admin();
-    //     }else if (data[0].user_type === 'client') {
-    //         menu_client();
-    //     }
-    //     click_profile(data[0]);
-    // }).catch(function() {
-    // $('<li></li>').attr({'class' : 'nav_item'}).html('<a href="' + friendlyURL("?module=login&op=view") + '" class="nav_link" data-tr="Log in">Log in</a>').appendTo('.nav_list');
-    // });
+    if (token) {
+        ajaxPromise(friendlyURL('?module=auth&op=user'), 'POST', 'JSON', { 'token': token })
+            .then(function(data) {
+                console.log(data);
+                if (data.type_user == "Client") {
+                    console.log("Cliente logeado");
+                    // $opcCrud.empty();
+                    // $opcExceptions.empty();
+                } else {
+                    console.log("Admin logeado");
+                    // $opcCrud.show();
+                    // $opcExceptions.show();
+                }
+
+                // Oculta el enlace de login
+                $('#login_link').hide();
+                // Elimina cualquier menú de usuario previo
+                $('.navbar-nav .user-menu').remove();
+                // Crea el menú de usuario con avatar, nombre y logout en línea
+                const $userMenu = $('<li>', { class: 'nav-item user-menu d-flex align-items-center', style: 'gap: 8px;' });
+                $userMenu.html(`
+                    <img src="${data.avatar}" alt="Avatar" class="avatar-img me-2" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
+                    <span style="font-weight:500;">${data.username}</span>
+                    <a href="#" class="logout-btn" style="color:inherit; margin-left:8px; font-size:1.2em;" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+                `);
+                $('.navbar-nav.ms-auto').append($userMenu);
+
+                // Evento logout
+                $(document).on('click', '.logout-btn', function(e) {
+                    e.preventDefault();
+                    logout();
+                });
+
+            }).catch(function(error) {
+                console.error("Error cargando datos:", error);
+                // handleLogoutUI();
+            });
+        }
 }
 
 // /* MENUS */
@@ -129,31 +151,30 @@ function load_menu() {
 // }
 
 
-// /* CLICK LOGOUT */
-// function click_logout() {
-//     $(document).on('click', '#logout', function() {
-//         logout();
-//         setTimeout(1000, window.location.href = friendlyURL("?module=home&op=view"));
-//     });
-// }
+/* CLICK LOGOUT */
+function click_logout() {
+    $(document).on('click', '#logout', function() {
+        logout();
+        setTimeout(1000, window.location.href = friendlyURL("?module=home&op=view"));
+    });
+}
 
-// /* LOGOUT */
-// function logout() {
-//     $.ajax({
-//         url: friendlyURL("?module=login&op=logout"),
-//         type: 'POST',
-//         dataType: 'JSON'
-//     }).done(function(data) {
-//         localStorage.removeItem('token');
-//         window.location.href = friendlyURL("?module=home&op=view");
-//         console.log("Sesion cerrada");
-//     }).fail(function() {
-//         console.log("Error: Logout error");
-//     });
-// }
+/* LOGOUT */
+function logout() {
+    ajaxPromise(friendlyURL('?module=auth&op=logout'), 'POST', 'JSON')
+    .then(function(data) {
+        console.log(data);
+        localStorage.removeItem('token');
+        window.location.href = friendlyURL("?module=home&op=view");
+        console.log("Sesion cerrada");
+    })
+    .catch(function() {
+        console.log("Error: Logout error");
+    });
+}
 
 $(document).ready(function() {
     load_menu();
-    // click_logout();
+    click_logout();
     // loading_spinner();
 });

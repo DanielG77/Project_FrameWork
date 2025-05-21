@@ -30,6 +30,11 @@ function authyread(authy) {
                     "<div class='form__field'>" +
                         "<input type='submit' class='login' id='login' value='Sign In'>" +
                     "</div>" +
+                    // Botones de login social
+                    "<div class='form__field social-login'>" +
+                        "<button type='button' class='btn-social-login' id='login-email'><i class='fa fa-envelope'></i> Acceder con Email</button>" +
+                        "<button type='button' class='btn-social-login' id='login-github'><i class='fab fa-github'></i> Acceder con GitHub</button>" +
+                    "</div>" +
                     "<div class='form__field'>" +
                         "<p>¿Ya tienes una cuenta? <button class='login-link' id='login-link'>Sign In</button></p>" +
                     "</div>" +
@@ -67,7 +72,11 @@ function authyread(authy) {
                     "<div class='form__field'>" +
                         "<input type='submit'class='register' id='register' value='Sign Up'>" +
                     "</div>" +
-
+                    // Botones de registro social
+                    "<div class='form__field social-login'>" +
+                        "<button type='button' class='btn-social-login' id='register-email'><i class='fa fa-envelope'></i> Acceder con Email</button>" +
+                        "<button type='button' class='btn-social-login' id='register-github'><i class='fab fa-github'></i> Acceder con GitHub</button>" +
+                    "</div>" +
                     "<div class='form__field'>" +
                         "<p>¿Ya tienes una cuenta? <button class='register-link' id='register-link'>Sign Up</button></p>" +
                     "</div>" +

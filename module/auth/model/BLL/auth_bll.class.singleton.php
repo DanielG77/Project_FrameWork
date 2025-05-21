@@ -107,13 +107,21 @@
 			}
 		}
 
-		// public function get_product_filters_BLL($filter) {
-		// 	return $this -> dao -> select_data_product_filters($this -> db, $filter);
-		// }
+		public function get_user_BLL($token) {
+			$tokens = middleware::decode_username($token);
 
-		// public function get_details_BLL($id) {
-		// 	return $this -> dao -> select_data_details($this -> db, $id);
-		// }
+			return $this -> dao -> select_user_username($this -> db, $tokens);
+			// return $this -> dao -> select_user_username($this -> db, $token);
+		}
+
+		public function get_logout_BLL() {
+            @session_start();
+            unset($_SESSION['username']);
+            unset($_SESSION['tiempo']);
+            session_destroy();
+            return 'Done';
+            // return 'ok';
+        }
 
 		// public function get_count_paginacion_BLL() {
 		// 	return $this -> dao -> select_data_count_paginacion($this -> db);

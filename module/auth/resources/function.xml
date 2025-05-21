@@ -12,15 +12,15 @@
         <name>login</name>
         <uri>login</uri>
     </function>
-    <!-- <function>
-        <name>product_filters</name>
-        <uri>product_filters</uri>
+     <function>
+        <name>user</name>
+        <uri>user</uri>
     </function>
-    <function>
-        <name>details</name>
-        <uri>details</uri>
+     <function>
+        <name>logout</name>
+        <uri>logout</uri>
     </function>
-    <function>
+    <!--<function>
         <name>count_paginacion</name>
         <uri>count_paginacion</uri>
     </function> 

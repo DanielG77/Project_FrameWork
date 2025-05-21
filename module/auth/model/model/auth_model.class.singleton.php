@@ -26,5 +26,15 @@
             // return 'hola get_carrusel';
             return $this -> bll -> get_login_BLL($arguments);
         }
+
+        public function get_user($token) {
+            // return 'hola get_carrusel';
+            return $this -> bll -> get_user_BLL($token);
+        }
+
+        public function get_logout() {
+            // return 'hola get_carrusel';
+            return $this -> bll -> get_logout_BLL();
+        }
     }
 ?>

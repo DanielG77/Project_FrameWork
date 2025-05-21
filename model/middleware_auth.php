@@ -1,15 +1,15 @@
 <?php
 class middleware{
     public static function decode_username($get_token){
-		$jwt = parse_ini_file(UTILS . "jwt.ini");
+		$jwt = parse_ini_file(MODEL_PATH . "jwt.ini");
 		$secret = $jwt['secret'];
 		$token = $get_token;
 
 		$JWT = new JWT;
 		$json = $JWT -> decode($token, $secret);
 		$json = json_decode($json, TRUE);
-
-        $decode_user = $json['name'];
+        
+        $decode_user = $json['username'];
         return $decode_user;
     }
 

@@ -31,6 +31,18 @@
                     ]
                 ));
         }
+
+         function user() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('auth_model', 'get_user', $_POST['token']));
+        }
+
+         function logout() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('auth_model', 'get_logout'));
+        }
     }
 ?>
 

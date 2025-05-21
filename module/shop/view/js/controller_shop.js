@@ -30,7 +30,9 @@ function shopAllproducts() {
 function ajaxForSearch(durl, filters) {
     ajaxPromise(friendlyURL(durl), 'POST',  'JSON', { 'filters': filters})
     .then(function(data) {
-        if(data != "shop_vacio") {
+        console.log("hola_data");
+        console.log(data);
+        if(data !== "shop_vacio" && data !== null && data !== "" && !(Array.isArray(data) && data.length === 0)) {
             $("#content_shop_nogames").hide();
             $('#content_shop_games').empty(); // Limpiar contenedor
             
@@ -39,6 +41,9 @@ function ajaxForSearch(durl, filters) {
                     <div class="product-card" id="${product.id_prod}">
                         <div class="product-header">
                             ${product.name_status ? `<span class="product-status">${product.name_status}</span>` : ''}
+                            <button class="like-btn" title="Like" style="position:absolute;top:10px;right:10px;z-index:3;">
+                                <i class="fa${product.is_liked ? 's' : 'r'} fa-heart"></i>
+                            </button>
                             <div class="product-carousel-container">
                                 <div id="carousel-${product.id_prod}" class="owl-carousel">
                                     ${product.images_prod.split(',').map(img => `
