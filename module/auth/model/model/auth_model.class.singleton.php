@@ -60,5 +60,10 @@
             // return $arguments;
             return $this -> bll -> get_refresh_token_BLL($args);
         }
+
+        public function get_firebase_config() {
+            // return $arguments;
+            return $this -> bll -> get_firebase_config_BLL();
+        }
     }
 ?>

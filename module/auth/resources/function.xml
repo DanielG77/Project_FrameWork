@@ -44,6 +44,10 @@
         <name>social_login</name>
         <uri>social_login</uri>
     </function>
+    <function>
+        <name>firebase_config</name>
+        <uri>firebase_config</uri>
+    </function>
     <!-- <function>
         <name>social_login</name>
         <uri>social_login</uri>

@@ -286,5 +286,21 @@
             return $new_token;
 		}
 
+		public function get_firebase_config_BLL() {
+			$firebase_ini = parse_ini_file(MODEL_PATH . "firebase.ini", true);
+			if (isset($firebase_ini['firebase'])) {
+				return [
+					'apiKey' => $firebase_ini['firebase']['apiKey'],
+					'authDomain' => $firebase_ini['firebase']['authDomain'],
+					'projectId' => $firebase_ini['firebase']['projectId'],
+					'storageBucket' => $firebase_ini['firebase']['storageBucket'],
+					'messagingSenderId' => $firebase_ini['firebase']['messagingSenderId'],
+					'measurementId' => $firebase_ini['firebase']['measurementId']
+				];
+			} else {
+				return ['error' => 'Firebase config not found'];
+			}
+		}
+
 	}
 ?>

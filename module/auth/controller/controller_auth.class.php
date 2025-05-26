@@ -21,7 +21,7 @@
         function recover_view() {
             // echo 'hola view';
             // exit;
-            common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'recover_view.html');
+            common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'recover_pass.html');
         }
         function register() {
             // echo 'hola carrusel';
@@ -90,6 +90,10 @@
 
         function refresh_token() {
             echo json_encode(common::load_model('auth_model', 'get_refresh_token', $_POST['token']));
+        }
+
+        function firebase_config() {
+            echo json_encode(common::load_model('auth_model', 'get_firebase_config'));
         }
     }
 ?>
