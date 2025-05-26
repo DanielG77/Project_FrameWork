@@ -18,18 +18,26 @@
 			return self::$_instance;
 		}
 
-		public function get_products_BLL() {
-			//return 'hola get_carrusel_BLL';
-			return $this -> dao -> select_data_products($this -> db);
-			// return $this -> dao -> select_data_carrusel();
+		public function get_products_BLL($arguments) {
+			$items_page = $arguments['items_page'];
+			$total_prod = $arguments['total_prod'];
+			// $filtro_shop = isset($arguments['filtro_shop']) ? $arguments['filtro_shop'] : null;
+			// return $total_prod;
+			return $this->dao->select_data_products($this->db, $total_prod, $items_page);
 		}
 
 		public function get_filters_BLL() {
 			return $this -> dao -> select_data_filters($this -> db);
 		}
 
-		public function get_product_filters_BLL($filter) {
-			return $this -> dao -> select_data_product_filters($this -> db, $filter);
+		public function get_product_filters_BLL($arguments) {
+			$items_page = $arguments['items_page'];
+			$total_prod = $arguments['total_prod'];
+			$filters = $arguments['filters'];
+			// $items_page = $arguments;
+			// $filtro_shop = isset($arguments['filtro_shop']) ? $arguments['filtro_shop'] : null;
+			// return $filters;
+			return $this -> dao -> select_data_product_filters($this -> db, $total_prod, $items_page, $filters);
 		}
 
 		public function get_details_BLL($id) {

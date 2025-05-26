@@ -95,7 +95,7 @@ function categories() {
 }
 
 function brand() {
-    ajaxPromise('?module=home&op=brand','GET', 'JSON')
+    ajaxPromise(friendlyURL('?module=home&op=brand'),'GET', 'JSON')
     .then(function(data) {
         // console.log(data);
         let carousel = $(".carouseBrands");
@@ -143,7 +143,7 @@ function brand() {
 }
 
 function city() {
-    ajaxPromise('?module=home&op=city', 'GET', 'JSON')
+    ajaxPromise(friendlyURL('?module=home&op=city'), 'GET', 'JSON')
     .then(function(data) {
         let carousel = $(".carouselCities");
         carousel.empty();
@@ -182,7 +182,7 @@ function city() {
 }
 
 function popular() {
-    ajaxPromise('?module=home&op=popular', 'GET', 'JSON')
+    ajaxPromise(friendlyURL('?module=home&op=popular'), 'GET', 'JSON')
     .then(function(data) {
         let carousel = $(".carouselPopuProds");
         carousel.empty();
@@ -253,7 +253,7 @@ function popular() {
 }
 
 function rating() {
-    ajaxPromise('?module=home&op=rating', 'GET', 'JSON')
+    ajaxPromise(friendlyURL('?module=home&op=rating'), 'GET', 'JSON')
     .then(function(data) {
         let carousel = $(".carouselRatingProds");
         carousel.empty();

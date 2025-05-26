@@ -302,3 +302,21 @@ body {
   border-color: #8ceabb;
   box-shadow: 0 0 0 3px rgba(140, 234, 187, 0.1);
 }
+
+/* Estilos para el enlace '¿Has olvidado tu contraseña?' */
+.forgot-pass-field {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+.forgot-password-link {
+  color: #378f7b;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.2s;
+  display: inline-block;
+}
+.forgot-password-link:hover {
+  color: #8ceabb;
+  text-decoration: underline;
+}

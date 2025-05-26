@@ -17,18 +17,18 @@
             return self::$_instance;
         }
 
-        public function get_products() {
+        public function get_products($arguments) {
             // return 'hola get_carrusel';
-            return $this -> bll -> get_products_BLL();
+            return $this -> bll -> get_products_BLL($arguments);
         }
 
         public function get_filters() {
             return $this -> bll -> get_filters_BLL();
         }
 
-        public function get_product_filters($filter) {
+        public function get_product_filters($arguments) {
             // return 'hola car brands';
-            return $this->bll->get_product_filters_BLL($filter);
+            return $this->bll->get_product_filters_BLL($arguments);
         }
 
         public function get_details($id) {

@@ -3,8 +3,8 @@ function shopAllproducts() {
     // var id_prod = localStorage.getItem('id_prod') || false;
     // var categoria = localStorage.getItem('name_cat') || false;
     // var ubicacion = localStorage.getItem('ubication') || false;
-    // console.log("hola_show_products");
-    // console.log(categoria);
+    console.log("hola_show_products");
+    console.log(filters);
 
     // if((categoria!=false) && (ubicacion=="shop")){ // Primer LLanze els filtros
     // if(categoria!=false){
@@ -12,8 +12,10 @@ function shopAllproducts() {
     //     categ_visited(categoria);
     // }
     if (filters != false) {
+        // console.log("hola_show_products_filtres");
+
         var filtro_data = JSON.parse(filters);
-        ajaxForSearch('?module=shop&op=product_filters', filtro_data);      
+        ajaxForSearch('?module=shop&op=product_filters', total_prod = 0, items_page = 8, filtro_data);      
     }
     // else if(id_prod != false){
         // localStorage.removeItem('id_prod');
@@ -21,17 +23,23 @@ function shopAllproducts() {
         // loadDetails(id_prod);
     // } 
     else {
-        ajaxForSearch('?module=shop&op=products', undefined)
+        // console.log("hola_show_products_no_filtres");
+
+        ajaxForSearch('?module=shop&op=products', total_prod = 0, items_page = 8, undefined)
             // ajaxForSearch('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=all_games', total_prod = 0, items_page = 3, undefined);
     }
     
 }
 
-function ajaxForSearch(durl, filters) {
-    ajaxPromise(friendlyURL(durl), 'POST',  'JSON', { 'filters': filters})
+function ajaxForSearch(durl, total_prod, items_page, filters) {
+    // console.log(durl);
+    // console.log(total_prod);
+    // console.log(items_page);
+
+    ajaxPromise(friendlyURL(durl), 'POST',  'JSON', { 'total_prod': total_prod, 'items_page': items_page, 'filters': filters })
     .then(function(data) {
-        console.log("hola_data");
-        console.log(data);
+        // console.log("hola_data_shop");
+        // console.log(data);
         if(data !== "shop_vacio" && data !== null && data !== "" && !(Array.isArray(data) && data.length === 0)) {
             $("#content_shop_nogames").hide();
             $('#content_shop_games').empty(); // Limpiar contenedor
@@ -470,30 +478,29 @@ function loadDetails(id) {
         $('.results').empty();
 
         // Galería de imágenes
-//         let images = product.images_prod.split(',');
-//         let $carousel = $("<div></div>")
-//             .attr({ id: "product-carousel", class: "owl-carousel owl-theme" })
-//             .appendTo('#container-date-img');
-//         for (let i = 0; i < images.length; i++) {
-//             let image = images[i].trim();
-//             $('<div></div>')
-//                 .addClass('item')
-//                 .html(
-//                     "<div class='content-img-details'>" +
-//                         "<img src="${IMG_PROD}${img.trim()}" alt="${product.name_prod}" class="product-image">
-// " +
-//                     "</div>"
-//                 ).appendTo($carousel);
-//         }
-//         $('#product-carousel').owlCarousel({
-//             items: 1,
-//             loop: false,
-//             nav: true,
-//             dots: true,
-//             autoplay: false,
-//             autoplayTimeout: 0,
-//             autoplayHoverPause: false
-//         });
+        let images = product.images_prod.split(',');
+        let $carousel = $("<div></div>")
+            .attr({ id: "product-carousel", class: "owl-carousel owl-theme" })
+            .appendTo('#container-date-img');
+        images.forEach(img => {
+            let image = img.trim();
+            $('<div></div>')
+                .addClass('item')
+                .html(
+                    `<div class='content-img-details'>
+                        <img src="${IMG_PROD}${image}" alt="${product.name_prod}" class="product-image">
+                    </div>`
+                ).appendTo($carousel);
+        });
+        $('#product-carousel').owlCarousel({
+            items: 1,
+            loop: true,
+            nav: true,
+            dots: true,
+            autoplay: false,
+            autoplayTimeout: 0,
+            autoplayHoverPause: false
+        });
 
         // Información del producto
         let name_brands = product.name_brands.split(',').join(', ');
@@ -562,7 +569,7 @@ function loadDetails(id) {
         }
 
         // Mapa en detalles (si tienes función)
-        // mapBox_Details(product);
+        mapBox_Details(product);
 
         // Relacionados (si tienes funciones)
         // more_accesori_related(names_typs);
@@ -696,31 +703,70 @@ function clicks() {
 
 
 
-// function mapBox_Details(product) {
-//     var mapContainer = document.getElementById('mapDetails');
-//     if (mapContainer) {
-//         // Destruir el mapa existente si ya existe
-//         if (mapContainer._leaflet_id) {
-//             mapContainer._leaflet_id = null; // Elimina la referencia previa
-//         }
+function mapBox_Details(product) {
+    const customIcon = L.icon({
+        iconUrl: '/programas/Project_FrameWork/view/images/marcador-de-posicion.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+    });
 
-//         var map = L.map('mapDetails').setView([product.latitud, product.longitud], 9);
+    const mapContainer = document.getElementById('mapDetails');
+    if (mapContainer) {
+        // Destruir el mapa existente si ya existe
+        if (mapContainer._leaflet_id) {
+            mapContainer._leaflet_id = null;
+            mapContainer.innerHTML = '';
+        }
+        const map = L.map('mapDetails').setView([product.latitud, product.longitud], 9);
 
-//         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//         }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-//         const marker = L.marker([product.latitud, product.longitud]).addTo(map);
-//         const popupContent = 
-//         `<div class="popup-content" id="${product.id_prod}" style="cursor: pointer;">
-//             <p style="text-align:Left;">Precio: <b>${product.price}€</b></p>
-//             <p style="text-align:Left;">Producto: <b>${product.name_prod}</b></p>
-//         </div>`;
-//         marker.bindPopup(popupContent);
-//     } else {
-//         console.error("Map container not found");
-//     }
-// }
+        const marker = L.marker([product.latitud, product.longitud], { icon: customIcon }).addTo(map);
+        const popupContent = `
+            <div class="map-popup">
+                <div class="popup-carousel owl-carousel">
+                    ${product.images_prod.split(',').map(img => `
+                        <div class="item">
+                            <img src="${IMG_PROD}${img.trim()}" alt="${product.name_prod}" class="popup-image">
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="popup-info">
+                    <h4 class="popup-title">${product.name_prod}</h4>
+                    <div class="popup-details">
+                        <p class="popup-price">${product.price}€</p>
+                        <p class="popup-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${product.name_cities}
+                        </p>
+                        ${product.names_cat ? `
+                        <div class="popup-categories">
+                            ${product.names_cat.split(',').map(cat => `
+                                <span class="popup-category">${cat.trim()}</span>
+                            `).join('')}
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        marker.bindPopup(popupContent);
+        marker.on('popupopen', () => {
+            $(`#mapDetails .popup-carousel`).owlCarousel({
+                items: 1,
+                loop: true,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                navText: ['‹', '›']
+            });
+        });
+    } else {
+        console.error("Map container for details not found");
+    }
+}
 
 function paginacion() {
     
@@ -731,7 +777,6 @@ function paginacion() {
     } else {
             var filter_data = JSON.parse(filters);
             var url = "?module=shop&op=count_paginacion_filters";
-
     }
    
 

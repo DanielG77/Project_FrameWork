@@ -62,7 +62,7 @@
                             require_once($path);
                             $controllerName = 'controller_' . (String) $row -> name;
                             $this -> nameModule = (String) $row -> name;
-                            return new $controllerName;
+                            return $controllerName::getInstance();
                             // getInstance();
                         }
                     }
