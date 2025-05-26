@@ -17,50 +17,60 @@
 		}
 
 		public function get_register_BLL($args) {
-			// No es necesario session_start() aquí, no se usa la sesión
-			if (!isset($args['email'], $args['username'], $args['passworda'])) {
-				return "error_args";
-			}
+    if (!isset($args['email'], $args['username'], $args['passworda'])) {
+        return "error_args";
+    }
 
-			try {
-				$check = $this->dao->select_email($this->db, $args['email']);
-			} catch (Exception $e) {
-				return "error_email";
-			}
+    try {
+        $check = $this->dao->select_email($this->db, $args['email']);
+    } catch (Exception $e) {
+        return "error_email";
+    }
 
-			if ($check === "no_email") {
-				$check_email = true;
-			} else {
-				return "email_exist";
-			}
+    if ($check !== "no_email") {
+        return "email_exist";
+    }
 
-			try {
-				$check = $this->dao->select_username($this->db, $args['username']);
-			} catch (Exception $e) {
-				return "error_username";
-			}
+    try {
+        $check = $this->dao->select_username($this->db, $args['username']);
+    } catch (Exception $e) {
+        return "error_username";
+    }
 
-			if ($check === "no_username") {
-				$check_username = true;
-			} else {
-				return "username_exist";
-			}
+    if ($check !== "no_username") {
+        return "username_exist";
+    }
 
-			if ($check_email === true && $check_username === true) {
-				try {
-					$rdo = $this->dao->insert_user($this->db, $args['username'], $args['email'], $args['passworda']);
-				} catch (Exception $e) {
-					return "error_user";
-				}
-				if ($rdo === 'ok') {
-					return "ok";
-				} else {
-					return "error_user_ok";
-				}
-			} else {
-				return "error_general";
-			}
-		}
+    // Si todo está bien, continuamos con el registro
+    $token_email = common::generate_Token_secure(20); // generar token
+
+    try {
+        // Insertar usuario (modifica tu DAO para aceptar el token)
+        $rdo = $this->dao->insert_user($this->db, $args['username'], $args['email'], $args['passworda'], $token_email);
+    } catch (Exception $e) {
+        return "error_user";
+    }
+
+    if ($rdo === 'ok') {
+        // Preparar y enviar el email de validación
+        $message = [
+            'type' => 'validate',
+            'token' => $token_email,
+            'toEmail' => $args['email']
+        ];
+
+        $email_status = json_decode(mail::send_email($message), true);
+
+        if (!empty($email_status)) {
+            return "ok";
+        } else {
+            return "error_email_send";
+        }
+    } else {
+        return "error_user_ok";
+    }
+}
+
 
 		public function get_login_BLL($args) {
 			session_start();
@@ -141,16 +151,6 @@
 			}
 		}
 
-		public function get_verify_email_BLL($args) {
-			// No es necesario session_start() aquí, no se usa la sesión
-			if($this -> dao -> select_verify_email($this->db, $args)){
-				$this -> dao -> update_verify_email($this->db, $args);
-				return 'verify';
-			} else {
-				return 'fail';
-			}
-		}
-
 		// RECOVER PASSWORD //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public function get_recover_email_BBL($args) {
@@ -197,6 +197,15 @@
 			return $this -> dao -> select_data_user($this->db, $decode);
 		}
 
+		public function get_verify_email_BLL($args) {
+			// No es necesario session_start() aquí, no se usa la sesión
+			if($this -> dao -> select_verify_email($this->db, $args)){
+				$this -> dao -> update_verify_email($this->db, $args);
+				return 'verify';
+			} else {
+				return 'fail';
+			}
+		}
 		// ACTIVITY //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public function get_controluser_BLL($args) {

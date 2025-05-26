@@ -37,17 +37,16 @@
             }
         }
         
-        public function insert_user($db, $username, $email, $password) {
+        public function insert_user($db, $username, $email, $password, $token_email) {
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
             $avatar_hash = md5(strtolower(trim($email)));
             $avatar = "https://i.pravatar.cc/500?u=$avatar_hash";
 
-            // Sentencia preparada, pero ejecutada a través de tu wrapper
-            $sql = "INSERT INTO usuario (username, email, password, avatar) VALUES ('$username', ' $email', '$hashed_password', '$avatar')";
+            $sql = "INSERT INTO usuario (username, email, password, avatar, token_email) 
+                    VALUES ('$username', '$email', '$hashed_password', '$avatar', '$token_email')";
 
             $stmt = $db->ejecutar($sql);
 
-            // Suponemos que $stmt será true/false según éxito o error
             if ($stmt) {
                 return 'ok';
             } else {
@@ -55,6 +54,7 @@
                 return 'error';
             }
         }
+
 
         public function select_user_email($db, $email) {
             $sql = "SELECT * FROM `usuario` WHERE email = '$email'";
@@ -114,7 +114,7 @@
 
         public function select_verify_email($db, $token_email){
 
-			$sql = "SELECT token_email FROM users WHERE token_email = '$token_email'";
+			$sql = "SELECT token_email FROM usuario WHERE token_email = '$token_email'";
 
             $stmt = $db->ejecutar($sql);
             return $db->listar($stmt);
@@ -122,7 +122,7 @@
 
         public function update_verify_email($db, $token_email){
 
-            $sql = "UPDATE users SET activate = 1, token_email= '' WHERE token_email = '$token_email'";
+            $sql = "UPDATE usuario SET activate = 1, token_email= '' WHERE token_email = '$token_email'";
 
             $stmt = $db->ejecutar($sql);
             return "update";

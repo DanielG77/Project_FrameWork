@@ -18,6 +18,11 @@
             // exit;
             common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'auth.html');
         }
+        function recover_view() {
+            // echo 'hola view';
+            // exit;
+            common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'recover_pass.html');
+        }
         function register() {
             // echo 'hola carrusel';
             // exit;
