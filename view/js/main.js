@@ -140,16 +140,25 @@ function logout() {
 
 function load_content() {
     let path = window.location.pathname.split('/');
-    
-    if(path[5] === 'recover'){
-        window.location.href = friendlyURL("?module=auth&op=recover_view");
+    console.log("Path:", path[4]);
+    if(path[4] === 'recover'){
+        window.location.href = friendlyURL("?module=auth&op=recover");
         localStorage.setItem("token_email", path[6]);
-    }else if (path[5] === 'verify') {
-        ajaxPromise(friendlyURL("?module=auth&op=verify_email"), 'POST', 'JSON', {token_email: path[6]})
-        .then(function(data) {
-            toastr.options.timeOut = 3000;
-            toastr.success('Email verified');
-        window.location.href = friendlyURL("?module=auth&op=view");
+    }else if (path[4] === 'verify') {
+        ajaxPromise(friendlyURL("?module=auth&op=verify_email"), 'POST', 'JSON', {'token_email': path[5]})
+       .then(function(data) {
+            // console.log("Email verificado:");
+            // console.log(data);
+            Swal.fire({
+                icon: 'success',
+                title: 'Email verificado',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                willClose: () => {
+                    window.location.href = friendlyURL("?module=auth&op=view");
+                }
+            });
         })
         .catch(function() {
           console.log('Error: verify email error');
@@ -157,7 +166,7 @@ function load_content() {
     }else if (path[4] === 'view') {
         $(".login-wrap").show();
         $(".forget_html").hide();
-    }else if (path[4] === 'recover_view') {
+    }else if (path[4] === 'recover') {
         load_form_new_password();
     }
 }

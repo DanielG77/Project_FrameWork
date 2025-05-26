@@ -48,13 +48,13 @@
         <name>firebase_config</name>
         <uri>firebase_config</uri>
     </function>
-    <!-- <function>
-        <name>social_login</name>
-        <uri>social_login</uri>
-    </function>
+     <function>
+        <name>recover</name>
+        <uri>recover</uri>
+    </function> 
     <function>
-        <name>social_login</name>
-        <uri>social_login</uri>
-    </function> -->
+        <name>verify_email</name>
+        <uri>verify_email</uri>
+    </function>
 
 </functions>

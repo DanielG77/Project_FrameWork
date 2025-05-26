@@ -53,24 +53,25 @@
 
 			if ($rdo === 'ok') {
 				// Preparar y enviar el email de validación
+				// return "ok";
 				$message = [
 					'type' => 'validate',
 					'token' => $token_email,
 					'toEmail' => $args['email']
 				];
 
-				$email_status = json_decode(mail::send_email($message), true);
+				// Enviar correo y verificar estado
+				$email_status = mail::send_email($message);
 
-				if (!empty($email_status)) {
+				if ($email_status['success']) {
 					return "ok";
 				} else {
-					return "error_email_send";
+					return "email_error";
 				}
 			} else {
 				return "error_user_ok";
 			}
 		}
-
 
 		public function get_login_BLL($args) {
 			session_start();
@@ -94,6 +95,10 @@
 					return "error_user";
 				}
 			}
+
+			if (isset($user->activate) && $user->activate == 1) {
+                    return "user_inactivo";
+                }
 
 			if (password_verify($args['password_log'], $user->password)) {
 				try {
@@ -129,6 +134,15 @@
             session_destroy();
             return 'Done';
         }
+
+		public function get_verify_email_BLL($args) {
+			// if($this -> dao -> select_verify_email($this->db, $args)){
+			// 	$this -> dao -> update_verify_email($this->db, $args);
+				return $args;
+			// } else {
+				// return 'fail';
+			// }
+		}
 
 		// SOCIAL LOGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		public function get_social_login_BLL($arguments) {
@@ -190,7 +204,6 @@
             }
 		}
 
-
 		public function get_verify_token_BLL($args) {
 			// No es necesario session_start() aquí, no se usa la sesión
 			if($this -> dao -> select_verify_email($this->db, $args)){
@@ -215,15 +228,6 @@
 			return $this -> dao -> select_data_user($this->db, $decode);
 		}
 
-		public function get_verify_email_BLL($args) {
-			// No es necesario session_start() aquí, no se usa la sesión
-			if($this -> dao -> select_verify_email($this->db, $args)){
-				$this -> dao -> update_verify_email($this->db, $args);
-				return 'verify';
-			} else {
-				return 'fail';
-			}
-		}
 		// ACTIVITY //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public function get_controluser_BLL($args) {
@@ -250,7 +254,6 @@
 				}
 			}
 		}
-
 		
 		public function get_token_expires_BLL($args) {
 			// No es necesario session_start() aquí, no se usa la sesión

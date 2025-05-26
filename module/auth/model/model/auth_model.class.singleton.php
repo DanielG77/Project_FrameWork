@@ -65,5 +65,9 @@
             // return $arguments;
             return $this -> bll -> get_firebase_config_BLL();
         }
+
+        public function get_verify_email($args) {
+            return $this -> bll -> get_verify_email_BLL($args);
+    }
     }
 ?>

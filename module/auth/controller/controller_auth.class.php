@@ -18,11 +18,19 @@
             // exit;
             common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'auth.html');
         }
-        function recover_view() {
+
+        function verify_email() {
+            
+            $verify = json_encode(common::load_model('auth_model', 'get_verify_email', $_POST['token_email']));
+            echo json_encode(value: $verify);
+        }
+        
+        function recover() {
             // echo 'hola view';
             // exit;
-            common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'recover_pass.html');
+            common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'recover.html');
         }
+        
         function register() {
             // echo 'hola carrusel';
             // exit;

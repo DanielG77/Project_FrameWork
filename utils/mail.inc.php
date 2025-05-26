@@ -2,50 +2,38 @@
     class mail {
         public static function send_email($email) {
             switch ($email['type']) {
-                case 'validate';
-                    $email['fromEmail'] = 'danieltest1@gmail.com';
-                    $email['inputEmail'] = 'danielgirgar@gmail.com';
-                    $email['inputMatter'] = 'Email verification';
-                    $email['inputMessage'] = "<h2>Email verification.</h2><a href='http://127.0.0.1/programas/Project_FrameWork/module/login/verify/$email[token]'>Click here for verify your email.</a>";
-                    break;
-                case 'recover';
-                    $email['fromEmail'] = 'danieltest1@gmail.com';
-                    $email['inputEmail'] = 'danielgirgar@gmail.com';
-                    $email['inputMatter'] = 'Recover password';
-                    $email['inputMessage'] = "<a href='http://127.0.0.1/programas/Project_FrameWork/module/login/recover/$email[token]'>Click here for recover your password.</a>";
-                    break;
-            }
-            return self::send_mailgun($email);
+            case 'validate':
+                $email['inputMatter'] = 'Email verification';
+                $email['inputMessage'] = "<h2>Email verification.</h2><a href='http://127.0.0.1/programas/Project_FrameWork/auth/verify/$email[token]'>Verify</a>";
+                break;
+            case 'recover':
+                $email['inputMatter'] = 'Recover password';
+                $email['inputMessage'] = "<a href='http://127.0.0.1/programas/Project_FrameWork/auth/recover/$email[token]'>Recover</a>";
+                break;
+                }
+                return self::send_resend_api($email); // Método renombrado
         }
 
-        public static function send_mailgun($values){
-            // Leer credenciales de Resend desde mail.ini
-            $resend = parse_ini_file(MODEL_PATH . "mail.ini", true)['resend'];
-            $api_key = trim($resend['api_key'], '"');
-            $api_url = trim($resend['api_url'], '"');
-            $from = trim($resend['from'], '"');
-            $to = trim($resend['to'], '"');
+       public static function send_resend_api($values) {
+            $resend_config = parse_ini_file(MODEL_PATH . "mail.ini", true)['resend'];
+            $api_key = trim($resend_config['api_key'], '"');
 
-            $message = array();
-            $message['from'] = $from;
-            $message['to'] = $to;
-            $message['subject'] = $values['inputMatter'];
-            $message['html'] = $values['inputMessage'];
+            // Mover la inclusión del autoloader al inicio del script si es posible
+            require_once __DIR__ . '/vendor/autoload.php';
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $api_url);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $api_key,
-                'Content-Type: application/json'
-            ]);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
-            $result = curl_exec($ch);
-            curl_close($ch);
-            return $result;
+            $resend = Resend::client($api_key);
+
+            try {
+                $result = $resend->emails->send([
+                    'from' => 'Daniel <onboarding@resend.dev>',
+                    'to' => [$resend_config['to']], // Asumiendo que $values contiene el correo destino
+                    'subject' => $values['inputMatter'],
+                    'html' => $values['inputMessage'],
+                    'tags' => [['name' => 'category', 'value' => 'confirm_email']]
+                ]);
+                return ['success' => true, 'data' => $result];
+            } catch (\Exception $e) {
+                return ['success' => false, 'error' => $e->getMessage()];
+            }
         }
     }
