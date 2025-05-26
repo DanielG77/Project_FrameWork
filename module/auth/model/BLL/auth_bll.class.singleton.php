@@ -133,21 +133,39 @@
 		// SOCIAL LOGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		public function get_social_login_BLL($arguments) {
 			session_start();
-			if (!empty($this -> dao -> select_user($this->db, $arguments['username'], $arguments['email']))) {
-				$user = $this -> dao -> select_user($this->db, $arguments['username'], $arguments['email']);
-
-				$jwt = jwt_process::encode($user[0]['username']);
+			if (!empty($this->dao->select_user($this->db, $arguments['username'], $arguments['email']))) {
+				$user = $this->dao->select_user($this->db, $arguments['username'], $arguments['email']);
+				// Crear el JWT usando la clase jwt
+				$jwt = new jwt();
+				$jwt_ini = parse_ini_file(MODEL_PATH . "jwt.ini");
+				$header = $jwt_ini['header'];
+				$secret = $jwt_ini['secret'];
+				$payload = json_encode([
+					'iat' => time(),
+					'exp' => time() + 3600,
+					'name' => $user[0]['username']
+				]);
+				$token = $jwt->encode($header, $payload, $secret);
 				$_SESSION['username'] = $user[0]['username'];
 				$_SESSION['tiempo'] = time();
-				return json_encode($jwt);
-            } else {
-				$this -> dao -> insert_social_login($this->db, $arguments['username'], $arguments['email'], $arguments['avatar']);
-				$user = $this -> dao -> select_user($this->db, $arguments['username'], $arguments['email']);
-
-				$jwt = jwt_process::encode($user[0]);
+				return $token;
+			} else {
+				$this->dao->insert_social_login($this->db, $arguments['username'], $arguments['email'], $arguments['avatar']);
+				$user = $this->dao->select_user($this->db, $arguments['username'], $arguments['email']);
+				// Crear el JWT usando la clase jwt
+				$jwt = new jwt();
+				$jwt_ini = parse_ini_file(MODEL_PATH . "jwt.ini");
+				$header = $jwt_ini['header'];
+				$secret = $jwt_ini['secret'];
+				$payload = json_encode([
+					'iat' => time(),
+					'exp' => time() + 3600,
+					'name' => $user[0]['username']
+				]);
+				$token = $jwt->encode($header, $payload, $secret);
 				$_SESSION['username'] = $user[0]['username'];
 				$_SESSION['tiempo'] = time();
-				return json_encode($jwt);
+				return $token;
 			}
 		}
 
@@ -251,9 +269,19 @@
 			$token = explode('"', $args);
 			$void_email = "";
 			$decode = middleware::decode_username($token[1]);
-			$user = $this -> dao -> select_user($this->db, $decode, $void_email);
+			$user = $this->dao->select_user($this->db, $decode, $void_email);
 
-			$new_token = jwt_process::encode($user[0]['username']);
+			// Crear el JWT usando la clase jwt
+			$jwt = new jwt();
+			$jwt_ini = parse_ini_file(MODEL_PATH . "jwt.ini");
+			$header = $jwt_ini['header'];
+			$secret = $jwt_ini['secret'];
+			$payload = json_encode([
+				'iat' => time(),
+				'exp' => time() + 3600,
+				'name' => $user[0]['username']
+			]);
+			$new_token = $jwt->encode($header, $payload, $secret);
 
             return $new_token;
 		}

@@ -323,15 +323,7 @@ function social_login(param){
 
 function firebase_config(){
     console.log("hola firebase");
-    var config = {
-        apiKey: "AIzaSyD08RK9aNbXsc8DTTskK5jY3MaMGPhDcPo",
-        authDomain: "datapop-test.firebaseapp.com",
-        projectId: "datapop-test",
-        storageBucket: "datapop-test.appspot.com",
-        messagingSenderId: "1234567890",
-        // appId: "",
-        measurementId: "G-JXEGLTGLTC"
-    };
+    
     if(!firebase.apps.length){
         firebase.initializeApp(config);
     }else{
