@@ -5,13 +5,11 @@
 		static $_instance;
 
 		function __construct() {
-			// return 'hola getInstance bll';
 			$this -> dao = auth_dao::getInstance();
 			$this -> db = db::getInstance();
 		}
 
 		public static function getInstance() {
-			// return 'hola getInstance bll';
 			if (!(self::$_instance instanceof self)) {
 				self::$_instance = new self();
 			}
@@ -19,12 +17,11 @@
 		}
 
 		public function get_register_BLL($args) {
-			// Validar que los campos existen
+			// No es necesario session_start() aquí, no se usa la sesión
 			if (!isset($args['email'], $args['username'], $args['passworda'])) {
 				return "error_args";
 			}
 
-			// EMAIL
 			try {
 				$check = $this->dao->select_email($this->db, $args['email']);
 			} catch (Exception $e) {
@@ -37,7 +34,6 @@
 				return "email_exist";
 			}
 
-			// USERNAME
 			try {
 				$check = $this->dao->select_username($this->db, $args['username']);
 			} catch (Exception $e) {
@@ -50,7 +46,6 @@
 				return "username_exist";
 			}
 
-			// REGISTRO
 			if ($check_email === true && $check_username === true) {
 				try {
 					$rdo = $this->dao->insert_user($this->db, $args['username'], $args['email'], $args['passworda']);
@@ -68,19 +63,17 @@
 		}
 
 		public function get_login_BLL($args) {
-			// Validar que los campos existen
+			session_start();
 			if (!isset($args['username_log'], $args['password_log'])) {
 				return "error_args";
 			}
 
-			// Primero intenta buscar por email
 			try {
 				$user = $this->dao->select_user_email($this->db, $args['username_log']);
 			} catch (Exception $e) {
 				return "error_user";
 			}
 
-			// Si no se encuentra el email, intenta buscar por username
 			if ($user === "no_email" || empty($user)) {
 				try {
 					$user = $this->dao->select_user_username($this->db, $args['username_log']);
@@ -92,7 +85,6 @@
 				}
 			}
 
-			// PASSWORD
 			if (password_verify($args['password_log'], $user->password)) {
 				try {
 					$token = middleware::create_token($user->username);
@@ -108,27 +100,154 @@
 		}
 
 		public function get_user_BLL($token) {
-			$tokens = middleware::decode_username($token);
-
-			return $this -> dao -> select_user_username($this -> db, $tokens);
-			// return $this -> dao -> select_user_username($this -> db, $token);
+			session_start();
+			// Decodifica correctamente el token JWT, sea string o array
+			if (is_array($token) && isset($token['token'])) {
+				$token_value = $token['token'];
+			} else {
+				$token_value = $token;
+			}
+			$username = middleware::decode_username($token_value);
+			return $this->dao->select_user_username($this->db, $username);
+			// return $username;
 		}
 
 		public function get_logout_BLL() {
-            @session_start();
+			session_start();
             unset($_SESSION['username']);
             unset($_SESSION['tiempo']);
             session_destroy();
             return 'Done';
-            // return 'ok';
         }
 
-		// public function get_count_paginacion_BLL() {
-		// 	return $this -> dao -> select_data_count_paginacion($this -> db);
-		// }
+		// SOCIAL LOGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		public function get_social_login_BLL($arguments) {
+			session_start();
+			if (!empty($this -> dao -> select_user($this->db, $arguments['username'], $arguments['email']))) {
+				$user = $this -> dao -> select_user($this->db, $arguments['username'], $arguments['email']);
 
-		// public function get_count_paginacion_filters_BLL($filter) {
-		// 	return $this -> dao -> select_data_count_paginacion_filters($this -> db, $filter);
-		// }
+				$jwt = jwt_process::encode($user[0]['username']);
+				$_SESSION['username'] = $user[0]['username'];
+				$_SESSION['tiempo'] = time();
+				return json_encode($jwt);
+            } else {
+				$this -> dao -> insert_social_login($this->db, $arguments['username'], $arguments['email'], $arguments['avatar']);
+				$user = $this -> dao -> select_user($this->db, $arguments['username'], $arguments['email']);
+
+				$jwt = jwt_process::encode($user[0]);
+				$_SESSION['username'] = $user[0]['username'];
+				$_SESSION['tiempo'] = time();
+				return json_encode($jwt);
+			}
+		}
+
+		public function get_verify_email_BLL($args) {
+			// No es necesario session_start() aquí, no se usa la sesión
+			if($this -> dao -> select_verify_email($this->db, $args)){
+				$this -> dao -> update_verify_email($this->db, $args);
+				return 'verify';
+			} else {
+				return 'fail';
+			}
+		}
+
+		// RECOVER PASSWORD //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		public function get_recover_email_BBL($args) {
+			// No es necesario session_start() aquí, no se usa la sesión
+			$user = $this -> dao -> select_recover_password($this->db, $args);
+			$token = common::generate_Token_secure(20);
+
+			if (!empty($user)) {
+				$this -> dao -> update_recover_password($this->db, $args, $token);
+                $message = ['type' => 'recover', 
+                            'token' => $token, 
+                            'toEmail' => $args];
+                $email = json_decode(mail::send_email($message), true);
+				if (!empty($email)) {
+					return;  
+				}   
+            }else{
+                return 'error';
+            }
+		}
+
+
+		public function get_verify_token_BLL($args) {
+			// No es necesario session_start() aquí, no se usa la sesión
+			if($this -> dao -> select_verify_email($this->db, $args)){
+				return 'verify';
+			}
+			return 'fail';
+		}
+
+		public function get_new_password_BLL($args) {
+			// No es necesario session_start() aquí, no se usa la sesión
+			$hashed_pass = password_hash($args[1], PASSWORD_DEFAULT, ['cost' => 12]);
+			if($this -> dao -> update_new_passwoord($this->db, $args[0], $hashed_pass)){
+				return 'done';
+			}
+			return 'fail';
+		}
+
+		public function get_data_user_BLL($args) {
+			session_start();
+			$token = explode('"', $args);
+			$decode = middleware::decode_username($token[1]);
+			return $this -> dao -> select_data_user($this->db, $decode);
+		}
+
+		// ACTIVITY //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		public function get_controluser_BLL($args) {
+			session_start();
+			$decode = middleware::decode_username($args); // <-- decodifica directamente el token
+			$user = $this -> dao -> select_user($this->db, $decode, "");
+
+			// Valida que la sesión esté activa y que el usuario en sesión coincida con el del token
+			if (!isset($_SESSION['username']) || empty($user) || $_SESSION['username'] !== $user[0]['username']) {
+				return 'not_match';
+			}
+			return 'match';
+		}
+
+		public function get_activity_BLL() {
+			session_start();
+            if (!isset($_SESSION["tiempo"])) {  
+				return "inactivo";
+			} else {  
+				if((time() - $_SESSION["tiempo"]) >= 1800) {  
+						return "inactivo";
+				}else{
+					return (time() - $_SESSION["tiempo"]);
+				}
+			}
+		}
+
+		
+		public function get_token_expires_BLL($args) {
+			// No es necesario session_start() aquí, no se usa la sesión
+			$token = explode('"', $args);
+			$decode = middleware::decode_exp($token[1]);
+			
+            if(time() >= $decode) {  
+				return "inactivo"; 
+			} else{
+				return "activo";
+			}
+		}
+
+		public function get_refresh_token_BLL($args) {
+			session_start();
+			$token = explode('"', $args);
+			$void_email = "";
+			$decode = middleware::decode_username($token[1]);
+			$user = $this -> dao -> select_user($this->db, $decode, $void_email);
+
+			$new_token = jwt_process::encode($user[0]['username']);
+
+            return $new_token;
+		}
+
 	}
 ?>

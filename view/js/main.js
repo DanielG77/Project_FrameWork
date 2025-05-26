@@ -56,6 +56,7 @@ function friendlyURL(url) {
 function load_menu() {
     // console.log("hola load menu");
     const token = localStorage.getItem('token');
+    // console.log(token);
 
     // Logo
   $('<a></a>')
@@ -79,12 +80,15 @@ function load_menu() {
         .attr({ 'class': 'nav-item', 'id': 'login_link' })
         .html('<a href="' + friendlyURL("?module=auth&op=view") + '" class="nav-link">Log in</a>')
         .appendTo('.navbar-nav');
-    
+
+    // console.log("Data de usuario:", token);
+    // console.log(token);
     if (token) {
         ajaxPromise(friendlyURL('?module=auth&op=user'), 'POST', 'JSON', { 'token': token })
             .then(function(data) {
-                console.log(data);
-                if (data.type_user == "Client") {
+                // console.log("Data de usuario:", data);
+                // console.log(data);
+                if (data.type_user == "Client" || data.type_user == "client_social") {
                     console.log("Cliente logeado");
                     // $opcCrud.empty();
                     // $opcExceptions.empty();

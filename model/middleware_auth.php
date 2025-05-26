@@ -1,20 +1,28 @@
 <?php
 class middleware{
     public static function decode_username($get_token){
-		$jwt = parse_ini_file(MODEL_PATH . "jwt.ini");
-		$secret = $jwt['secret'];
-		$token = $get_token;
+        $jwt = parse_ini_file(MODEL_PATH . "jwt.ini");
+        $secret = $jwt['secret'];
+        $token = $get_token;
 
-		$JWT = new JWT;
-		$json = $JWT -> decode($token, $secret);
-		$json = json_decode($json, TRUE);
-        
-        $decode_user = $json['username'];
+        if (is_array($get_token) && isset($get_token['token'])) {
+            $token = $get_token['token'];
+        } else {
+            $token = $get_token;
+        }
+
+        $token = trim($token, '"');
+// 
+        $JWT = new JWT;
+        $json = $JWT -> decode($token, $secret);
+        $json = json_decode($json, TRUE);
+
+        $decode_user = $json['name'] ?? $json['username'] ?? null;
         return $decode_user;
     }
 
 	public static function decode_exp($get_token){
-		$jwt = parse_ini_file(UTILS . "jwt.ini");
+		$jwt = parse_ini_file(MODEL_PATH . "jwt.ini");
 		$secret = $jwt['secret'];
 		$token = $get_token;
 
@@ -27,7 +35,7 @@ class middleware{
     }
 
 	public static function encode($user) {
-        $jwt = parse_ini_file(UTILS . "jwt.ini");
+        $jwt = parse_ini_file(MODEL_PATH . "jwt.ini");
 
         $header = $jwt['header'];
         $secret = $jwt['secret'];

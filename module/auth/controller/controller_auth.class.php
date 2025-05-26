@@ -1,5 +1,18 @@
 <?php
     class controller_auth {
+
+        static $_instance;
+
+        function __construct() {
+		}
+
+		public static function getInstance() {
+			if (!(self::$_instance instanceof self)) {
+				self::$_instance = new self();
+			}
+			return self::$_instance;
+		}
+
         function view() {
             // echo 'hola view';
             // exit;
@@ -42,6 +55,36 @@
             // echo 'hola carrusel';
             // exit;
             echo json_encode(common::load_model('auth_model', 'get_logout'));
+        }
+        
+        function social_login() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('auth_model', 'get_social_login', [
+                'username' => $_POST['username'],
+                'email' => $_POST['email'],
+                'avatar' => $_POST['avatar']
+            ]));
+        }
+
+         function controluser() {
+            echo json_encode(common::load_model('auth_model', 'get_controluser', $_POST['token']));
+        }
+
+         function activity() {
+            echo json_encode(common::load_model('auth_model', 'get_activity'));
+        }
+
+         function token_expires() {
+            echo json_encode(common::load_model('auth_model', 'get_token_expires', $_POST['token']));
+        }
+
+        function refresh_cookie() {
+            session_regenerate_id();
+        } 
+
+        function refresh_token() {
+            echo json_encode(common::load_model('auth_model', 'get_refresh_token', $_POST['token']));
         }
     }
 ?>
