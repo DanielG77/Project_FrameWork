@@ -17,59 +17,59 @@
 		}
 
 		public function get_register_BLL($args) {
-    if (!isset($args['email'], $args['username'], $args['passworda'])) {
-        return "error_args";
-    }
+			if (!isset($args['email'], $args['username'], $args['passworda'])) {
+				return "error_args";
+			}
 
-    try {
-        $check = $this->dao->select_email($this->db, $args['email']);
-    } catch (Exception $e) {
-        return "error_email";
-    }
+			try {
+				$check = $this->dao->select_email($this->db, $args['email']);
+			} catch (Exception $e) {
+				return "error_email";
+			}
 
-    if ($check !== "no_email") {
-        return "email_exist";
-    }
+			if ($check !== "no_email") {
+				return "email_exist";
+			}
 
-    try {
-        $check = $this->dao->select_username($this->db, $args['username']);
-    } catch (Exception $e) {
-        return "error_username";
-    }
+			try {
+				$check = $this->dao->select_username($this->db, $args['username']);
+			} catch (Exception $e) {
+				return "error_username";
+			}
 
-    if ($check !== "no_username") {
-        return "username_exist";
-    }
+			if ($check !== "no_username") {
+				return "username_exist";
+			}
 
-    // Si todo está bien, continuamos con el registro
-    $token_email = common::generate_Token_secure(20); // generar token
+			// Si todo está bien, continuamos con el registro
+			$token_email = common::generate_Token_secure(20); // generar token
 
-    try {
-        // Insertar usuario (modifica tu DAO para aceptar el token)
-        $rdo = $this->dao->insert_user($this->db, $args['username'], $args['email'], $args['passworda'], $token_email);
-    } catch (Exception $e) {
-        return "error_user";
-    }
+			try {
+				// Insertar usuario (modifica tu DAO para aceptar el token)
+				$rdo = $this->dao->insert_user($this->db, $args['username'], $args['email'], $args['passworda'], $token_email);
+			} catch (Exception $e) {
+				return "error_user";
+			}
 
-    if ($rdo === 'ok') {
-        // Preparar y enviar el email de validación
-        $message = [
-            'type' => 'validate',
-            'token' => $token_email,
-            'toEmail' => $args['email']
-        ];
+			if ($rdo === 'ok') {
+				// Preparar y enviar el email de validación
+				$message = [
+					'type' => 'validate',
+					'token' => $token_email,
+					'toEmail' => $args['email']
+				];
 
-        $email_status = json_decode(mail::send_email($message), true);
+				$email_status = json_decode(mail::send_email($message), true);
 
-        if (!empty($email_status)) {
-            return "ok";
-        } else {
-            return "error_email_send";
-        }
-    } else {
-        return "error_user_ok";
-    }
-}
+				if (!empty($email_status)) {
+					return "ok";
+				} else {
+					return "error_email_send";
+				}
+			} else {
+				return "error_user_ok";
+			}
+		}
 
 
 		public function get_login_BLL($args) {

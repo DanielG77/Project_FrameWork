@@ -15,13 +15,11 @@
         }
         
         private function setConexion() {
-            require_once 'Conf.class.singleton.php';
-            $conf = Conf::getInstance();
-            
-            $this->server = $conf -> getHostDB();
-            $this->database = $conf -> getDB();
-            $this->user = $conf -> getUserDB();
-            $this->password = $conf -> getPassDB();
+            $ini = parse_ini_file(__DIR__ . '/db.ini');
+            $this->user = trim($ini['_userdb'], "'\"");
+            $this->password = trim($ini['_passdb'], "'\"");
+            $this->server = trim($ini['_hostdb'], "'\"");
+            $this->database = trim($ini['_db'], "'\"");
         }
 
         private function __clone() {

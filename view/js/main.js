@@ -42,16 +42,6 @@ function friendlyURL(url) {
     return "/programas/Project_FrameWork" + link;
 }
 
-/* Loading Spinner */
-// function loading_spinner() {
-//     window.onload = function(){
-//         var contenedor = document.getElementById('contenedor_carga');
-
-//         contenedor.style.visibility = "hidden";
-//         contenedor.style.opacity = '0';
-//     }
-// }
-
 /* LOAD MENU */
 function load_menu() {
     // console.log("hola load menu");
@@ -124,36 +114,6 @@ function load_menu() {
         }
 }
 
-// /* MENUS */
-// function menu_admin() {
-//     $('<li></li>').attr('class', 'profile').attr('id', 'profile').html('<a id="profile" class="nav_link" data-tr="Profile">Profile</a>').appendTo('.nav_list');
-// }
-
-// function menu_client() {
-//     $('<li></li>').attr('class', 'profile').attr('id', 'profile').html('<a id="profile" class="nav_link" data-tr="Profile">Profile</a>').appendTo('.nav_list');
-// }
-
-// /* CLICK PROFILE */
-// function click_profile(data) {
-//     $(document).on('click', '#profile', function() {
-//         $(".profile_options").remove();
-//         $('<div></div>').attr('class', 'profile_options').attr('id', 'profile_options').appendTo('.nav_list_profile')
-//         .html(
-//             "<ul class='profile_list' id='profile_list'>" +
-//                 "<li><div class='user'>" +
-//                 "<div class='user_img'><img class='avatar_img' src='" + data.avatar + "'></div>" + 
-//                 "<div class='user_name'>" + data.username + "</div></li>" +
-//                 "<li><div id='logout' class='logout' data-tr='Log out'>Log out</div></li>" +
-//             "</ul>"
-//         )
-//     });
-//     $(document).on('click scroll', function(event) {
-//         if (event.target.id !== 'profile') {
-//             $('.profile_options').fadeOut(500);
-//         }
-//     });
-// }
-
 
 /* CLICK LOGOUT */
 function click_logout() {
@@ -177,8 +137,33 @@ function logout() {
     });
 }
 
+
+function load_content() {
+    let path = window.location.pathname.split('/');
+    
+    if(path[5] === 'recover'){
+        window.location.href = friendlyURL("?module=auth&op=recover_view");
+        localStorage.setItem("token_email", path[6]);
+    }else if (path[5] === 'verify') {
+        ajaxPromise(friendlyURL("?module=auth&op=verify_email"), 'POST', 'JSON', {token_email: path[6]})
+        .then(function(data) {
+            toastr.options.timeOut = 3000;
+            toastr.success('Email verified');
+        window.location.href = friendlyURL("?module=auth&op=view");
+        })
+        .catch(function() {
+          console.log('Error: verify email error');
+        });
+    }else if (path[4] === 'view') {
+        $(".login-wrap").show();
+        $(".forget_html").hide();
+    }else if (path[4] === 'recover_view') {
+        load_form_new_password();
+    }
+}
+
 $(document).ready(function() {
     load_menu();
     click_logout();
-    // loading_spinner();
+    load_content();
 });

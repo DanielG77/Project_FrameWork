@@ -44,4 +44,13 @@
         <name>social_login</name>
         <uri>social_login</uri>
     </function>
+    <!-- <function>
+        <name>social_login</name>
+        <uri>social_login</uri>
+    </function>
+    <function>
+        <name>social_login</name>
+        <uri>social_login</uri>
+    </function> -->
+
 </functions>

@@ -2,7 +2,6 @@
     class mail {
         public static function send_email($email) {
             switch ($email['type']) {
-    
                 case 'validate';
                     $email['fromEmail'] = 'danielgirgar@gmail.com';
                     $email['inputEmail'] = 'danielgirgar@gmail.com';
@@ -20,17 +19,31 @@
         }
 
         public static function send_mailgun($values){
-            
+            // Leer credenciales de Resend desde mail.ini
+            $resend = parse_ini_file(MODEL_PATH . "mail.ini", true)['resend'];
+            $api_key = trim($resend['api_key'], '"');
+            $api_url = trim($resend['api_url'], '"');
+            $from = trim($resend['from'], '"');
+            $to = trim($resend['to'], '"');
+
+            $message = array();
+            $message['from'] = $from;
+            $message['to'] = $to;
+            $message['subject'] = $values['inputMatter'];
+            $message['html'] = $values['inputMessage'];
+
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $config['api_url']);
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-            curl_setopt($ch, CURLOPT_USERPWD, "api:{$config['api_key']}");
+            curl_setopt($ch, CURLOPT_URL, $api_url);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $api_key,
+                'Content-Type: application/json'
+            ]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,$message);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
             $result = curl_exec($ch);
             curl_close($ch);
             return $result;
