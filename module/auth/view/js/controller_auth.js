@@ -321,7 +321,23 @@ function social_login(param){
     });
 }
 
-
+function firebase_config() {
+    return ajaxPromise(friendlyURL("?module=auth&op=firebase_config"), 'POST', 'JSON')
+        .then(function(data) {
+            console.log(data);
+            
+            // Inicializar Firebase solo si no está inicializado
+            if (!firebase.apps.length) {
+                firebase.initializeApp(data);
+            }
+            
+            return firebase.auth();  // Retornar el servicio de autenticación
+        })
+        .catch(function(error) {
+            console.error('Error al cargar configuración Firebase:', error);
+            throw error;  // Propagar el error para manejo externo
+        });
+}
 
 
 function provider_config(param){
