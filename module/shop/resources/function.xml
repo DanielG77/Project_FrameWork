@@ -28,4 +28,20 @@
         <name>count_paginacion_filters</name>
         <uri>count_paginacion_filters</uri>
     </function>
+    <function>
+        <name>more_visited</name>
+        <uri>more_visited</uri>
+    </function>
+    <function>
+        <name>load_likes</name>
+        <uri>load_likes</uri>
+    </function>
+    <function>
+        <name>load_likes_details</name>
+        <uri>load_likes_details</uri>
+    </function>
+    <function>
+        <name>control_likes</name>
+        <uri>control_likes</uri>
+    </function>
 </functions>

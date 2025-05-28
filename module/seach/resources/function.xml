@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <functions>
-    <!-- <function>
-        <name>products</name>
-        <uri>products</uri>
+    <function>
+        <name>type_game</name>
+        <uri>type_game</uri>
     </function>
     <function>
-        <name>filters</name>
-        <uri>filters</uri>
+        <name>brand_game</name>
+        <uri>brand_game</uri>
     </function>
     <function>
-        <name>product_filters</name>
-        <uri>product_filters</uri>
+        <name>brand_category</name>
+        <uri>brand_category</uri>
     </function>
     <function>
-        <name>details</name>
-        <uri>details</uri>
+        <name>autocomplete</name>
+        <uri>autocomplete</uri>
     </function>
-    <function>
-        <name>count_paginacion</name>
-        <uri>count_paginacion</uri>
-    </function> 
-    <function>
-        <name>count_paginacion_filters</name>
-        <uri>count_paginacion_filters</uri>
-    </function> -->
 </functions>

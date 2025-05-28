@@ -62,5 +62,30 @@
             // exit;
             echo json_encode(common::load_model('shop_model', 'get_count_paginacion_filters', $_POST['filters']));
         }
+
+        function more_visited() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_more_visited', $_POST['id']));
+        }
+
+        // LIKES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         function load_likes() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_count_paginacion'));
+        }
+
+         function load_likes_details() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_count_paginacion_filters', $_POST['filters']));
+        }
+
+        function control_likes() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_more_visited', $_POST['id']));
+        }
     }
 ?>

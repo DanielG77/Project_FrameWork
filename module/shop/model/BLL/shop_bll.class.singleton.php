@@ -51,5 +51,9 @@
 		public function get_count_paginacion_filters_BLL($filter) {
 			return $this -> dao -> select_data_count_paginacion_filters($this -> db, $filter);
 		}
+
+		public function get_more_visited_BLL($id) {
+			return $this -> dao -> update_data_visited($this -> db, $id);
+		}
 	}
 ?>

@@ -45,5 +45,10 @@
             // return 'hola car brands';
             return $this -> bll -> get_count_paginacion_filters_BLL($filter);
         }
+
+        public function get_more_visited($id) {
+            // return 'hola car brands';
+            return $this -> bll -> get_more_visited_BLL($id);
+        }
     }
 ?>

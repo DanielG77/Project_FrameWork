@@ -143,12 +143,12 @@ function load_content() {
     console.log("Path:", path[4]);
     if(path[4] === 'recover'){
         window.location.href = friendlyURL("?module=auth&op=recover");
-        localStorage.setItem("token_email", path[6]);
+        localStorage.setItem("token_email", path[5]);
     }else if (path[4] === 'verify') {
         ajaxPromise(friendlyURL("?module=auth&op=verify_email"), 'POST', 'JSON', {'token_email': path[5]})
        .then(function(data) {
-            // console.log("Email verificado:");
-            // console.log(data);
+            console.log("Email verificado:");
+            console.log(data);
             Swal.fire({
                 icon: 'success',
                 title: 'Email verificado',

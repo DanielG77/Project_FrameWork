@@ -389,5 +389,16 @@
             $stmt = $db -> ejecutar($sql);
             return $db -> listar($stmt);
         }
+
+		 public function update_data_visited($db, $id) {
+
+            $sql = "UPDATE `products` 
+				SET visitas = visitas + 1
+				WHERE id_prod ='$id'";
+
+            $stmt = $db -> ejecutar($sql);
+            return $db -> listar($stmt);
+        }
+		
     }
 ?>

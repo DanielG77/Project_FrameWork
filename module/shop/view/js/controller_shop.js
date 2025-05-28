@@ -145,7 +145,7 @@ function mapBox_all(data) {
             const marker = L.marker([product.latitud, product.longitud], { icon: customIcon }).addTo(map);
             
             const popupContent = `
-                <div class="map-popup">
+                <div class="map-popup" id="${product.id_prod}">
                     <div class="popup-carousel owl-carousel">
                         ${product.images_prod.split(',').map(img => `
                             <div class="item">
@@ -587,30 +587,30 @@ function clicks() {
 
         $(".left-column-shop, .right-column-shop").hide();
         $(".left-column-details, .right-column-details").show();
-        // more_visiteds(id_prod);
+        more_visiteds(id);
         loadDetails(id);
     });
 
-//     $(document).on("click", ".popup-content", function () {
-//         var id_prod = this.getAttribute('id');
+    $(document).on("click", ".map-popup", function () {
+        var id_prod = this.getAttribute('id');
         
-//         $(".left-column-shop, .right-column-shop").hide();
-//         $(".left-column-details, .right-column-details").show();
-//         more_visiteds(id_prod);
-//         loadDetails(id_prod);
-//     });
+        $(".left-column-shop, .right-column-shop").hide();
+        $(".left-column-details, .right-column-details").show();
+        more_visiteds(id_prod);
+        loadDetails(id_prod);
+    });
 
-//     $(document).on("click", ".related-product-card", function () {
-//         var id_prod = this.getAttribute('id');
+    // $(document).on("click", ".related-product-card", function () {
+    //     var id_prod = this.getAttribute('id');
         
-//         $("html, body").animate({ scrollTop: 0 }, "slow");
+    //     $("html, body").animate({ scrollTop: 0 }, "slow");
     
-//         $(".left-column-shop, .right-column-shop").hide();
-//         $(".left-column-details, .right-column-details").show();
-//         more_visiteds(id_prod);
-//         loadDetails(id_prod);
+    //     $(".left-column-shop, .right-column-shop").hide();
+    //     $(".left-column-details, .right-column-details").show();
+    //     more_visiteds(id_prod);
+    //     loadDetails(id_prod);
         
-//     });
+    // });
 
 //     // Filtros  
     
@@ -666,11 +666,11 @@ function clicks() {
 //         }
 //     });
 
-//     // Botones Like
-//     $(document).on("click", ".list__heart", function() {
-//         var id_prod = this.getAttribute('id');
-//         click_like(id_prod, "list_all");
-//     });
+    // // Botones Like
+    // $(document).on("click", ".list__heart", function() {
+    //     var id_prod = this.getAttribute('id');
+    //     click_like(id_prod, "list_all");
+    // });
 
 //     $(document).on("click", ".details__heart", function() {
 //         console.log("Corazonzito");
@@ -681,11 +681,12 @@ function clicks() {
 
 }
 
-// function more_visiteds(id_prod){
-//     // console.log("VISITITAAS");
-//     // console.log(id_prod);
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=popularity', 'POST', 'JSON', { 'id_prod': id_prod })
-// }
+function more_visiteds(id_prod){
+    console.log("hola_most_visited");
+    console.log(id_prod);
+    ajaxPromise(friendlyURL('?module=shop&op=more_visited'), 'POST', 'JSON', { 'id_prod': id_prod })
+}
+
 
 // function rating(id_prod, value){
 //     // console.log("RATING");
@@ -1057,184 +1058,65 @@ function paginacion() {
 //         });
 // }
 
-// function accesori_related(loadeds = 0, type_game, total_items) {
-//     let items = 2; 
-//     let loaded = loadeds; 
-//     let type = type_game; 
-//     let total_prods = total_items; 
-
-//     // console.log("MIRA MIRA MIRA");
-//     // console.log(type);
-
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=accesoris_related', 'POST', 'JSON', { 'type': type, 'loaded': loaded, 'items': items})
-//         .then(function(data) {
-//             // console.log("MIRA MIRA MIRA");
-//             // console.log(loaded);
-//             // Carga Por Defecto
-//             if (loaded == 0) {
-//                 $('.related-accesorie-grid').empty();
-//                 $('<div></div>')
-//                 .attr({ 'id': 'related-accesories-section','class': 'related-accesories-section' })  
-//                 .appendTo('.results_acesories')
-//                 .html(` 
-//                     <h2 class="related-accesorie-title">Accesorios Relacionados</h2>
-//                     <div class="related-accesorie-grid"></div>
-//                     <div class="related-load-more-accesori"></div>
-
-//                 `);
-
-//                 var gridContainer = $('.related-accesorie-grid');
-//                 // Itera sobre los datos recibidos y genera elementos HTML para cada producto.
-//                 for (row in data) {
-//                     if (data[row].id_acces != undefined) {
-//                         var productCard = `
-//                             <article class="related-accesori-card" id="${data[row].id_acces}">
-//                                 <div class="related-accesori-info">
-//                                     <img class="related-product-image" src="${data[row].image_prod}" 
-//                                     <h3 class="related-accesori-title">${data[row].name_acces}</h3>
-//                                     <div class="related-price-container">
-//                                         <span class="related-price">${data[row].price}€</span>
-//                                     </div>
-//                                 </div>
-//                             </article>
-//                         `;
-
-//                         gridContainer.append(productCard);
-                        
-//                     }
-//                     $('<div></div>').attr({ 'id': 'more_accesori__button', 'class': 'more_accesori__button' })
-//                     .appendTo('.related-load-more-accesori')
-                        
-//                     // .html('<button class="load_more_button" id="load_more_button">LOAD MORE</button>');
-    
-//                 }
-
-//             if (loaded >= 2) {
-//                 var gridContainer = $('.related-accesorie-grid');
-//                 for (row in data) {
-//                     if (data[row].id_acces != undefined) {
-//                         var productCard = `
-//                             <article class="related-accesori-card" id="${data[row].id_acces}">
-//                                 <div class="related-accesori-info">
-//                                     <img class="related-product-image" src="${data[row].image_prod}" 
-//                                     <h3 class="related-accesori-title">${data[row].name_acces}</h3>
-//                                     <div class="related-price-container">
-//                                         <span class="related-price">${data[row].price}€</span>
-//                                     </div>
-//                                 </div>
-//                             </article>
-//                         `;
-
-//                         gridContainer.append(productCard);
-                        
-//                     }
-//                 }
-
-//                 var total_prods = total_prods - 2;
-                
-//                 // console.log(total_prods);
-//                 // console.log(loaded);
-//                 if (total_prods >= loaded) {
-//                     $('.more_accesori__button').empty();
-//                     $('<div></div>').attr({ 'id': 'more_accesori__button', 'class': 'more_accesori__button' }).appendTo('.title_content')
-//                         .html("</br><button class='btn-notexist' id='btn-notexist'></button>");
-//                 } else {
-//                     $('.more_accesori__button').empty();
-//                     $('<div></div>').attr({ 'id': 'more_accesori__button', 'class': 'more_accesori__button' }).appendTo('.title_content')
-//                         .html('<button class="load_more_button" id="load_more_button">LOAD MORE</button>');
-//                 }
-//             }
-//             }
-
-//         }).catch(function() {
-//             console.log("error accesories_related");
-//         });
-// }
-
-// function more_accesori_related(type_games) {
-//     var type_game = type_games;
-//     var prods = 0;
-//     // console.log("INICIAMOS EL SCROLLLL Accesories");
-//     // console.log(type_game);
-//     // console.log(prods);
-
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=count_accesoris', 'POST', 'JSON', { 'type_game': type_game, })
-//         .then(function(data) {
-//             // console.log("Pero esto funciona?");
-//             // console.log(data);
-//             var total_prod = data[0].num_accesories;
-//             // console.log(total_prod);
-//             // console.log(type_game);
-//             accesori_related(0, type_game, total_prod);
-//             $(document).on("click", '.more_accesori__button', function() {
-//                 prods = prods + 2;
-//                 $('.more_accesori__button').empty();
-//                 accesori_related(prods, type_game, total_prod);
-//             });
-//         }).catch(function() {
-//             console.log('error total_prod');
-//         });
-// }
-
 //
 //Likes
 //
-// function load_likes() {
-//     var token = localStorage.getItem('token');
-//     if (token) {
-//         ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=load_likes', 'POST', 'JSON', { 'token': token })
-//             .then(function(data) {
-//                 for (row in data) {
-//                     if ($("#" + data[row].car_id).children("i").hasClass("like_white")) {
-//                         $("#" + data[row].car_id).children("i").removeClass("like_white").addClass("like_red");
-//                     }
-//                 }
-//             })
-//     }
-// }
+function load_likes() {
+    var token = localStorage.getItem('token');
+    if (token) {
+        ajaxPromise(friendlyURL('?module=shop&op=load_likes'), 'POST', 'JSON', { 'token': token })
+            .then(function(data) {
+                for (row in data) {
+                    if ($("#" + data[row].car_id).children("i").hasClass("like_white")) {
+                        $("#" + data[row].car_id).children("i").removeClass("like_white").addClass("like_red");
+                    }
+                }
+            })
+    }
+}
 
-// function load_likes_details(id) {
-//     var token = localStorage.getItem('token');
-//     var id = id.id;
-//     if (token) {
-//         ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=load_likes_details', 'POST', 'JSON', { 'token': token, 'id': id })
-//             .then(function(data) {
-//                 if (id == data.car_id) {
-//                     $("#" + data.car_id).children("i").removeClass("like_white").addClass("like_red");
-//                     $(".like").empty();
-//                     $('<i id="like" class="like_red fa-heart fa-2x"></i>').appendTo('.like')
-//                 }
-//             })
-//     }
-// }
+function load_likes_details(id) {
+    var token = localStorage.getItem('token');
+    var id = id.id;
+    if (token) {
+        ajaxPromise(friendlyURL('?module=shop&op=load_likes_details'), 'POST', 'JSON', { 'token': token, 'id': id })
+            .then(function(data) {
+                if (id == data.car_id) {
+                    $("#" + data.car_id).children("i").removeClass("like_white").addClass("like_red");
+                    $(".like").empty();
+                    $('<i id="like" class="like_red fa-heart fa-2x"></i>').appendTo('.like')
+                }
+            })
+    }
+}
 
-// function click_likes(id_prod, location) {
-//         let redirect = [location]; // mirar
-//         var token = localStorage.getItem('token') // no
-//         var id = id_prod; //si
-//         redirect.push(id);
-//         localStorage.setItem('id', JSON.stringify(redirect));
-//         // console.log(token);
-//         // console.log(id);
-//         // console.log(redirect);
-//         if (token) {
-//             ajaxPromise("/programas/courses_home/module/shop/controller/ctrl_shop.php?op=control_likes", 'POST', 'JSON', { 'token': token, 'id': id })
-//             if ($(this).children("i").hasClass("like_white")) {
-//                 $(this).children("i").removeClass("like_white").addClass("like_red");
-//             } else {
-//                 $(this).children("i").removeClass("like_red").addClass("like_white");
-//             }
-//         } else {
-//             if (localStorage.getItem('details')) {
-//                 toastr['warning']("Necesitas loguearte para dar like");
-//                 setTimeout(' window.location.href = "index.php?page=ctrl_auth&op=list"; ', 2000);
+function click_likes(id_prod, location) {
+        let redirect = [location]; // mirar
+        var token = localStorage.getItem('token') // no
+        var id = id_prod; //si
+        redirect.push(id);
+        localStorage.setItem('id', JSON.stringify(redirect));
+        // console.log(token);
+        // console.log(id);
+        // console.log(redirect);
+        if (token) {
+            ajaxPromise(friendlyURL('?module=shop&op=control_likes'), 'POST', 'JSON', { 'token': token, 'id': id })
+            if ($(this).children("i").hasClass("like_white")) {
+                $(this).children("i").removeClass("like_white").addClass("like_red");
+            } else {
+                $(this).children("i").removeClass("like_red").addClass("like_white");
+            }
+        } else {
+            if (localStorage.getItem('details')) {
+                toastr['warning']("Necesitas loguearte para dar like");
+                setTimeout(' window.location.href = "index.php?page=ctrl_auth&op=list"; ', 2000);
                                                     
-//             } else {
-//                 toastr['warning']("Necesitas loguearte para dar like");
-//                 setTimeout(' window.location.href = "index.php?page=ctrl_auth&op=list"; ', 2000);
-//             }
-//         }
-//     };
+            } else {
+                toastr['warning']("Necesitas loguearte para dar like");
+                setTimeout(' window.location.href = "index.php?page=ctrl_auth&op=list"; ', 2000);
+            }
+        }
+    };
 
 
 $(document).ready(function() {

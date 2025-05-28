@@ -13,45 +13,43 @@
             return self::$_instance;
         }
 
-		// function select_brand(){
-        //     $sql = "SELECT DISTINCT b.*
-		// 			FROM brands b INNER JOIN product_brand pb ON b.id_brands=b.id_brands";
+		public function select_data_type_game($db){
 
-		// 	$conexion = connect::con();
-        //     $res = mysqli_query($conexion, $sql);
-        //     connect::close($conexion);
-        //     return $res;
-        // }
+			$sql = "SELECT DISTINCT b.*
+		 			FROM brands b INNER JOIN product_brand pb ON b.id_brands=b.id_brands";
 
-        // function select_type_brand($type){
-        //     $sql = "SELECT DISTINCT br.name_brand
-        //             FROM products pr
-        //             INNER JOIN product_brand pr_br ON pr.id_prod=pr_br.id_prod
-        //             INNER JOIN brands br ON br.id_brands=pr_br.id_brand
-        //             INNER JOIN product_type pr_ty ON pr.id_prod=pr_ty.id_prod 
-        //             INNER JOIN types ty ON ty.id_typ=pr_ty.id_typ
-        //             INNER JOIN prod_images pr_img ON pr.id_prod=pr_img.product_id
-        //             WHERE ty.name_typ = '$type'";
+            $stmt = $db->ejecutar($sql);
+            return $db->listar($stmt);
+        }
+    
 
-		// 	$conexion = connect::con();
-        //     $res = mysqli_query($conexion, $sql);
-        //     connect::close($conexion);
-        //     return $res;
-        // }
+        function select_data_brand_game($db){
+            $sql = "SELECT DISTINCT b.*
+					FROM brands b INNER JOIN product_brand pb ON b.id_brands=b.id_brands";
 
-        // function select_auto_type_game($auto, $type){
-        //     $sql = "SELECT DISTINCT t.name_typ, c.name_cities
-		// 			FROM types t INNER JOIN product_type tp ON t.id_typ=tp.id_typ
-		// 			INNER JOIN products p ON p.id_prod=tp.id_prod
-		// 			INNER JOIN cities c ON c.id_cities=p.id_city
-		// 			WHERE t.name_typ LIKE '$type%'
-		// 			AND c.name_cities LIKE '$auto%'";
-		// 	$conexion = connect::con();
-        //     $res = mysqli_query($conexion, $sql);
-        //     connect::close($conexion);
-        //     return $res;
-        // }
 
+            $stmt = $db->ejecutar($sql);
+            return $db->listar($stmt);
+        }
+
+        function select_data_brand_category($db){
+            $sql = "SELECT DISTINCT b.*
+					FROM brands b INNER JOIN product_brand pb ON b.id_brands=b.id_brands";
+
+
+            $stmt = $db->ejecutar($sql);
+            return $db->listar($stmt);
+        }
+
+        function select_data_autocomplete($db){
+            $sql = "SELECT DISTINCT b.*
+					FROM brands b INNER JOIN product_brand pb ON b.id_brands=b.id_brands";
+
+
+            $stmt = $db->ejecutar($sql);
+            return $db->listar($stmt);
+        }
+    }
         // function select_auto_brand_game($auto, $brand){
         //     $sql = "SELECT DISTINCT b.name_brand, c.name_cities
         //             FROM brands b INNER JOIN product_brand pb ON b.id_brands=pb.id_brand
@@ -102,4 +100,3 @@
         //     connect::close($conexion);
         //     return $res;
         // }
-	}

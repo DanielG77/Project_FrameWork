@@ -18,12 +18,29 @@
 			return self::$_instance;
 		}
 
-		// public function get_products_BLL() {
-		// 	//return 'hola get_carrusel_BLL';
-		// 	return $this -> dao -> select_data_products($this -> db);
-		// 	// return $this -> dao -> select_data_carrusel();
-		// }
+		public function get_type_game_BLL() {
+			//return 'hola get_carrusel_BLL';
+			return $this -> dao -> select_data_type_game($this -> db);
+			// return $this -> dao -> select_data_carrusel();
+		}
 
+		public function get_brand_game_BLL() {
+			//return 'hola get_carrusel_BLL';
+			return $this -> dao -> select_data_brand_game($this -> db);
+			// return $this -> dao -> select_data_carrusel();
+		}
+
+		public function get_brand_category() {
+			//return 'hola get_carrusel_BLL';
+			return $this -> dao -> select_data_brand_category($this -> db);
+			// return $this -> dao -> select_data_carrusel();
+		}
+
+		public function get_autocomplete_BLL() {
+			//return 'hola get_carrusel_BLL';
+			return $this -> dao -> select_data_autocomplete($this -> db);
+			// return $this -> dao -> select_data_carrusel();
+		}
 		// public function get_filters_BLL() {
 		// 	return $this -> dao -> select_data_filters($this -> db);
 		// }

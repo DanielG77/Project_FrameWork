@@ -136,12 +136,12 @@
         }
 
 		public function get_verify_email_BLL($args) {
-			// if($this -> dao -> select_verify_email($this->db, $args)){
-			// 	$this -> dao -> update_verify_email($this->db, $args);
+			if($this -> dao -> select_verify_email($this->db, $args)){
+				$this -> dao -> update_verify_email($this->db, $args);
 				return $args;
-			// } else {
-				// return 'fail';
-			// }
+			} else {
+				return 'fail';
+			}
 		}
 
 		// SOCIAL LOGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////
