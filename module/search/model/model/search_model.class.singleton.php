@@ -22,19 +22,32 @@
             return $this -> bll -> get_type_game_BLL();
         }
 
-        public function get_brand_game($filter) {
+        public function get_brand_game() {
             // return 'hola car brands';
-            return $this->bll->get_brand_game_BLL($filter);
+            return $this->bll->get_brand_game_BLL();
         }
 
-        public function get_brand_category($args) {
+        public function get_brand_type($args) {
             // return 'hola car brands';
-            return $this->bll->get_brand_category_BLL($args);
+            return $this->bll->get_brand_type_BLL($args);
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////
         public function get_autocomplete($args) {
-            // return 'hola car brands';
+            // return $args;
             return $this->bll->get_autocomplete_BLL($args);
+        }
+        public function get_autocomplete_type_brand($args) {
+            // return 'hola car brands';
+            return $this->bll->get_autocomplete_type_brand_BLL($args);
+        }
+        public function get_autocomplete_type($args) {
+            // return 'hola car brands';
+            return $this->bll->get_autocomplete_type_BLL($args);
+        }
+        public function get_autocomplete_brand($args) {
+            // return 'hola car brands';
+            return $this->bll->get_autocomplete_brand_BLL($args);
         }
     }
 ?>

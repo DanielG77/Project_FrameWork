@@ -9,10 +9,6 @@
         <uri>brand_game</uri>
     </function>
     <function>
-        <name>brand_category</name>
-        <uri>brand_category</uri>
-    </function>
-    <function>
         <name>autocomplete</name>
         <uri>autocomplete</uri>
     </function>

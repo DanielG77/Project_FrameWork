@@ -12,8 +12,10 @@ function launch_search() {
 }
 
 function load_type_game() {
+    console.log("Esto son search type_game");
     ajaxPromise(friendlyURL('?module=search&op=type_game'), 'POST', 'JSON')
         .then(function(data) {
+            console.log(data);
             $('#type_game').append('<option selected="selected" value = "0" disabled>Type Game</option>');
             for (row in data) {
                 $('#type_game').append('<option value = "' + data[row].name_typ + '">' + data[row].name_typ + '</option>');
@@ -35,7 +37,7 @@ function load_brand(data) {
                 }
             })
     } else {
-        ajaxPromise(friendlyURL('?module=search&op=brand_category'), 'POST', 'JSON', data)
+        ajaxPromise(friendlyURL('?module=search&op=brand_game'), 'POST', 'JSON', data)
             .then(function(data) {
                 // console.log(data);
                 $('#brand_game').empty();
@@ -49,17 +51,21 @@ function load_brand(data) {
 
 function autocomplete() {
     $("#autocom").on("keyup", function() {
-        let sdata = { complete: $(this).val() };
+        let complete = $(this).val() ;
+        let type = null;
+        let brand = null;
         if ($('#type_game').val() != 0) {
-            sdata.type_game = $('#type_game').val();
+            type = $('#type_game').val();
             if ($('#brand_game').val() != 0) {
-                sdata.brand_game = $('#brand_game').val();
+                brand = $('#brand_game').val();
             }
         } else if ($('#brand_game').val() != 0) {
-            sdata.brand_game = $('#brand_game').val();
+            brand = $('#brand_game').val();
         }
-        ajaxPromise(friendlyURL('?module=search&op=autocomplete'), 'POST', 'JSON', sdata)
+        // console.log("Autocomplete data:", sdata);
+        ajaxPromise(friendlyURL('?module=search&op=autocomplete'), 'POST', 'JSON', { 'type': type, 'autocomplete': complete, 'brand': brand })
             .then(function(data) {
+                // console.log("Autocomplete data:", data);
                 $('#search_game').empty();
                 $('#search_game').stop(true, true).fadeIn();
                 for (let row in data) {
@@ -111,5 +117,5 @@ function btn_search() {
 $(document).ready(function() {
     launch_search();
     autocomplete();
-    btn_search();
+    // btn_search();
 });
