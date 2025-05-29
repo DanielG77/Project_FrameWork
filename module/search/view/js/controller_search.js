@@ -109,7 +109,7 @@ function btn_search() {
 
         localStorage.setItem('filter_shop', JSON.stringify(filters_shop));
         setTimeout(function(){ 
-            window.location.href = 'index.php?page=ctrl_shop&op=list';
+            window.location.href = friendlyURL("?module=shop&op=view");
         }, 1000);      
     });
 }
@@ -117,5 +117,5 @@ function btn_search() {
 $(document).ready(function() {
     launch_search();
     autocomplete();
-    // btn_search();
+    btn_search();
 });
