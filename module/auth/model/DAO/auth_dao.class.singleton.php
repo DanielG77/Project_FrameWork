@@ -167,16 +167,21 @@
             
         }
 
-        public function update_data_token_banned($db, $username, $token_banned, $is_blocking) {
+        public function update_data_token_banned($db, $username, $token_banned) {
 
-            if($is_blocking) {
-                $sql = "UPDATE usuario SET token_banned = '$token_banned', activate=2 WHERE username = '$username'";
-            } else {                
-                 $sql = "UPDATE usuario SET token_banned = '', activate=0 WHERE username = '$username'";
-            }
+            $sql = "UPDATE usuario SET token_banned = '$token_banned', activate=2 WHERE username = '$username'";
+            
 
             $stmt = $db->ejecutar($sql);
             // return $sql;
+        }
+
+         public function delete_data_token_banned($db, $username) {
+
+        $sql = "UPDATE usuario SET token_banned = '', activate=0 WHERE username = '$username'";
+
+        $stmt = $db->ejecutar($sql);
+        // return $sql;
         }
     }
 ?>

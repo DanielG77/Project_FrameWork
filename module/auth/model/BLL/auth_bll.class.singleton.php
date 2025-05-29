@@ -337,8 +337,11 @@
 			$token = common::generate_Token_secure(4);
 			$username = $args['username_log'];	
 			$is_blocking = $args['is_blocking']; 
-
-			$this -> dao -> update_data_token_banned($this->db, $username, $token, $is_blocking);
+			if ($is_blocking === true || $is_blocking === 'true' || $is_blocking == 1 || $is_blocking === '1') {
+			$this -> dao -> update_data_token_banned($this->db, $username, $token);
+            } else {
+			$this -> dao -> delete_data_token_banned($this->db, $username, $token);
+            }
 					
 		}
 	}

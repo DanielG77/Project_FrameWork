@@ -170,6 +170,7 @@ function signin() {
                             localStorage.setItem('cont_error', parseInt(localStorage.getItem('cont_error')) + 1);
                         }
                         if( localStorage.getItem('cont_error') >= 3){
+                            console.log("Usuario bloqueado");
                             ajaxPromise(friendlyURL('?module=auth&op=user_state'), 'POST', 'JSON', { 'username_log': username_log, 'is_blocking': true })
                             .then(function(result) {
                                 ajaxPromise(friendlyURL('?module=auth&op=data_token_banned'), 'POST', 'JSON', { 'username_log': username_log })
@@ -196,13 +197,21 @@ function signin() {
                         }
 
                         if (result == "user_banned") {
-                            // Usuario NO activo
+                        //     // Usuario NO activo
                             Swal.fire({
                                 title: 'Usuario banneado',
                                 text: 'Tu usuario está banneado. Por favor, revisa tu telegram.',
                                 icon: 'warning',
                                 confirmButtonText: 'OK'
                             });
+
+                                ajaxPromise(friendlyURL('?module=auth&op=data_token_banned'), 'POST', 'JSON', { 'username_log': username_log })
+                                .then(function(token) {
+                                send_message_telegram(token[0].token_banned);
+                                localStorage.setItem('username_banned', username_log);
+                                window.location.href = friendlyURL("?module=auth&op=recover_acount");
+                                });
+
                             return;
                         }
                         // Usuario activo: flujo normal
@@ -366,7 +375,7 @@ function social_login(param){
 }
 
 function firebase_config(){
-    // Configuración de Firebase
+// Configuración de Firebase   
 }
 
 function provider_config(param){
@@ -424,11 +433,17 @@ function clicks() {
     }); 
 
     $('#forgot-password-link').on('click', function(e) {
-    e.preventDefault();
-    
-    window.location.reload();
+        e.preventDefault();
+        localStorage.setItem('location_auth', "recover");
+        window.location.reload();
     });
 
+    // $('#test').on('click', function(e) {
+    //     e.preventDefault();
+    //     // console.log("Test button clicked");
+    //     send_message_telegram("Test message from the login page");
+
+    // });
 }
 
 // RECOVER PASSWORD //////////////////////////////////////////////////////////
@@ -578,7 +593,7 @@ function send_new_password(token_email){
 }
 
 function send_message_telegram(mensaje){
-   // Enviar mensaje a Telegram
+    // Enviar mensaje a Telegram
 
     }
 
@@ -601,6 +616,8 @@ function check_token_banned(token_input){
                 })
                 localStorage.removeItem('cont_error');
                 localStorage.removeItem('username_banned');
+                localStorage.removeItem('token');
+
                 window.location.href = friendlyURL("?module=auth&op=view");
             });
         }
