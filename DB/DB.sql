@@ -25,6 +25,10 @@ ADD COLUMN refresh_token VARCHAR(255) DEFAULT NULL,
 ADD COLUMN access_token VARCHAR(255) DEFAULT NULL;
 ADD COLUMN avatar VARCHAR(255) NOT NULL;
 
+-- Ahora añadimos el nuevo campo token_banned
+ALTER TABLE usuario
+ADD COLUMN token_banned VARCHAR(25) DEFAULT NULL;
+
 CREATE TABLE categories (
   id_cat INT(11),
   name_cat VARCHAR(25) NOT NULL,

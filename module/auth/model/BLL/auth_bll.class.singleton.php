@@ -100,6 +100,9 @@
                     return "user_inactivo";
                 }
 
+			if (isset($user->activate) && $user->activate == 2) {
+                    return "user_banned";
+                }
 			if (password_verify($args['password_log'], $user->password)) {
 				try {
 					$token = middleware::create_token($user->username);
@@ -185,13 +188,13 @@
 
 		// RECOVER PASSWORD //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public function get_verify_token_BLL($args) {
-			// No es necesario session_start() aquí, no se usa la sesión
-			if($this -> dao -> select_verify_email($this->db, $args)){
-				return 'verify';
-			}
-			return 'fail';
-		}
+		// public function get_verify_token_BLL($args) {
+		// 	// No es necesario session_start() aquí, no se usa la sesión
+		// 	if($this -> dao -> select_verify_email($this->db, $args)){
+		// 		return 'verify';
+		// 	}
+		// 	return 'fail';
+		// }
 
 		public function get_data_user_BLL($args) {
 			session_start();
@@ -312,6 +315,32 @@
 			return 'fail';
 		}
 
+		public function get_verify_token_BLL($args) {
+			// No es necesario session_start() aquí, no se usa la sesión
+			if($this -> dao -> select_verify_email($this->db, $args)){
+				return 'verify';
+			}
+			return 'fail';
+		}
+
+
+		// CONTROL USER //////////////////////////////////////////////////////////////////////////////////////////////////////////
+		public function get_data_token_banned_BLL($args) {
+			//return 'hola get_carrusel_BLL';
+			return $this -> dao -> select_data_token_banned($this -> db, $args);
+			// return $this -> dao -> select_data_carrusel();
+		}
+		
+
+		public function update_user_state_BLL($args) {
+			// No es necesario session_start() aquí, no se usa la sesión
+			$token = common::generate_Token_secure(4);
+			$username = $args['username_log'];	
+			$is_blocking = $args['is_blocking']; 
+
+			$this -> dao -> update_data_token_banned($this->db, $username, $token, $is_blocking);
+					
+		}
 	}
 ?>
 

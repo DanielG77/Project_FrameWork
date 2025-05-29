@@ -19,6 +19,12 @@
             common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'auth.html');
         }
 
+        function recover_acount() {
+            // echo 'hola view';
+            // exit;
+            common::load_view('top_page_auth.html', VIEW_PATH_AUTH . 'recover_acount.html');
+        }
+
         function verify_email() {
             
             $verify = json_encode(common::load_model('auth_model', 'get_verify_email', $_POST['token_email']));
@@ -111,6 +117,19 @@
          function new_password() {
             echo json_encode(common::load_model('auth_model', 'get_new_password', $_POST['data']));
         }
+
+        function data_token_banned() {
+            echo json_encode(common::load_model('auth_model', 'get_data_token_banned', $_POST['username_log']));
+        }
+
+        function user_state() {
+            echo json_encode(common::load_model('auth_model', 'get_user_state', [ // <-- ESTO DEBE SER UN ARRAY ASOCIATIVO
+                        'username_log' => $_POST['username_log'],
+                        'is_blocking' => $_POST['is_blocking']
+                    ]));
+        }
+
+        
     }
 ?>
 

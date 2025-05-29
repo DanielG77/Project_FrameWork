@@ -1,0 +1,110 @@
+<div class="auth-container">
+    <form id="auth_recover_form" class="auth-form">
+        <h2 class="auth-title">Autenticación Requerida</h2>
+        
+        <!-- Campo de Token/Email -->
+        <div class="auth-field">
+            <label for="auth_token" class="auth-label">Código de verificación:</label>
+            <input 
+                id="auth_token" 
+                name="auth_token" 
+                type="text" 
+                class="auth-input" 
+                placeholder="Ingresa el código recibido" 
+                required
+            >
+            <span id="error_auth_token" class="auth-error"></span>
+        </div>
+        
+        <!-- Solo muestra campos de contraseña si es paso 2 -->
+        <div id="password_fields" style="display:none;">
+            <div class="auth-field">
+                <label for="new_password" class="auth-label">Nueva contraseña:</label>
+                <input 
+                    id="new_password" 
+                    name="new_password" 
+                    type="password" 
+                    class="auth-input" 
+                    placeholder="Mínimo 8 caracteres"
+                    minlength="8"
+                >
+                <span id="error_password" class="auth-error"></span>
+            </div>
+            
+            <div class="auth-field">
+                <label for="confirm_password" class="auth-label">Confirmar contraseña:</label>
+                <input 
+                    id="confirm_password" 
+                    name="confirm_password" 
+                    type="password" 
+                    class="auth-input" 
+                    placeholder="Repite tu contraseña"
+                >
+                <span id="error_confirm_password" class="auth-error"></span>
+            </div>
+        </div>
+        
+        <!-- Botón dinámico -->
+        <div class="button_forget">
+			<input type="button" class="button" id="auth_submit" value="Set password">
+		</div>
+    </form>
+</div>
+
+<style>
+.auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.auth-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.auth-field {
+    margin-bottom: 1rem;
+}
+
+.auth-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.auth-error {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 0.25rem;
+    min-height: 1rem;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.auth-button:hover {
+    background-color: #2980b9;
+}
+</style>

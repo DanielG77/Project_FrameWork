@@ -77,5 +77,13 @@
         public function get_new_password($args) {
             return $this -> bll -> get_new_password_BLL($args);
         }
+
+        public function get_data_token_banned($args) {
+            return $this -> bll -> get_data_token_banned_BLL($args);
+        }
+
+        public function get_user_state($args) {
+            return $this -> bll -> update_user_state_BLL($args);
+        }
     }
 ?>

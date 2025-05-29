@@ -8,6 +8,10 @@
         <name>register</name>
         <uri>register</uri>
     </function>
+    <function>
+        <name>recover_acount</name>
+        <uri>recover_acount</uri>
+    </function>
      <function>
         <name>login</name>
         <uri>login</uri>
@@ -63,5 +67,13 @@
     <function>
         <name>new_password</name>
         <uri>new_password</uri>
+    </function>
+     <function>
+        <name>data_token_banned</name>
+        <uri>data_token_banned</uri>
+    </function>
+     <function>
+        <name>user_state</name>
+        <uri>user_state</uri>
     </function>
 </functions>

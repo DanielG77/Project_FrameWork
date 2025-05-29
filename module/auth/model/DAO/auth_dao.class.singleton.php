@@ -155,5 +155,28 @@
             $stmt = $db->ejecutar($sql);
             return $db->listar($stmt);
         }
+
+        /// Usuario Banned //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public function select_data_token_banned($db, $username) {
+            $sql = "SELECT usuario.token_banned FROM usuario WHERE username='$username'";
+            $stmt = $db->ejecutar($sql);
+            $result = $db->listar($stmt);
+
+                return $result;
+            
+        }
+
+        public function update_data_token_banned($db, $username, $token_banned, $is_blocking) {
+
+            if($is_blocking) {
+                $sql = "UPDATE usuario SET token_banned = '$token_banned', activate=2 WHERE username = '$username'";
+            } else {                
+                 $sql = "UPDATE usuario SET token_banned = '', activate=0 WHERE username = '$username'";
+            }
+
+            $stmt = $db->ejecutar($sql);
+            // return $sql;
+        }
     }
 ?>
