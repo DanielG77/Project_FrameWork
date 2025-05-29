@@ -66,7 +66,8 @@
         function more_visited() {
             // echo 'hola carrusel';
             // exit;
-            echo json_encode(common::load_model('shop_model', 'get_more_visited', $_POST['id']));
+            common::load_model('shop_model', 'get_more_visited', $_POST['id']);
+            echo json_encode(['success' => true]);
         }
 
         // LIKES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

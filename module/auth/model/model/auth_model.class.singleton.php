@@ -68,6 +68,14 @@
 
         public function get_verify_email($args) {
             return $this -> bll -> get_verify_email_BLL($args);
-    }
+        }
+
+        public function get_send_recover_email($args) {
+            return $this -> bll -> get_send_recover_email_BLL($args);
+        }
+
+        public function get_new_password($args) {
+            return $this -> bll -> get_new_password_BLL($args);
+        }
     }
 ?>

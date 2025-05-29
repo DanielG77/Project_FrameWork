@@ -103,6 +103,14 @@
         function firebase_config() {
             echo json_encode(common::load_model('auth_model', 'get_firebase_config'));
         }
+
+         function send_recover_email() {
+            echo json_encode(common::load_model('auth_model', 'get_send_recover_email', $_POST['data']));
+        }
+
+         function new_password() {
+            echo json_encode(common::load_model('auth_model', 'get_new_password', $_POST['data']));
+        }
     }
 ?>
 

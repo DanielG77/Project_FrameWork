@@ -593,11 +593,17 @@ function clicks() {
 
     $(document).on("click", ".map-popup", function () {
         var id_prod = this.getAttribute('id');
-        
         $(".left-column-shop, .right-column-shop").hide();
         $(".left-column-details, .right-column-details").show();
         more_visiteds(id_prod);
         loadDetails(id_prod);
+    });
+
+    // Evento independiente para el botón de like en la lista
+    $(document).on("click", ".like-btn", function (event) {
+        event.stopPropagation(); // Evita que el click llegue al card
+        var id_prod = $(this).closest('.product-card').attr('id');
+        click_likes(id_prod, "list_all");
     });
 
     // $(document).on("click", ".related-product-card", function () {
@@ -681,10 +687,16 @@ function clicks() {
 
 }
 
-function more_visiteds(id_prod){
-    console.log("hola_most_visited");
-    console.log(id_prod);
-    ajaxPromise(friendlyURL('?module=shop&op=more_visited'), 'POST', 'JSON', { 'id_prod': id_prod })
+function more_visiteds(id){
+    // console.log("hola_most_visited");
+    // console.log(id);
+    ajaxPromise(friendlyURL('?module=shop&op=more_visited'), 'POST', 'JSON', {id: id})
+        .then(function(data) {
+            console.log("most_visited", data);
+        })
+        .catch(function(error) {
+            console.log("Error al cargar productos visitados:", error);
+        });
 }
 
 
@@ -1061,34 +1073,34 @@ function paginacion() {
 //
 //Likes
 //
-function load_likes() {
-    var token = localStorage.getItem('token');
-    if (token) {
-        ajaxPromise(friendlyURL('?module=shop&op=load_likes'), 'POST', 'JSON', { 'token': token })
-            .then(function(data) {
-                for (row in data) {
-                    if ($("#" + data[row].car_id).children("i").hasClass("like_white")) {
-                        $("#" + data[row].car_id).children("i").removeClass("like_white").addClass("like_red");
-                    }
-                }
-            })
-    }
-}
+// function load_likes() {
+//     var token = localStorage.getItem('token');
+//     if (token) {
+//         ajaxPromise(friendlyURL('?module=shop&op=load_likes'), 'POST', 'JSON', { 'token': token })
+//             .then(function(data) {
+//                 for (row in data) {
+//                     if ($("#" + data[row].car_id).children("i").hasClass("like_white")) {
+//                         $("#" + data[row].car_id).children("i").removeClass("like_white").addClass("like_red");
+//                     }
+//                 }
+//             })
+//     }
+// }
 
-function load_likes_details(id) {
-    var token = localStorage.getItem('token');
-    var id = id.id;
-    if (token) {
-        ajaxPromise(friendlyURL('?module=shop&op=load_likes_details'), 'POST', 'JSON', { 'token': token, 'id': id })
-            .then(function(data) {
-                if (id == data.car_id) {
-                    $("#" + data.car_id).children("i").removeClass("like_white").addClass("like_red");
-                    $(".like").empty();
-                    $('<i id="like" class="like_red fa-heart fa-2x"></i>').appendTo('.like')
-                }
-            })
-    }
-}
+// function load_likes_details(id) {
+//     var token = localStorage.getItem('token');
+//     var id = id.id;
+//     if (token) {
+//         ajaxPromise(friendlyURL('?module=shop&op=load_likes_details'), 'POST', 'JSON', { 'token': token, 'id': id })
+//             .then(function(data) {
+//                 if (id == data.car_id) {
+//                     $("#" + data.car_id).children("i").removeClass("like_white").addClass("like_red");
+//                     $(".like").empty();
+//                     $('<i id="like" class="like_red fa-heart fa-2x"></i>').appendTo('.like')
+//                 }
+//             })
+//     }
+// }
 
 function click_likes(id_prod, location) {
         let redirect = [location]; // mirar
@@ -1107,14 +1119,16 @@ function click_likes(id_prod, location) {
                 $(this).children("i").removeClass("like_red").addClass("like_white");
             }
         } else {
-            if (localStorage.getItem('details')) {
-                toastr['warning']("Necesitas loguearte para dar like");
-                setTimeout(' window.location.href = "index.php?page=ctrl_auth&op=list"; ', 2000);
-                                                    
-            } else {
-                toastr['warning']("Necesitas loguearte para dar like");
-                setTimeout(' window.location.href = "index.php?page=ctrl_auth&op=list"; ', 2000);
-            }
+            Swal.fire({
+                title: 'Necesitas loguearte',
+                text: 'Para dar like debes estar autenticado.',
+                icon: 'warning',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+                didClose: () => {
+                    window.location.href = friendlyURL("?module=auth&op=view");
+                }
+            });
         }
     };
 

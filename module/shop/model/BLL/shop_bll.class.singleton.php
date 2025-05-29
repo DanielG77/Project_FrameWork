@@ -53,6 +53,7 @@
 		}
 
 		public function get_more_visited_BLL($id) {
+			// return $id;
 			return $this -> dao -> update_data_visited($this -> db, $id);
 		}
 	}

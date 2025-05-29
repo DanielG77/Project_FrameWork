@@ -185,38 +185,10 @@
 
 		// RECOVER PASSWORD //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public function get_recover_email_BBL($args) {
-			// No es necesario session_start() aquí, no se usa la sesión
-			$user = $this -> dao -> select_recover_password($this->db, $args);
-			$token = common::generate_Token_secure(20);
-
-			if (!empty($user)) {
-				$this -> dao -> update_recover_password($this->db, $args, $token);
-                $message = ['type' => 'recover', 
-                            'token' => $token, 
-                            'toEmail' => $args];
-                $email = json_decode(mail::send_email($message), true);
-				if (!empty($email)) {
-					return;  
-				}   
-            }else{
-                return 'error';
-            }
-		}
-
 		public function get_verify_token_BLL($args) {
 			// No es necesario session_start() aquí, no se usa la sesión
 			if($this -> dao -> select_verify_email($this->db, $args)){
 				return 'verify';
-			}
-			return 'fail';
-		}
-
-		public function get_new_password_BLL($args) {
-			// No es necesario session_start() aquí, no se usa la sesión
-			$hashed_pass = password_hash($args[1], PASSWORD_DEFAULT, ['cost' => 12]);
-			if($this -> dao -> update_new_passwoord($this->db, $args[0], $hashed_pass)){
-				return 'done';
 			}
 			return 'fail';
 		}
@@ -305,5 +277,41 @@
 			}
 		}
 
+		public function get_send_recover_email_BLL($args) {
+			$user = $this->dao->select_recover_password($this->db, $args);
+			$token = common::generate_Token_secure(20);
+
+			// return $user;
+			if (!empty($user)) {
+				// return $user; // Retorna el usuario encontrado
+				$this->dao->update_recover_password($this->db, $args, $token);
+				$message = [
+					'type' => 'recover',
+					'token' => $token,
+					'toEmail' => $args
+				];
+
+				// return $message; // Retorna el mensaje para enviar el correo
+				// Enviar correo y verificar estado
+				$email_status = mail::send_email($message);
+				if (!empty($email_status)) {
+					return;  // Aquí no se devuelve nada explícito (podría ser mejor devolver un valor)
+				}
+				// return "ok"; // Retorna un mensaje de éxito
+			} else {
+				return 'error';
+			}
+			return $user; // Retorna el usuario encontrado, o un mensaje de error si no se encontró
+		}
+
+		public function get_new_password_BLL($args) {
+			$hashed_pass = password_hash($args['password'], PASSWORD_DEFAULT, ['cost' => 12]);
+			if($this -> dao -> update_new_passwoord($this->db, $args['token_email'], $hashed_pass)){
+				return 'done';
+			}
+			return 'fail';
+		}
+
 	}
 ?>
+
