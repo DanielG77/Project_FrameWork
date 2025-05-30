@@ -198,12 +198,12 @@ function signin() {
 
                         if (result == "user_banned") {
                         //     // Usuario NO activo
-                            Swal.fire({
-                                title: 'Usuario banneado',
-                                text: 'Tu usuario está banneado. Por favor, revisa tu telegram.',
-                                icon: 'warning',
-                                confirmButtonText: 'OK'
-                            });
+                            // Swal.fire({
+                            //     title: 'Usuario banneado',
+                            //     text: 'Tu usuario está banneado. Por favor, revisa tu telegram.',
+                            //     icon: 'warning',
+                            //     confirmButtonText: 'OK'
+                            // });
 
                                 ajaxPromise(friendlyURL('?module=auth&op=data_token_banned'), 'POST', 'JSON', { 'username_log': username_log })
                                 .then(function(token) {
@@ -382,8 +382,8 @@ function social_login(param){
 }
 
 function firebase_config(){
-    // console.log("hola firebase");
-    
+    // Configuración de Firebase
+  
 }
 
 function provider_config(param){
@@ -601,7 +601,7 @@ function send_new_password(token_email){
 }
 
 function send_message_telegram(mensaje){
-   
+    // Enviar mensaje a Telegram
 
     }
 
