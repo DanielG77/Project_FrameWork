@@ -4,6 +4,8 @@ function shopAllproducts() {
     const likesData = localStorage.getItem('pre_like') || null;
 
     if (likesData !== null) {
+        // console.log("Cargando likes desde localStorage");
+        // console.log(likesData);
         click_likes(likesData);
         localStorage.removeItem('pre_like'); // Eliminar después de usar
     }
@@ -606,23 +608,23 @@ function clicks() {
     });
 
     $(document).on("click", ".details__heart", function() {
-        var fullId = this.getAttribute('id'); // Ejemplo: "heart_1"
-        var id_prod = fullId.split('_')[1];   // Resultado: "1"        const $icon = $(this).find('i');
+        var fullId = this.getAttribute('id'); 
+        var id_prod = fullId.split('_')[1];   // extrae "1"
         const $icon = $(this).find('i');
+        
         localStorage.setItem('shop_ubication', id_prod);
-
-    // Cambio visual inmediato
+        
+        // Cambio visual inmediato
         const isLiked = $icon.hasClass('fa-solid');
         if (isLiked) {
             $icon.removeClass('fa-solid').addClass('fa-regular').css('color', '');
         } else {
             $icon.removeClass('fa-regular').addClass('fa-solid').css('color', 'red');
         }
-
-
-        click_likes(id_prod);
-
+        
+        click_likes(id_prod); // pasa el id limpio
     });
+
 
     $(document).on("click", ".related-product-card", function () {
         var id_prod = this.getAttribute('id');
@@ -1022,12 +1024,10 @@ function games_related(loadeds = 0, type_game, total_items, id_prod) {
 
 /////////////likes///////////////////////////////////////////////////////
 
-function click_likes(id_prod, location) {
-        let redirect = [location]; // mirar
+function click_likes(id_prod) {
         var token = localStorage.getItem('token') // no
         var id = id_prod; //si
-        redirect.push(id);
-        localStorage.setItem('id', JSON.stringify(redirect));
+        localStorage.setItem('id', id); // Guarda directo, sin JSON.stringify
         // console.log(token);
         // console.log(id);
         // console.log(redirect);
@@ -1039,7 +1039,7 @@ function click_likes(id_prod, location) {
                 $(this).children("i").removeClass("like_red").addClass("like_white");
             }
         } else {
-            localStorage.setItem('pre_like', JSON.stringify(id));
+            localStorage.setItem('pre_like', id); // Guarda directo, sin JSON.stringify
 
             Swal.fire({
                 title: 'Necesitas loguearte',
