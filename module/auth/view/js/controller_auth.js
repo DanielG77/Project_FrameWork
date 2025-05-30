@@ -383,7 +383,21 @@ function social_login(param){
 
 function firebase_config(){
     // Configuración de Firebase
-  
+    var config = {
+        apiKey: "AIzaSyD08RK9aNbXsc8DTTskK5jY3MaMGPhDcPo",
+        authDomain: "datapop-test.firebaseapp.com",
+        projectId: "datapop-test",
+        storageBucket: "datapop-test.appspot.com",
+        messagingSenderId: "1234567890",
+        measurementId: "G-JXEGLTGLTC"
+    };
+    console.log(config);
+    if(!firebase.apps.length){
+        firebase.initializeApp(config);
+    }else{
+        firebase.app();
+    }
+    return authService = firebase.auth();
 }
 
 function provider_config(param){
@@ -602,6 +616,22 @@ function send_new_password(token_email){
 
 function send_message_telegram(mensaje){
     // Enviar mensaje a Telegram
+    fetch(`https://api.telegram.org/bot7846748078:AAFYyHzpIXoof4YlDZAAnLMcWSb49Z2sSgQ/sendMessage`,{
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({
+        chat_id: "6482762516",
+        text: mensaje
+    })
+    })
+    .then(response => response.json())
+    .then(data => {
+    console.log('Respuesta de Telegram:', data);
+    })
+    .catch(error => {
+    console.error('Error al enviar mensaje:', error);
+    });
 
     }
 

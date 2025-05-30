@@ -37,7 +37,11 @@ Cada sección incluye un resumen, las tecnologías principales y recomendaciones
 
 ### 🏠 Home
 
+<<<<<<< HEAD
 | ![image1](view/images/readme/portada.jpg) |
+=======
+| ![image1](image1) |
+>>>>>>> 6964ab5c5d7a7e53f7f4f3041cdee78608079b5d
 |:-:|
 | _Aquí una imagen del dashboard o portada de la home, mostrando la bienvenida y acceso a funcionalidades principales._ |
 
