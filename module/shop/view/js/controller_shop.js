@@ -32,16 +32,30 @@ function shopAllproducts() {
 function ajaxForSearch(durl, total_prod, items_page, filters) {
     const token = localStorage.getItem('token');
 
-    ajaxPromise(friendlyURL(durl), 'POST', 'JSON', { 'total_prod': total_prod, 'items_page': items_page, 'filters': filters })
+    // Recuperar valores existentes si no se pasan
+    total_prods = total_prod !== undefined ? total_prod : parseInt(localStorage.getItem('total_prod')) || 0;
+    items_page = items_page !== undefined ? items_page : 8;
+    filters = filters !== undefined ? filters : (localStorage.getItem('filter_shop') ? JSON.parse(localStorage.getItem('filter_shop')) : null);
+
+    const move = localStorage.getItem('move');
+
+    if (move !== null) {
+        total_prods = parseInt(move);  // Sobrescribir total_prod con el valor de 'move'
+    }
+
+    ajaxPromise(friendlyURL(durl), 'POST', 'JSON', {
+        'total_prod': total_prods,
+        'items_page': items_page,
+        'filters': filters
+    })
     .then(function(data) {
-        if(data !== "shop_vacio" && data !== null && data !== "" && !(Array.isArray(data) && data.length === 0)) {
+        if (data !== "shop_vacio" && data !== null && data !== "" && !(Array.isArray(data) && data.length === 0)) {
             $("#content_shop_nogames").hide();
             $('#content_shop_games').empty();
-            
+
             data.forEach(product => {
-                // Determinar clase inicial del corazón basado en si está likeado
                 const heartClass = token && product.is_liked ? 'fa-solid' : 'fa-regular';
-                
+
                 const productHTML = `
                     <div class="product-card" id="${product.id_prod}">
                         <div class="product-header">
@@ -64,14 +78,14 @@ function ajaxForSearch(durl, total_prod, items_page, filters) {
                                 <span class="product-price">${product.price}€</span>
                                 <h3 class="product-title">${product.name_prod}</h3>
                                 <div class="product-meta">
-                                ${product.names_cat ? `
-                                <div class="popup-categories">
-                                    ${product.names_cat.split(',').map(cat => `
-                                        <span class="popup-category">${cat.trim()}</span>
-                                    `).join('')}
-                                </div>
-                                ` : ''}                                    
-                                <span class="product-location">${product.name_cities}</span>
+                                    ${product.names_cat ? `
+                                        <div class="popup-categories">
+                                            ${product.names_cat.split(',').map(cat => `
+                                                <span class="popup-category">${cat.trim()}</span>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+                                    <span class="product-location">${product.name_cities}</span>
                                 </div>
                             </div>
                             <div class="product-footer">
@@ -84,7 +98,7 @@ function ajaxForSearch(durl, total_prod, items_page, filters) {
                 `;
 
                 $('#content_shop_games').append(productHTML);
-                
+
                 $(`#carousel-${product.id_prod}`).owlCarousel({
                     items: 1,
                     loop: true,
@@ -97,9 +111,16 @@ function ajaxForSearch(durl, total_prod, items_page, filters) {
             });
 
             mapBox_all(data);
-            load_likes(); // Cargar likes después de renderizar productos
+            load_likes();
         } else {
-            // Código para mostrar "no hay productos"
+            $("#content_shop_games").empty();
+            $("#content_shop_nogames").html(`
+                <div class="no-products-container" style="text-align: center; padding: 40px;">
+                    <img src="assets/img/no-products.png" alt="Sin productos" style="max-width: 150px; opacity: 0.6;">
+                    <h2 style="margin-top: 20px; font-size: 1.5rem; color: #555;">No se han encontrado productos</h2>
+                    <p style="color: #888;">Intenta ajustar tus filtros o vuelve a intentarlo más tarde.</p>
+                </div>
+            `).show();
         }
     });
 }
@@ -575,7 +596,8 @@ function clicks() {
         const $icon = $(this).find('i');
         const id_prod = $(this).data('id');
         const token = localStorage.getItem('token');
-                
+        localStorage.setItem('shop_ubication', 'shop');
+
         // Enviar petición al servidor
         click_likes(id_prod);
 
@@ -584,9 +606,11 @@ function clicks() {
     });
 
     $(document).on("click", ".details__heart", function() {
-        var id_prod = this.getAttribute('id');
+        var fullId = this.getAttribute('id'); // Ejemplo: "heart_1"
+        var id_prod = fullId.split('_')[1];   // Resultado: "1"        const $icon = $(this).find('i');
         const $icon = $(this).find('i');
-    
+        localStorage.setItem('shop_ubication', id_prod);
+
     // Cambio visual inmediato
         const isLiked = $icon.hasClass('fa-solid');
         if (isLiked) {
@@ -594,7 +618,7 @@ function clicks() {
         } else {
             $icon.removeClass('fa-regular').addClass('fa-solid').css('color', 'red');
         }
-        
+
 
         click_likes(id_prod);
 
@@ -730,51 +754,45 @@ function mapBox_Details(product) {
 }
 
 function paginacion() {
-    
+
     console.log("hola paginacion");
     var filters = localStorage.getItem('filter_shop') || false;
     if (filters === undefined || filters === false || filters === false) {
-            var url = "?module=shop&op=count_paginacion";
+        var url = "?module=shop&op=count_paginacion";
     } else {
-            var filter_data = JSON.parse(filters);
-            var url = "?module=shop&op=count_paginacion_filters";
+        var filter_data = JSON.parse(filters);
+        var url = "?module=shop&op=count_paginacion_filters";
     }
-   
 
     ajaxPromise(friendlyURL(url), 'POST', 'JSON', { 'filters': filter_data })
     .then(function(data) {
-        // console.log(data);
         var total_prod = data[0].contador;
-        // console.log(total_prod);
         localStorage.setItem('total_prod', total_prod);
         var total_pages = total_prod >= 8 ? Math.ceil(total_prod / 8) : 1;
-        // console.log(total_pages);
-        var currentPage = localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0;
-        // console.log(currentPage);
+        var currentPage = localStorage.getItem('move') ? parseInt(localStorage.getItem('move')) / 8 + 1 : 1;
 
         var paginationHtml = '<div class="pagination-container">';
-        if(currentPage!=0){
+        if(currentPage !== 1){
             paginationHtml += `
                 <div class="arrow">
-                <svg width="18" height="18"><use xlink:href="#left" /></svg>
-                <span class="arrow-text">Previous</span>
+                    <svg width="18" height="18"><use xlink:href="#left" /></svg>
+                    <span class="arrow-text">Previous</span>
                 </div>`;
         }
 
         for (let i = 1; i <= total_pages; i++) {
             paginationHtml += `
                 <div class="pagination-number ${i === currentPage ? 'pagination-active' : ''}">
-                  ${i}
+                    ${i}
                 </div>
             `;
         }
 
-        if((localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0) < (total_prod-8)){
-
+        if(currentPage < total_pages){
             paginationHtml += `
                 <div class="arrow">
-                <svg width="18" height="18"><use xlink:href="#right" /></svg>
-                <span class="arrow-text">Next</span>
+                    <svg width="18" height="18"><use xlink:href="#right" /></svg>
+                    <span class="arrow-text">Next</span>
                 </div>`;
         }
 
@@ -784,52 +802,36 @@ function paginacion() {
         $('#pagination').on('click', '.pagination-number', function(event) {
             event.preventDefault();
             var num = parseInt($(this).text());
-            total_prod = 8 * (num - 1);
-
-            //con la variable move soy capaz de saber en que pagina estoy
-            localStorage.setItem('move', JSON.stringify(total_prod));
-
+            var offset = 8 * (num - 1);
+            localStorage.setItem('move', JSON.stringify(offset));
             window.location.reload();
             $('html, body').animate({ scrollTop: $(".wrap") });
-
         });
 
-        $(document).ready(function() {
-            $('#pagination').on('click', '.arrow', function(event) {
-                event.preventDefault();
-                
-                var direction = $(this).find('.arrow-text').text();
-        
-                var actualyposition = localStorage.getItem('move') ? parseInt(JSON.parse(localStorage.getItem('move'))) : 0;
-        
-                var total_prod = parseInt(localStorage.getItem('total_prod')) || 0;
-        
-                // localStorage.setItem('Actual position', actualyposition);
-                
-                if (direction === 'Next') {
-                    var next_page = actualyposition + 8;
-                    localStorage.setItem("Next page:", next_page);
-                    localStorage.setItem("actualyposition:", actualyposition);
+        $('#pagination').on('click', '.arrow', function(event) {
+            event.preventDefault();
+            var direction = $(this).find('.arrow-text').text();
+            var currentOffset = localStorage.getItem('move') ? parseInt(localStorage.getItem('move')) : 0;
 
-                    if (next_page <= total_prod) {
-                        localStorage.setItem('move', JSON.stringify(next_page));
-                        window.location.reload();
-                    }
-                } else if (direction === 'Previous') {
-                    var prev_page = actualyposition - 8; 
-                    localStorage.setItem("Next page:", next_page);
-                    localStorage.setItem("actualyposition:", actualyposition);
-                    if (prev_page >= 0) {
-                        localStorage.setItem('move', JSON.stringify(prev_page));
-                        window.location.reload();
-                    }
+            if (direction === 'Next') {
+                var nextOffset = currentOffset + 8;
+                if (nextOffset < total_prod) {
+                    localStorage.setItem('move', JSON.stringify(nextOffset));
+                    window.location.reload();
                 }
-        
-                $('html, body').animate({ scrollTop: $(".wrap") });
-            });
+            } else if (direction === 'Previous') {
+                var prevOffset = currentOffset - 8;
+                if (prevOffset >= 0) {
+                    localStorage.setItem('move', JSON.stringify(prevOffset));
+                    window.location.reload();
+                }
+            }
+
+            $('html, body').animate({ scrollTop: $(".wrap") });
         });
     });
 }
+
 
 function more_games_related(id_prod, type_games) {
     var type_game = type_games;
