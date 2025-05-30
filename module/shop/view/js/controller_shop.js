@@ -507,16 +507,6 @@ function loadDetails(id) {
                             "</button>" +
                         "</div>" +
 
-                        "<div class='container-new'>" +
-                            "<div class='container__items' id='" + product.id_prod + "'>" +
-                                "<input type='radio' name='stars' id='st5'><label for='st5'><div class='star-stroke'><div class='star-fill'></div></div><div class='label-description' data-content='5'></div></label>" +
-                                "<input type='radio' name='stars' id='st4'><label for='st4'><div class='star-stroke'><div class='star-fill'></div></div><div class='label-description' data-content='4'></div></label>" +
-                                "<input type='radio' name='stars' id='st3'><label for='st3'><div class='star-stroke'><div class='star-fill'></div></div><div class='label-description' data-content='3'></div></label>" +
-                                "<input type='radio' name='stars' id='st2'><label for='st2'><div class='star-stroke'><div class='star-fill'></div></div><div class='label-description' data-content='2'></div></label>" +
-                                "<input type='radio' name='stars' id='st1'><label for='st1'><div class='star-stroke'><div class='star-fill'></div></div><div class='label-description' data-content='1'></div></label>" +
-                            "</div>" +
-                        "</div>" +
-
                         "<h1><b>" + product.price + "€" + "</b></h1>" +
                         "<p><b>Estado:</b> " + (product.name_status || "N/A") + "</p>" +
                         "<a class='button_carrito' href='#'>Add to Cart</a>" +
@@ -623,7 +613,7 @@ function clicks() {
         
     });
 
-//     // Filtros  
+    // Filtros  
     
     $(document).on('click', '.filter_remove', function () {
         localStorage.removeItem('name_typ');
@@ -639,49 +629,27 @@ function clicks() {
     });
     
     
-    // $(document).on("click", '.button_categories', function() {
+    $(document).on("click", '.button_categories', function() {
 
-    //     localStorage.removeItem('filter_shop');
-    //     localStorage.removeItem('name_cat');
+        localStorage.removeItem('filter_shop');
+        localStorage.removeItem('name_cat');
 
-    //     var filter_maps = [];
-    //     var name_catergoria = this.getAttribute('id');
+        var filter_maps = [];
+        var name_catergoria = this.getAttribute('id');
 
-    //     localStorage.setItem('name_cat', "["+JSON.stringify(name_catergoria)+"]");
-    //     filter_maps.push(['name_cat', name_catergoria]);         
+        localStorage.setItem('name_cat', "["+JSON.stringify(name_catergoria)+"]");
+        filter_maps.push(['name_cat', name_catergoria]);         
         
-    //     var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
-    //     filter_shop = filter_shop.filter(filter => filter[0] !== 'name_cat');
-    //     filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
-    //     localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
+        var filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || [];
+        filter_shop = filter_shop.filter(filter => filter[0] !== 'name_cat');
+        filter_shop.push(['name_cat', localStorage.getItem('name_cat')]);
+        localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
 
-    //     setTimeout(function() {
-    //         window.location.href = 'index.php?page=ctrl_shop&op=list';
-    //     }, 300);
-    // });
-
-//     // Valoracion
-//     $(document).on("click", ".container__items label", function() {
-//         var ratingValue = $(this).find('.label-description').data('content');
-        
-//         var productId = $(this).closest('.container__items').attr('id');
-        
-//         if (productId && ratingValue) {
-//             console.log("ID Producto:", productId, "Rating:", ratingValue);
-            
-//             rating(productId, ratingValue);
-            
-//             $(this).siblings().removeClass('selected');
-//             $(this).addClass('selected');
-//         } else {
-//             console.error("No se pudo obtener el ID del producto o el valor de la valoración");
-//         }
-//     });
-
-    // Botones Like
-
+        setTimeout(function() {
+            window.location.reload();
+        }, 300);
+    });
     
-
 }
 
 function more_visiteds(id){

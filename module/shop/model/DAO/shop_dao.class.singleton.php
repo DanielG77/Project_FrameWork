@@ -199,7 +199,7 @@
         }
 
         public function select_data_details($db, $id) {
-    	$sql = "SELECT pr.id_prod, pr.name_prod, pr.description_prod, pr.price, sta.name_status, AVG(pr.rating) AS rating_vg,
+    	$sql = "SELECT pr.id_prod, pr.name_prod, cit.name_cities ,pr.description_prod, pr.price, sta.name_status, AVG(pr.rating) AS rating_vg,
         GROUP_CONCAT(DISTINCT prim.image_prod ORDER BY prim.image_prod) AS images_prod, 
         GROUP_CONCAT(DISTINCT c.name_cat) AS names_cat, GROUP_CONCAT(DISTINCT e.name_extra) AS name_extras,
         GROUP_CONCAT(DISTINCT b.name_brand ) AS name_brands, GROUP_CONCAT(DISTINCT t.name_typ) AS names_typs,
