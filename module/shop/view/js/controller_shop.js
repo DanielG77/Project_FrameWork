@@ -1,56 +1,53 @@
 function shopAllproducts() {
-    var filters = localStorage.getItem('filter_shop') || false;
-    // var id_prod = localStorage.getItem('id_prod') || false;
-    // var categoria = localStorage.getItem('name_cat') || false;
-    // var ubicacion = localStorage.getItem('ubication') || false;
-    console.log("hola_show_products");
-    console.log(filters);
+    const filters = localStorage.getItem('filter_shop');
+    const shopUbication = localStorage.getItem('shop_ubication');
+    const likesData = localStorage.getItem('pre_like') || null;
 
-    // if((categoria!=false) && (ubicacion=="shop")){ // Primer LLanze els filtros
-    // if(categoria!=false){
-    //     localStorage.removeItem('id_prod');
-    //     categ_visited(categoria);
-    // }
-    if (filters != false) {
-        // console.log("hola_show_products_filtres");
-
-        var filtro_data = JSON.parse(filters);
-        ajaxForSearch('?module=shop&op=product_filters', total_prod = 0, items_page = 8, filtro_data);      
+    if (likesData !== null) {
+        click_likes(likesData);
+        localStorage.removeItem('pre_like'); // Eliminar después de usar
     }
-    // else if(id_prod != false){
-        // localStorage.removeItem('id_prod');
-        // more_visiteds(id_prod);
-        // loadDetails(id_prod);
-    // } 
-    else {
-        // console.log("hola_show_products_no_filtres");
 
-        ajaxForSearch('?module=shop&op=products', total_prod = 0, items_page = 8, undefined)
-            // ajaxForSearch('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=all_games', total_prod = 0, items_page = 3, undefined);
+    // Verificar si shop_ubication contiene un número válido
+    const productId = Number(shopUbication);
+    if (!isNaN(productId) && productId > 0) {
+        // Cargar detalles del producto específico
+        loadDetails(productId);
+        localStorage.removeItem('shop_ubication'); // Opcional: eliminar después de usar
+        return;
     }
-    
+
+    if (filters !== null) {
+            const filtro_data = JSON.parse(filters);
+            if ('category' in filtro_data) {
+            }
+        ajaxForSearch('?module=shop&op=product_filters', 0, 8, filtro_data);
+        return;
+
+    }
+
+    ajaxForSearch('?module=shop&op=products', 0, 8, undefined);
 }
 
 function ajaxForSearch(durl, total_prod, items_page, filters) {
-    // console.log(durl);
-    // console.log(total_prod);
-    // console.log(items_page);
+    const token = localStorage.getItem('token');
 
-    ajaxPromise(friendlyURL(durl), 'POST',  'JSON', { 'total_prod': total_prod, 'items_page': items_page, 'filters': filters })
+    ajaxPromise(friendlyURL(durl), 'POST', 'JSON', { 'total_prod': total_prod, 'items_page': items_page, 'filters': filters })
     .then(function(data) {
-        // console.log("hola_data_shop");
-        // console.log(data);
         if(data !== "shop_vacio" && data !== null && data !== "" && !(Array.isArray(data) && data.length === 0)) {
             $("#content_shop_nogames").hide();
-            $('#content_shop_games').empty(); // Limpiar contenedor
+            $('#content_shop_games').empty();
             
             data.forEach(product => {
+                // Determinar clase inicial del corazón basado en si está likeado
+                const heartClass = token && product.is_liked ? 'fa-solid' : 'fa-regular';
+                
                 const productHTML = `
                     <div class="product-card" id="${product.id_prod}">
                         <div class="product-header">
                             ${product.name_status ? `<span class="product-status">${product.name_status}</span>` : ''}
-                            <button class="like-btn" title="Like" style="position:absolute;top:10px;right:10px;z-index:3;">
-                                <i class="fa${product.is_liked ? 's' : 'r'} fa-heart"></i>
+                            <button class="like-btn" title="Like" style="position:absolute;top:10px;right:10px;z-index:3;" data-id="${product.id_prod}">
+                                <i class="fa-heart ${heartClass}"></i>
                             </button>
                             <div class="product-carousel-container">
                                 <div id="carousel-${product.id_prod}" class="owl-carousel">
@@ -88,7 +85,6 @@ function ajaxForSearch(durl, total_prod, items_page, filters) {
 
                 $('#content_shop_games').append(productHTML);
                 
-                // Inicializar Owl Carousel
                 $(`#carousel-${product.id_prod}`).owlCarousel({
                     items: 1,
                     loop: true,
@@ -100,28 +96,10 @@ function ajaxForSearch(durl, total_prod, items_page, filters) {
                 });
             });
 
-            //Carga de Funciones Extras
             mapBox_all(data);
-
+            load_likes(); // Cargar likes después de renderizar productos
         } else {
-            $("#content_shop_games").hide();
-            const noProductsHTML = `
-                <div class="no-products-container">
-                    <div class="no-products-content">
-                        <div class="no-products-illustration">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-                                <path d="M0 0h24v24H0z" fill="none"/>
-                            </svg>
-                        </div>
-                        <h3 class="no-products-title">¡Ups! No encontramos resultados</h3>
-                        <p class="no-products-subtitle">Prueba ajustando tus filtros de búsqueda</p>
-                        <button class="filter_remove" id="Remove_filter">Remove</button>
-                    </div>
-                </div>
-            `;
-            
-            $('#content_shop_nogames').html(noProductsHTML);
+            // Código para mostrar "no hay productos"
         }
     });
 }
@@ -513,14 +491,19 @@ function loadDetails(id) {
             .addClass("date_prod_dentro")
             .appendTo("#container-date-prod");
 
+        // Determinar el estado inicial del like
+        const token = localStorage.getItem('token');
+        const heartClass = product.is_liked ? 'fa-solid' : 'fa-regular';
+        const heartColor = product.is_liked ? 'style="color: red;"' : '';
+
         $prodInfo.html(
             "<div class='list_product_details'>" +
                 "<div class='product-info_details'>" +
                     "<div class='product-content_details'>" +
                         "<div class='product-title-container'>" +
                             "<h1><b>" + product.name_prod + "</b></h1>" +
-                            "<button class='details__heart' id='" + id + "'>" +
-                                "<i class='" + (product.is_liked ? "fas" : "far") + " fa-heart'></i>" +
+                            "<button class='details__heart' id='heart_" + id + "'>" +
+                                "<i class='fa-heart " + heartClass + "' " + heartColor + "></i>" +
                             "</button>" +
                         "</div>" +
 
@@ -570,11 +553,8 @@ function loadDetails(id) {
 
         // Mapa en detalles (si tienes función)
         mapBox_Details(product);
-
-        // Relacionados (si tienes funciones)
-        // more_accesori_related(names_typs);
-        // more_games_related(names_typs, product.id_prod);
-        
+        more_games_related(product.id_prod, product.names_typs);
+        load_likes_details(product.id_prod);        
     }).catch(function(error) {
         console.error("Error al cargar detalles:", error);
     });
@@ -601,22 +581,47 @@ function clicks() {
 
     // Evento independiente para el botón de like en la lista
     $(document).on("click", ".like-btn", function (event) {
-        event.stopPropagation(); // Evita que el click llegue al card
-        var id_prod = $(this).closest('.product-card').attr('id');
-        click_likes(id_prod, "list_all");
+        event.stopPropagation();
+        const $icon = $(this).find('i');
+        const id_prod = $(this).data('id');
+        const token = localStorage.getItem('token');
+                
+        // Enviar petición al servidor
+        click_likes(id_prod);
+
+        $icon.toggleClass('fa-regular fa-solid');
+
     });
 
-    // $(document).on("click", ".related-product-card", function () {
-    //     var id_prod = this.getAttribute('id');
-        
-    //     $("html, body").animate({ scrollTop: 0 }, "slow");
+    $(document).on("click", ".details__heart", function() {
+        var id_prod = this.getAttribute('id');
+        const $icon = $(this).find('i');
     
-    //     $(".left-column-shop, .right-column-shop").hide();
-    //     $(".left-column-details, .right-column-details").show();
-    //     more_visiteds(id_prod);
-    //     loadDetails(id_prod);
+    // Cambio visual inmediato
+        const isLiked = $icon.hasClass('fa-solid');
+        if (isLiked) {
+            $icon.removeClass('fa-solid').addClass('fa-regular').css('color', '');
+        } else {
+            $icon.removeClass('fa-regular').addClass('fa-solid').css('color', 'red');
+        }
         
-    // });
+
+        click_likes(id_prod);
+
+    });
+
+    $(document).on("click", ".related-product-card", function () {
+        var id_prod = this.getAttribute('id');
+        
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    
+        $(".left-column-shop, .right-column-shop").hide();
+        $(".left-column-details, .right-column-details").show();
+        more_visiteds(id_prod);
+        localStorage.setItem('shop_ubication', id_prod); // Guardar ubicación para detalles
+        window.location.reload(); // Recargar para mostrar detalles
+        
+    });
 
 //     // Filtros  
     
@@ -632,6 +637,7 @@ function clicks() {
 
         window.location.reload();
     });
+    
     
     // $(document).on("click", '.button_categories', function() {
 
@@ -672,18 +678,9 @@ function clicks() {
 //         }
 //     });
 
-    // // Botones Like
-    // $(document).on("click", ".list__heart", function() {
-    //     var id_prod = this.getAttribute('id');
-    //     click_like(id_prod, "list_all");
-    // });
+    // Botones Like
 
-//     $(document).on("click", ".details__heart", function() {
-//         console.log("Corazonzito");
-//         var id_prod = this.getAttribute('id');
-//         console.log(id_prod);
-//         click_likes(id_prod, "details");
-//     });
+    
 
 }
 
@@ -698,23 +695,6 @@ function more_visiteds(id){
             console.log("Error al cargar productos visitados:", error);
         });
 }
-
-
-// function rating(id_prod, value){
-//     // console.log("RATING");
-//     // console.log(id_prod);
-//     // console.log(id_prod);
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=rating', 'POST', 'JSON', { 'id_prod': id_prod, 'value': value })
-// }
-
-// function categ_visited(name_cat){
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=categorievisted', 'POST', 'JSON', { 'name_cat': name_cat })
-//     .then(function(data) {
-//         console.log(data);
-//     });
-// }
-
-
 
 function mapBox_Details(product) {
     const customIcon = L.icon({
@@ -883,224 +863,194 @@ function paginacion() {
     });
 }
 
-// function games_related(loadeds = 0, type_game, total_items, id_prod) {
-//     let items = 5; 
-//     let loaded = loadeds; 
-//     let type = type_game; 
-//     let total_prods = total_items; 
+function more_games_related(id_prod, type_games) {
+    var type_game = type_games;
+    var prods = 0;
+    // console.log("INICIAMOS EL SCROLLLL SEÑORES");
+    // console.log(type_game);
+    // console.log(prods);
+    // console.log(id_prod);
 
-//     // console.log("MIRA MIRA MIRA");
-//     // console.log(type); // Imprime el tipo de juego en la consola.
+    ajaxPromise(friendlyURL('?module=shop&op=count_related'), 'POST', 'JSON', { 'type_game': type_game, 'id_prod': id_prod })
+        .then(function(data) {
+            // console.log("Pero esto funciona?");
+            // console.log(data);
+            var total_prod = data[0].num_prods;
+            // console.log(total_prod);
+            // console.log(type_game);
+            games_related(0, type_game, total_prod, id_prod);
+            $(document).on("click", '.more_game__button', function() {
+                prods = prods + 5;
+                $('.more_game__button').empty();
+                games_related(prods, type_game, total_prod, id_prod);
+            });
+        }).catch(function() {
+            console.log('error total_prod');
+        });
+}
 
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=games_related', 'POST', 'JSON', { 'type': type, 'loaded': loaded, 'items': items, 'id_prod':id_prod })
-//         .then(function(data) {
-//             // console.log(data);
-//             //Carga Por Defecto
-//             if (loaded == 0) {
-//                 $('.related-products-grid').empty();
-//                 $('<div></div>')
-//                 .attr({ 'id': 'related-games-section','class': 'related-games-section' })  
-//                 .appendTo('.results')
-//                 .html(` 
-//                     <h2 class="related-title">Juegos Relacionados</h2>
-//                     <div class="related-products-grid"></div>
-//                     <div class="related-load-more-container"></div>
-//                 `);
+function games_related(loadeds = 0, type_game, total_items, id_prod) {
+    let items = 5; 
+    let loaded = loadeds; 
+    let type = type_game; 
+    let total_prods = total_items; 
 
-//                 var gridContainer = $('.related-products-grid');
-//                 // Itera sobre los datos recibidos y genera elementos HTML para cada producto.
-//                 for (row in data) {
-//                     if (data[row].id_prod != undefined) {
-//                         var productCard = `
-//                             <article class="related-product-card" id="${data[row].id_prod}">
-//                                 <div class="related-carousel-wrapper">
-//                                     <div id="related-carousel-${data[row].id_prod}" class="related-carousel owl-carousel"></div>
-//                                 </div>
-//                                 <div class="related-product-info">
-//                                     <h3 class="related-product-title">${data[row].name_prod}</h3>
-//                                     <div class="related-price-container">
-//                                         <span class="related-price">${data[row].price}€</span>
-//                                     </div>
+    // console.log("MIRA MIRA MIRA");
+    // console.log(type); // Imprime el tipo de juego en la consola.
+
+    ajaxPromise(friendlyURL('?module=shop&op=games_related'), 'POST', 'JSON', { 'type': type, 'loaded': loaded, 'items': items, 'id_prod':id_prod })
+        .then(function(data) {
+            // console.log(data);
+            // Carga Por Defecto
+            if (loaded == 0) {
+                $('.related-products-grid').empty();
+                $('<div></div>')
+                .attr({ 'id': 'related-games-section','class': 'related-games-section' })  
+                .appendTo('.results')
+                .html(` 
+                    <h2 class="related-title">Juegos Relacionados</h2>
+                    <div class="related-products-grid"></div>
+                    <div class="related-load-more-container"></div>
+                `);
+
+                var gridContainer = $('.related-products-grid');
+                // Itera sobre los datos recibidos y genera elementos HTML para cada producto.
+                for (row in data) {
+                    if (data[row].id_prod != undefined) {
+                        var productCard = `
+                            <article class="related-product-card" id="${data[row].id_prod}">
+                                <div class="related-carousel-wrapper">
+                                    <div id="related-carousel-${data[row].id_prod}" class="related-carousel owl-carousel"></div>
+                                </div>
+                                <div class="related-product-info">
+                                    <h3 class="related-product-title">${data[row].name_prod}</h3>
+                                    <div class="related-price-container">
+                                        <span class="related-price">${data[row].price}€</span>
+                                    </div>
                                     
-//                                 </div>
-//                             </article>
-//                         `;
+                                </div>
+                            </article>
+                        `;
 
-//                         // <div class="related-product-badges">
-//                         //<span class="related-badge related-badge-new">Nuevo</span>
-//                         //<span class="related-badge related-badge-discount">${data[row].discount}%</span>
-//                         //</div>
-//                         gridContainer.append(productCard);
-//                         // Carrusel de imágenes
-//                         const carousel = $(`#related-carousel-${data[row].id_prod}`);
-//                         data[row].images_prod.split(',').forEach((image, index) => {
-//                             carousel.append(`
-//                                 <div class="related-carousel-item">
-//                                     <img src="${image.trim()}" 
-//                                          alt="${data[row].name_brands}" 
-//                                          class="related-product-image"
-//                                          loading="${index > 0 ? 'lazy' : 'eager'}">
-//                                 </div>
-//                             `);
-//                         });
+                        // <div class="related-product-badges">
+                        //<span class="related-badge related-badge-new">Nuevo</span>
+                        //<span class="related-badge related-badge-discount">${data[row].discount}%</span>
+                        //</div>
+                        gridContainer.append(productCard);
+                        // Carrusel de imágenes
+                        const carousel = $(`#related-carousel-${data[row].id_prod}`);
+                        data[row].images_prod.split(',').forEach((image, index) => {
+                            carousel.append(`
+                                <div class="related-carousel-item">
+                                    <img src="${IMG_PROD}${image.trim()}" 
+                                        alt="${data[row].name_brands}" 
+                                        class="related-product-image"
+                                        loading="${index > 0 ? 'lazy' : 'eager'}">
+                                </div>
+                            `);
+                        });
 
-//                         // Inicializar Owl Carousel con opciones mejoradas
-//                         carousel.owlCarousel({
-//                             items: 1,
-//                             loop: false,
-//                             nav: true,
-//                             navText: [
-//                                 '<i class="related-carousel-nav related-prev-nav"></i>',
-//                                 '<i class="related-carousel-nav related-next-nav"></i>'
-//                             ],
-//                             dots: true,
-//                             autoplay: true,
-//                             autoplayTimeout: 5000,
-//                             autoplayHoverPause: true,
-//                             responsiveRefreshRate: 100
-//                         });
-//                     }
-//                 }
+                        // Inicializar Owl Carousel con opciones mejoradas
+                        carousel.owlCarousel({
+                            items: 1,
+                            loop: false,
+                            nav: true,
+                            navText: [
+                                '<i class="related-carousel-nav related-prev-nav"></i>',
+                                '<i class="related-carousel-nav related-next-nav"></i>'
+                            ],
+                            dots: true,
+                            autoplay: true,
+                            autoplayTimeout: 5000,
+                            autoplayHoverPause: true,
+                            responsiveRefreshRate: 100
+                        });
+                    }
+                }
 
-//                 $('<div></div>').attr({ 'id': 'more_game__button', 'class': 'more_game__button' })
-//                 .appendTo('.related-load-more-container')
+                $('<div></div>').attr({ 'id': 'more_game__button', 'class': 'more_game__button' })
+                .appendTo('.related-load-more-container')
                     
-//                 .html('<button class="load_more_button" id="load_more_button">LOAD MORE</button>');
-//             }
+                .html('<button class="load_more_button" id="load_more_button">LOAD MORE</button>');
+            }
 
-//             // Si ya se han cargado al menos 3 productos.
-//             if (loaded >= 5) {
-//                 var gridContainer = $('.related-products-grid');
+            // Si ya se han cargado al menos 3 productos.
+            if (loaded >= 5) {
+                var gridContainer = $('.related-products-grid');
                 
-//                 for (row in data) {
-//                     if (data[row].id_prod != undefined) {
-//                         var productCard = `
-//                             <article class="related-product-card" id="${data[row].id_prod}">
-//                                 <div class="related-carousel-wrapper">
-//                                     <div id="related-carousel-${data[row].id_prod}" class="related-carousel owl-carousel"></div>
-//                                 </div>
-//                                 <div class="related-product-info">
-//                                     <h3 class="related-product-title">${data[row].name_prod}</h3>
-//                                     <div class="related-price-container">
-//                                         <span class="related-price">${data[row].price}€</span>
-//                                         <span class="related-price-label">Precio final</span>
-//                                     </div>
-//                                 </div>
-//                             </article>
-//                         `;
+                for (row in data) {
+                    if (data[row].id_prod != undefined) {
+                        var productCard = `
+                            <article class="related-product-card" id="${data[row].id_prod}">
+                                <div class="related-carousel-wrapper">
+                                    <div id="related-carousel-${data[row].id_prod}" class="related-carousel owl-carousel"></div>
+                                </div>
+                                <div class="related-product-info">
+                                    <h3 class="related-product-title">${data[row].name_prod}</h3>
+                                    <div class="related-price-container">
+                                        <span class="related-price">${data[row].price}€</span>
+                                        <span class="related-price-label">Precio final</span>
+                                    </div>
+                                </div>
+                            </article>
+                        `;
 
-//                         gridContainer.append(productCard);
-//                         // Carrusel de imágenes
-//                         const carousel = $(`#related-carousel-${data[row].id_prod}`);
-//                         data[row].images_prod.split(',').forEach((image, index) => {
-//                             carousel.append(`
-//                                 <div class="related-carousel-item">
-//                                     <img src="${image.trim()}" 
-//                                          alt="${data[row].name_brands}" 
-//                                          class="related-product-image"
-//                                          loading="${index > 0 ? 'lazy' : 'eager'}">
-//                                     <div class="related-image-overlay">
-//                                         <button class="related-quick-view">Vista rápida</button>
-//                                     </div>
-//                                 </div>
-//                             `);
-//                         });
+                        gridContainer.append(productCard);
+                        // Carrusel de imágenes
+                        const carousel = $(`#related-carousel-${data[row].id_prod}`);
+                        data[row].images_prod.split(',').forEach((image, index) => {
+                            carousel.append(`
+                                <div class="related-carousel-item">
+                                    <img src="${IMG_PROD}${image.trim()}" 
+                                        alt="${data[row].name_brands}" 
+                                        class="related-product-image"
+                                        loading="${index > 0 ? 'lazy' : 'eager'}">
+                                </div>
+                            `);
+                        });
 
-//                         carousel.owlCarousel({
-//                             items: 1,
-//                             loop: false,
-//                             nav: true,
-//                             navText: [
-//                                 '<i class="related-carousel-nav related-prev-nav"></i>',
-//                                 '<i class="related-carousel-nav related-next-nav"></i>'
-//                             ],
-//                             dots: true,
-//                             autoplay: true,
-//                             autoplayTimeout: 5000,
-//                             autoplayHoverPause: true,
-//                             responsiveRefreshRate: 100
-//                         });
-//                     }
-//                 }
+                        carousel.owlCarousel({
+                            items: 1,
+                            loop: false,
+                            nav: true,
+                            navText: [
+                                '<i class="related-carousel-nav related-prev-nav"></i>',
+                                '<i class="related-carousel-nav related-next-nav"></i>'
+                            ],
+                            dots: true,
+                            autoplay: true,
+                            autoplayTimeout: 5000,
+                            autoplayHoverPause: true,
+                            responsiveRefreshRate: 100
+                        });
+                    }
+                }
 
-//                 var total_prods = total_prods - 3;
+                var total_prods = total_prods - 3;
                 
-//                 // console.log(total_prods);
-//                 // console.log(loaded);
-//                 if (total_prods >= loaded) {
-//                     $('.more_game__button').empty();
-//                     $('<div></div>').attr({ 'id': 'more_game__button', 'class': 'more_game__button' }).appendTo('.title_content')
-//                         .html("</br><button class='btn-notexist' id='btn-notexist'></button>");
-//                 } else {
-//                     $('.more_game__button').empty();
-//                     $('<div></div>').attr({ 'id': 'more_game__button', 'class': 'more_game__button' }).appendTo('.title_content')
-//                         .html('<button class="load_more_button" id="load_more_button">LOAD MORE</button>');
-//                 }
-//             }
+                // console.log(total_prods);
+                // console.log(loaded);
+                if (total_prods >= loaded) {
+                    $('.more_game__button').empty();
+                    $('<div></div>').attr({ 'id': 'more_game__button', 'class': 'more_game__button' }).appendTo('.title_content')
+                        .html("</br><button class='btn-notexist' id='btn-notexist'></button>");
+                } else {
+                    $('.more_game__button').empty();
+                    $('<div></div>').attr({ 'id': 'more_game__button', 'class': 'more_game__button' }).appendTo('.title_content')
+                        .html('<button class="load_more_button" id="load_more_button">LOAD MORE</button>');
+                }
+            }
 
 
-//         }).catch(function() {
-//             console.log("error game_related");
-//         });
-// }
-
-// function more_games_related(type_games, id_prod) {
-//     var type_game = type_games;
-//     var prods = 0;
-//     // console.log("INICIAMOS EL SCROLLLL SEÑORES");
-//     // console.log(type_game);
-//     // console.log(prods);
-//     // console.log(id_prod);
-
-//     ajaxPromise('/programas/courses_home/module/shop/controller/ctrl_shop.php?op=count_related', 'POST', 'JSON', { 'type_game': type_game, 'id_prod': id_prod })
-//         .then(function(data) {
-//             // console.log("Pero esto funciona?");
-//             // console.log(data);
-//             var total_prod = data[0].num_prods;
-//             // console.log(total_prod);
-//             // console.log(type_game);
-//             games_related(0, type_game, total_prod, id_prod);
-//             $(document).on("click", '.more_game__button', function() {
-//                 prods = prods + 5;
-//                 $('.more_game__button').empty();
-//                 games_related(prods, type_game, total_prod, id_prod);
-//             });
-//         }).catch(function() {
-//             console.log('error total_prod');
-//         });
-// }
+        }).catch(function() {
+            console.log("error game_related");
+        });
+}
 
 //
-//Likes
-//
-// function load_likes() {
-//     var token = localStorage.getItem('token');
-//     if (token) {
-//         ajaxPromise(friendlyURL('?module=shop&op=load_likes'), 'POST', 'JSON', { 'token': token })
-//             .then(function(data) {
-//                 for (row in data) {
-//                     if ($("#" + data[row].car_id).children("i").hasClass("like_white")) {
-//                         $("#" + data[row].car_id).children("i").removeClass("like_white").addClass("like_red");
-//                     }
-//                 }
-//             })
-//     }
-// }
 
-// function load_likes_details(id) {
-//     var token = localStorage.getItem('token');
-//     var id = id.id;
-//     if (token) {
-//         ajaxPromise(friendlyURL('?module=shop&op=load_likes_details'), 'POST', 'JSON', { 'token': token, 'id': id })
-//             .then(function(data) {
-//                 if (id == data.car_id) {
-//                     $("#" + data.car_id).children("i").removeClass("like_white").addClass("like_red");
-//                     $(".like").empty();
-//                     $('<i id="like" class="like_red fa-heart fa-2x"></i>').appendTo('.like')
-//                 }
-//             })
-//     }
-// }
+
+/////////////likes///////////////////////////////////////////////////////
 
 function click_likes(id_prod, location) {
         let redirect = [location]; // mirar
@@ -1119,6 +1069,8 @@ function click_likes(id_prod, location) {
                 $(this).children("i").removeClass("like_red").addClass("like_white");
             }
         } else {
+            localStorage.setItem('pre_like', JSON.stringify(id));
+
             Swal.fire({
                 title: 'Necesitas loguearte',
                 text: 'Para dar like debes estar autenticado.',
@@ -1129,9 +1081,52 @@ function click_likes(id_prod, location) {
                     window.location.href = friendlyURL("?module=auth&op=view");
                 }
             });
+
         }
     };
 
+//Likes
+
+function load_likes() {
+    var token = localStorage.getItem('token');
+    if (token) {
+        ajaxPromise(friendlyURL('?module=shop&op=load_likes'), 'POST', 'JSON', { 'token': token })
+        .then(function(data) {
+            data.forEach(likedProduct => {
+                const $likeBtn = $(`#${likedProduct.id_prod} .like-btn i`);
+                if ($likeBtn.length) {
+                    $likeBtn.removeClass('fa-regular').addClass('fa-solid');
+                }
+            });
+        });
+    }
+}
+
+function load_likes_details(id) {
+    var token = localStorage.getItem('token');
+    if (token) {
+        ajaxPromise(friendlyURL('?module=shop&op=load_likes_details'), 'POST', 'JSON', { 'token': token, 'id': id })
+        .then(function(data) {
+            const $heartIcon = $(`#heart_${id} i`);
+            if (data && data.length > 0 && data.some(item => item.id_prod == id)) {
+                // Producto likeado - corazón rojo
+                $heartIcon.removeClass('fa-regular').addClass('fa-solid').css('color', 'red');
+            } else {
+                // Producto no likeado - corazón blanco
+                $heartIcon.removeClass('fa-solid').addClass('fa-regular').css('color', '');
+            }
+        })
+        .catch(function(error) {
+            console.error("Error al cargar likes:", error);
+        });
+    } else {
+        // Sin token - mostrar corazón blanco
+        $(`#heart_${id} i`)
+            .removeClass('fa-solid')
+            .addClass('fa-regular')
+            .css('color', '');
+    }
+}
 
 $(document).ready(function() {
     print_filters();

@@ -190,6 +190,47 @@ body {
     color: #e74c3c;
 }
 
+.details__heart {
+    position: sticky;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    align-self: flex-start; /* Importante para sticky */
+    margin-left: auto; /* Alinea a la derecha */
+}
+
+.details__heart:hover {
+    background: #ffeaea;
+    transform: scale(1.05);
+}
+
+.details__heart i {
+    color: #bbb;
+    font-size: 1.8em;
+    transition: all 0.3s ease;
+}
+
+.details__heart i.fa-solid {
+    color: #e74c3c;
+    text-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+}
+
+.details__heart:hover i {
+    transform: scale(1.1);
+}
+
 /* PÁGINA DE DETALLES */
 .product-gallery {
     position: relative;
@@ -259,6 +300,13 @@ body {
 /*MAPA DEL LIST PRODUCTS*/
 /**/
 /* Popup miniaturizado */
+
+#mapDetails {
+    height: 300px;
+    width: 100%;
+}
+
+
 .leaflet-popup-content {
     width: 200px !important;
     margin: 8px !important;

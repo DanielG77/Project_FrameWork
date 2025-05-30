@@ -50,5 +50,30 @@
             // return 'hola car brands';
             return $this -> bll -> get_more_visited_BLL($args);
         }
+
+        public function get_games_related($args) {
+            // return 'hola car brands';
+            return $this -> bll -> get_games_related_BLL($args);
+        }
+
+        public function get_count_related($args) {
+            // return 'hola car brands';
+            return $this -> bll -> get_count_related_BLL($args);
+        }
+
+        public function get_control_likes($args) {
+            // return 'hola car brands';
+            return $this -> bll -> get_control_likes_BLL($args);
+        }
+
+        public function get_load_likes($args) {
+            // return 'hola car brands';
+            return $this -> bll -> get_load_likes_BLL($args);
+        }
+
+        public function get_load_likes_details($args) {
+            // return 'hola car brands';
+            return $this -> bll -> get_load_likes_details_BLL($args);
+        }
     }
 ?>

@@ -56,5 +56,40 @@
 			// return $id;
 			return $this -> dao -> update_data_visited($this -> db, $id);
 		}
+
+		public function get_games_related_BLL($args) {
+			return $this -> dao -> select_data_games_related($this -> db, $args['id_prod'], $args['items'], $args['loaded'], $args['type']);
+		}
+
+		public function get_count_related_BLL($args) {
+			return $this -> dao -> select_data_count_related($this -> db, $args['id_prod'], $args['type_game']);
+		}
+
+		public function get_control_likes_BLL($args) {
+			$token = $args['token'];
+			$decode = middleware::decode_username($token);
+			// return $decode;
+
+			if ($this -> dao -> select_likes($this->db, $args['id'], $decode)) {
+				return $this -> dao -> delete_likes($this->db, $args['id'], $decode);
+			}
+			return $this -> dao -> insert_likes($this->db, $args['id'], $decode);
+		}
+
+		public function get_load_likes_BLL($args) {
+			// $token = $args['token'];
+			$decode = middleware::decode_username(get_token: $args);
+			// return $decode;
+
+			return $this -> dao -> select_load_likes($this->db, $decode);
+		}
+
+		public function get_load_likes_details_BLL($args) {
+			// $token = $args['token'];
+			$decode = middleware::decode_username(get_token: $args['token']);
+			// return $decode;
+
+			return $this -> dao -> select_load_likes_details($this->db, $decode, $args['id']);
+		}
 	}
 ?>

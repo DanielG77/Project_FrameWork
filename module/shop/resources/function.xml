@@ -44,4 +44,12 @@
         <name>control_likes</name>
         <uri>control_likes</uri>
     </function>
+    <function>
+        <name>games_related</name>
+        <uri>games_related</uri>
+    </function>
+    <function>
+        <name>count_related</name>
+        <uri>count_related</uri>
+    </function>
 </functions>

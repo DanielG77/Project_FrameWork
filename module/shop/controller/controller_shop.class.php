@@ -74,19 +74,45 @@
          function load_likes() {
             // echo 'hola carrusel';
             // exit;
-            echo json_encode(common::load_model('shop_model', 'get_count_paginacion'));
+            echo json_encode(common::load_model('shop_model', 'get_load_likes', $_POST['token']));
         }
 
          function load_likes_details() {
             // echo 'hola carrusel';
             // exit;
-            echo json_encode(common::load_model('shop_model', 'get_count_paginacion_filters', $_POST['filters']));
+            echo json_encode(common::load_model('shop_model', 'get_load_likes_details', [ // <-- ESTO DEBE SER UN ARRAY ASOCIATIVO
+                        'token' => $_POST['token'],
+                        'id' => $_POST['id'],
+                    ]));
         }
 
         function control_likes() {
             // echo 'hola carrusel';
             // exit;
-            echo json_encode(common::load_model('shop_model', 'get_more_visited', $_POST['id']));
+            echo json_encode(common::load_model('shop_model', 'get_control_likes', [ // <-- ESTO DEBE SER UN ARRAY ASOCIATIVO
+                        'token' => $_POST['token'],
+                        'id' => $_POST['id'],
+                    ]));
+        }
+
+        function games_related() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_games_related', [ // <-- ESTO DEBE SER UN ARRAY ASOCIATIVO
+                        'type' => $_POST['type'],
+                        'loaded' => $_POST['loaded'],
+                        'items' => $_POST['items'],
+                        'id_prod' => $_POST['id_prod'],
+                    ]));
+        }
+
+        function count_related() {
+            // echo 'hola carrusel';
+            // exit;
+            echo json_encode(common::load_model('shop_model', 'get_count_related', [ // <-- ESTO DEBE SER UN ARRAY ASOCIATIVO
+                        'type_game' => $_POST['type_game'],
+                        'id_prod' => $_POST['id_prod'],
+                    ]));
         }
     }
 ?>

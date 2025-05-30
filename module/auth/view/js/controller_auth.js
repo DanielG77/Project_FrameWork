@@ -222,8 +222,15 @@ function signin() {
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
+
                         setTimeout(function() {
-                            window.location.href = "?module=home&op=view";
+                            const shopUbication = localStorage.getItem('shop_ubication');
+                            if (shopUbication !== null) {
+                                // Si 'shop_ubication' existe en localStorage, recarga la página
+                            window.location.href = friendlyURL("?module=shop&op=view");
+                            } else {
+                                window.location.href = friendlyURL("?module=home&op=view");
+                            }
                         }, 1000);
                     }
         });
@@ -375,7 +382,8 @@ function social_login(param){
 }
 
 function firebase_config(){
-// Configuración de Firebase   
+    // console.log("hola firebase");
+    
 }
 
 function provider_config(param){
@@ -593,7 +601,7 @@ function send_new_password(token_email){
 }
 
 function send_message_telegram(mensaje){
-    // Enviar mensaje a Telegram
+   
 
     }
 
