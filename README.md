@@ -1,7 +1,7 @@
 # ♻️ WarGames Bazaar 🎲
 
 
-| ![Bienvenida](view/images/readme/Taberna de los dados.png) |
+| ![Bienvenida](view/images/readme/Taberna_de_los_dados.png) |
 
 ---
 
