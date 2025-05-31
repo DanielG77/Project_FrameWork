@@ -37,34 +37,67 @@ Cada sección incluye un resumen, las tecnologías principales y recomendaciones
 
 ### 🏠 Home
 
-| ![image1](view/images/readme/portada.jpg) |
-|:-:|
+| ![Vista principal del Home, bienvenida y carruseles](view/images/readme/portada.jpg) |
+|:--:|
 | _Aquí una imagen del dashboard o portada de la home, mostrando la bienvenida y acceso a funcionalidades principales._ |
 
-- **Presentación general** de la tienda y su especialización en wargames.
-- Diseño **amigable y responsivo**.
-- Acceso rápido a Shop y Login.
-- **Tecnologías:**  
-  - Frontend: React / Vue / Angular (especifica el tuyo)
-  - Estilos: CSS3, Tailwind, Bootstrap, etc.
+---
+
+#### Funcionalidades Principales
+
+- 🎉 **Presentación general** de la tienda y su especialización en juegos de mesa wargames.
+- 💎 **Diseño amigable y responsivo** para todo tipo de dispositivos.
+- 🚀 **Acceso rápido** a las secciones de Shop y Login.
+- 🎠 **Carruseles dinámicos** de:
+  - Tipos de juegos
+  - Categorías
+  - Marcas
+  - Ciudades
+  - Productos más gustados y más visitados  
+  *(Estos carruseles permiten navegar fácilmente y aplicar filtros en el Shop, creando una conexión directa entre Home y Shop para acceder rápidamente al producto deseado o explorar por preferencias).*
+- ⚡ **Navegación dinámica**: salto sencillo y rápido desde el Home al Shop aplicando filtros automáticos o viajando directamente a la ficha del producto.
 
 ---
+
+#### 🛠️ Tecnologías empleadas
+- **Frontend:** HTML, JavaScript
+- **Backend:** PHP, Java
+- **Estilos:** CSS3, (añade aquí si usas Tailwind, Bootstrap, etc.)
+
+---
+
+> 📝 *La página de inicio está pensada para facilitar la exploración y el acceso a los productos más relevantes, ofreciendo una experiencia moderna y eficiente a los usuarios desde el primer momento.*
+
 
 ### 🛒 Shop
 
-<!-- [Aquí puedes añadir una imagen de la vista de productos o catálogo, mostrando varios juegos de mesa. Ejemplo:  
-![Shop Screenshot](assets/shop.png) ] -->
-
-- **Catálogo de juegos** de segunda mano, visualización clara y ordenada.
-- **Filtros** por tipo, precio, editor, estado, etc.
-- Carrito de compra básico (si aplica).
-- Página de **detalle de producto** con fotos y descripciones.
-- **Tecnologías:**  
-  - Frontend: React/Vue/Angular
-  - Backend/API: Node.js/Express, Laravel, Django, etc. (especifica el tuyo)
-  - Base de datos: MongoDB, MySQL, etc.
+| ![Vista de la tienda, productos y datacards](view/images/readme/shop.jpg) |
+|:--:|
+| _Vista principal de la tienda: productos destacados, datacards y navegación._ |
 
 ---
+
+#### Funcionalidades Principales
+
+- 🃏 **Catálogo de juegos** de segunda mano, visualización clara y ordenada.
+- 🗂️ **Filtros avanzados** por tipo, precio, editor, estado, etc.
+- 💳 **Carrito de compra** básico (si aplica).
+- 🔍 **Detalle de producto**: página específica con fotos y descripciones.
+- 🗺️ **Sistema de geolocalización**: mapa interactivo personalizado con el logo de la empresa para localizar productos cerca del usuario.
+- 🔄 **Paginación eficiente**: muestra 8 productos por página para mejor experiencia.
+- ⚙️ **Filtros dinámicos**: el sistema de filtros se adapta automáticamente a los modelos configurados en la base de datos, actualizando la vista sin perder los filtros aplicados tras cada búsqueda.
+
+---
+
+#### 🛠️ Tecnologías empleadas
+- **Frontend:** HTML / CSS / JavaScript
+- **Backend/API:** PHP / Java
+- **Base de datos:** MySQL
+- **Mapas:** Leafle
+
+---
+
+> 📝 *El sistema de Shop está diseñado para ser flexible y escalable, permitiendo incorporar nuevos tipos de filtros y funcionalidades fácilmente según crezcan las necesidades de la tienda.*
 
 ### 🔐 Login
 
@@ -91,8 +124,19 @@ Cada sección incluye un resumen, las tecnologías principales y recomendaciones
 
 ## 🎨 Ejemplo visual de arquitectura y organización
 
-<!-- [Aquí puedes añadir un diagrama visual de la arquitectura tecnológica o el flujo de la aplicación. Ejemplo:  
-![Arquitectura](assets/arquitectura.png) ] -->
+```mermaid
+flowchart LR
+    Index --> Router
+    Router --> Module
+    Module --> Shop
+    Module --> Home
+    Module --> Search
+    Module --> Auth
+    Shop & Home & Search & Auth --> HTML
+    HTML --> Controller
+    Controller --> BLL
+    BLL --> Servidor
+```
 
 ---
 
