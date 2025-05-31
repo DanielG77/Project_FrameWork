@@ -1,13 +1,10 @@
 # ♻️ WarGames Bazaar 🎲
 
-<!--
-[ Aquí va la imagen principal de cabecera de la web. Añádela justo debajo de este comentario.  
-Ejemplo:  
-![Header principal](assets/header.jpg)  
-]
--->
+
+| ![Bienvenida](view/images/readme/Taberna de los dados.png) |
 
 ---
+
 
 <p align="center">
   <img src="https://img.shields.io/badge/Estado-%F0%9F%9A%A7%20En%20Desarrollo-yellow" alt="Estado del proyecto" />
