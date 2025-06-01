@@ -35,12 +35,12 @@ Cada sección incluye un resumen, las tecnologías principales y recomendaciones
 flowchart LR
     Index --> Router
     Router --> Module
-    Module --> Shop (View/Top_page)
-    Module --> Home (View/Top_page)
-    Module --> Search (View/Top_page)
-    Module --> Auth (View/Top_page)
-    Shop & Home & Search & Auth --> Controller (Jv)
-    Controller (Jv) --> BLL_class
+    Module --> Shop_ViewTopPage
+    Module --> Home_ViewTopPage
+    Module --> Search_ViewTopPage
+    Module --> Auth_ViewTopPage
+    Shop_ViewTopPage & Home_ViewTopPage & Search_ViewTopPage & Auth_ViewTopPage --> Controller_Jv
+    Controller_Jv --> BLL_class
     BLL_class --> DAO_class
     DAO_class --> Servidor
 ```
@@ -118,29 +118,19 @@ flowchart LR
 
 ## 🔐 Login & Registro
 
-### Registro de usuario
+<div align="center">
 
-| ![Formulario de registro](view/images/readme/register.jpg) |
-|:--:|
-| _Formulario para registrar nuevos usuarios._ |
+| ![Formulario de registro](view/images/readme/register.jpg) | ![Formulario de login](view/images/readme/login.jpg) |
+|:--:|:--:|
+| _Registro de nuevos usuarios_ | _Acceso de usuarios registrados_ |
 
-### Acceso/Login
+| ![Formulario de cambio de contraseña](view/images/readme/recover_password.jpg) | ![Formulario de desbaneo](view/images/readme/bann_user.jpg) |
+|:--:|:--:|
+| _Recuperación/cambio de contraseña vía email_ | _Desbloqueo de cuenta tras intentos de acceso sospechosos_ |
 
-| ![Formulario de login](view/images/readme/login.jpg) |
-|:--:|
-| _Formulario de acceso para usuarios registrados._ |
+</div>
 
-### Recuperación/Cambio de contraseña
-
-| ![Formulario de cambio de contraseña](view/images/readme/recover_password.jpg) |
-|:--:|
-| _Formulario seguro para recuperar o cambiar la contraseña mediante validación por email._ |
-
-### Desbloqueo de cuenta/desbaneo
-
-| ![Formulario de desbaneo](view/images/readme/bann_user.jpg) |
-|:--:|
-| _Formulario para desbloquear la cuenta tras intentos de acceso no autorizados, incluye verificación adicional._ |
+---
 
 **Funcionalidades principales**
 - **Autenticación** sencilla y segura.
@@ -159,7 +149,6 @@ flowchart LR
 - **Base de datos:** MySQL
 
 > 📝 *El sistema de autenticación combina seguridad, usabilidad y flexibilidad, integrando múltiples métodos modernos y servicios externos.*
-
 ---
 
 ## 🔎 Search
